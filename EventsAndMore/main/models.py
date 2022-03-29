@@ -92,7 +92,8 @@ class Servicios_Asignados(Model):
     evento = models.ForeignKey(Evento, on_delete=models.DO_NOTHING)
     stand = models.ForeignKey(Stand, on_delete=models.DO_NOTHING)
     cantidad = models.IntegerField()
-    # TODO: Preguntar que passa si un cliente que tiene mas de un stand pide el servicio se ha de poner mas de 1 si no se quita cantidad
+    # TODO: Preguntar que passa si un cliente que tiene mas de un stand pide el servicio se ha de poner mas de 1 si
+    #  no se quita cantidad
 
 
 class Assignacion(Model):
