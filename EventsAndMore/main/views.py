@@ -6,6 +6,8 @@ from django.utils.decorators import method_decorator
 from django.views.generic import TemplateView
 
 from main.forms import RegisterClientForm
+from .models import *
+import viewsEvento
 
 
 def RegisterClientView(request):

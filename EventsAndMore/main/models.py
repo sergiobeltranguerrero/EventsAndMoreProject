@@ -84,7 +84,7 @@ class Evento(Model):
 
 class Stand(Model):
     numero_stand = models.IntegerField()
-
+    size = models.CharField(max_length=10)
 
 class Servicios_Asignados(Model):
     cliente = models.ForeignKey(Cliente, on_delete=models.DO_NOTHING)
