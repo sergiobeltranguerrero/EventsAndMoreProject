@@ -7,8 +7,6 @@ from django.views.generic import TemplateView
 
 from main.forms import RegisterClientForm
 from .models import *
-import viewsEvento
-
 
 def RegisterClientView(request):
     if request.method == 'POST':
@@ -24,3 +22,15 @@ def RegisterClientView(request):
 @method_decorator(login_required, name='dispatch')
 class AdminView(TemplateView):
     template_name = 'admin.html'
+
+
+def setPlanningStand(request):
+    if request.method == 'GET':
+        stand = Stand.objects.all()
+        sector = Sector.objects.all()
+        json = {'stands':stand,'sectores':sector}
+        return render(request,'Evento\setStandSector.html',json)
+    elif request.method == 'POST':
+        return render(request, 'Evento\setStandSector.html')
+    else:
+        return render(request, '/')
