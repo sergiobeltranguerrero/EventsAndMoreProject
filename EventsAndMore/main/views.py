@@ -5,6 +5,7 @@ from django.shortcuts import render, redirect
 from django.utils.decorators import method_decorator
 from django.views.generic import TemplateView
 
+from main.decorators import client_only
 from main.forms import RegisterClientForm
 
 
@@ -17,8 +18,3 @@ def RegisterClientView(request):
     else:
         form = RegisterClientForm()
     return render(request, 'registerClient.html', {'form': form})
-
-
-@method_decorator(login_required, name='dispatch')
-class AdminView(TemplateView):
-    template_name = 'admin.html'
