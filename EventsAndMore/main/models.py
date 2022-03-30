@@ -84,7 +84,6 @@ class Evento(Model):
 
 class Stand(Model):
     numero_stand = models.IntegerField()
-    size = models.CharField(max_length=10)
 
 class Servicios_Asignados(Model):
     cliente = models.ForeignKey(Cliente, on_delete=models.DO_NOTHING)
@@ -106,7 +105,7 @@ class Evento_Stand_Sector(Model):
     evento = models.ForeignKey(Evento, on_delete=models.DO_NOTHING)
     stand = models.ForeignKey(Stand, on_delete=models.DO_NOTHING)
     sector = models.ForeignKey(Sector, on_delete=models.DO_NOTHING)
-
+    stand_size = models.CharField(max_length=10)
 
 class Historial_Incidencias(Model):
     comentario = models.ForeignKey(Comentario, on_delete=models.DO_NOTHING)

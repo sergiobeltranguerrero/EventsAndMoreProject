@@ -1,9 +1,9 @@
 {% extends "base.html" %}
 {% block title %}Planificacion del pavellon{% endblock %}
 {% block body %}
-<h1>Evento {{evento.name}}</h1>
+<h1>Evento {{evento.nombre}}</h1>
 <div class="container">
-    <form action="{% url 'stand_planning' %}" method="POST">
+    <form action="{% url 'stand_planning'  evento.id %}" method="POST">
     {% csrf_token %}
         <table class="table table-striped table-hover">
             <thead>
@@ -17,9 +17,9 @@
             <tbody>
                 {% for stand in stands %}
                     <tr>
-                        <th scope="row" hidden><input type="number" id="idStand{{stand.id}}" name="idStand{{stand.id}}" value="{{stand.id}}" readonly required/></th>
+                        <th scope="row" hidden><input type="number" id="id_stand{{stand.id}}" name="id_stand{{stand.id}}" value="{{stand.id}}" readonly required/></th>
                         <td>{{stand.numero_stand}}</td>
-                        <td><input type="text" id="size{{stand.id}}"name="size{{stand.id}}" placeholder="2x2" required/></td>
+                        <td><input type="text" id="size{{stand.id}}"name="size{{stand.id}}" placeholder="2x2" /></td>
                         <td>
                             <select class="form-select" aria-label="Sector">
                                 <option value="none" selected>Seleccionar...</option>
