@@ -6,4 +6,4 @@ def setPlanningStand(request):
     stand = Stand.objects.all()
     sector = Sector.objects.all()
     json = {'stands':stand,'sectores':sector}
-    return render(request,'Evento\setStandSector.html',json)
+    return render(request,'evento\setStandSector.html',json)

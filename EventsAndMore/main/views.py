@@ -24,13 +24,13 @@ class AdminView(TemplateView):
     template_name = 'admin.html'
 
 
-def setPlanningStand(request):
+def stand_planning(request):
     if request.method == 'GET':
         stand = Stand.objects.all()
         sector = Sector.objects.all()
         json = {'stands':stand,'sectores':sector}
-        return render(request,'Evento\setStandSector.html',json)
+        return render(request,'evento\stand_planning.html',json)
     elif request.method == 'POST':
-        return render(request, 'Evento\setStandSector.html')
+        return render(request, 'evento\stand_planning.html')
     else:
         return render(request, '/')
