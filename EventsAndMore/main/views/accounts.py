@@ -17,4 +17,5 @@ def RegisterClientView(request):
             return redirect('home')
     else:
         form = RegisterClientForm()
-    return render(request, 'registerClient.html', {'form': form})
+    return render(request, 'registration/registerClient.html', {'form': form})
+
