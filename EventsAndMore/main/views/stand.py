@@ -31,22 +31,29 @@ def stand_planning_edit(request,id_event):
         ids=[]
         for es in ess:
             ids.append(es.stand.id)
-        stand = Stand.objects.filter(pk__in=ids)
+        stand = Stand.objects.exclude(pk__in=ids)
         sector = Sector.objects.all()
         sizes = Evento_Stand_Sector.SIZE
         json = {'ess':ess,'stands':stand,'sectores':sector,'evento':evento,'sizes':sizes}
         return render(request,'evento\stand_planning_edit.html',json)
     elif request.method == 'POST':
         lstValues = []
-        for id in range(1,Stand.objects.count()+1):
-            id_stand = request.POST["id_stand"+str(id)]
-            stand = Stand.objects.get(id=id_stand)
-            size = request.POST["size"+str(id)]
+        lstDeletes = []
+        for id in range(1,Evento_Stand_Sector.objects.filter(evento=evento).count()+1):
+            id_ess = request.POST["id"+str(id)]
+            ess = Evento_Stand_Sector.objects.get(id=id_ess)
+            ess.stand_size = request.POST["size"+str(id)]
             id_sector = request.POST["sector"+ str(id)]
-            if not id_sector == 'none' and not size == '':
-                sector = Sector.objects.get(id=id_sector)
-                lstValues.append(Evento_Stand_Sector(stand=stand,sector=sector,evento_id=evento.id,stand_size=size))
-        Evento_Stand_Sector.objects.bulk_create(lstValues)
+            try:
+                lstDeletes.append(request.POST["delete" + str(id)])
+            except:
+                print('No delete on number'+str(id))
+            if not id_sector == 'none':
+                ess.sector = Sector.objects.get(id=id_sector)
+                lstValues.append(ess)
+        Evento_Stand_Sector.objects.bulk_update(lstValues,['stand_size','sector'])
+        a = Evento_Stand_Sector.objects.filter(pk__in=lstDeletes)
+        a.delete()
         return render(request, '/')
     else:
         return render(request, '/')

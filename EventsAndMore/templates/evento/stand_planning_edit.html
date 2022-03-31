@@ -18,7 +18,7 @@
             <tbody>
                 {% for es in ess %}
                     <tr>
-                        <th scope="row" hidden><input type="number" id="id_stand{{es.id}}" name="id_stand{{es.id}}" value="{{es.id}}" readonly required/></th>
+                        <th scope="row" hidden><input type="number" id="id{{es.id}}" name="id{{es.id}}" value="{{es.id}}" readonly required/></th>
                         <td>{{es.stand.numero_stand}}</td>
                         <td>
                             <select class="form-select" id="size{{es.id}}" name="size{{es.id}}" aria-label="Size">
@@ -33,7 +33,7 @@
                             </select>
                         </td>
                         <td>
-                            <select class="form-select" id="sector{{stand.id}}" name="sector{{stand.id}}" aria-label="Sector">
+                            <select class="form-select" id="sector{{es.id}}" name="sector{{es.id}}" aria-label="Sector">
                                 <option value="none">Seleccionar...</option>
                                 {% for sector in sectores %}
                                     {% if sector == es.sector %}
@@ -43,6 +43,42 @@
                                     {% endif %}
                                 {% endfor %}
                             </select>
+                        </td>
+                        <td>
+                            <div class="form-check form-switch">
+                                <input class="form-check-input" type="checkbox" value="{{ es.id }}" id="delete{{ es.id }}" name="delete{{ es.id }}">
+                                <label class="form-check-label" for="delete{{ es.id }}">
+                                </label>
+                            </div>
+                        </td>
+                    </tr>
+                {% endfor %}
+                {% for stand in stands %}
+                    <tr>
+                        <th scope="row" hidden><input type="number" id="id_stand{{stand.id}}" name="id_stand{{stand.id}}" value="{{stand.id}}" readonly required/></th>
+                        <td>{{stand.numero_stand}}</td>
+                        <td>
+                            <select class="form-select" id="size{{stand.id}}" name="size{{stand.id}}" aria-label="Size">
+                                <option value="" selected>Seleccionar...</option>
+                                {% for size in sizes %}
+                                    <option value="{{size.0}}">{{size.1}}</option>
+                                {% endfor %}
+                            </select>
+                        </td>
+                        <td>
+                            <select class="form-select" id="sector{{stand.id}}" name="sector{{stand.id}}" aria-label="Sector">
+                                <option value="none" selected>Seleccionar...</option>
+                                {% for sector in sectores %}
+                                    <option value="{{sector.id}}">{{sector.nombre}}</option>
+                                {% endfor %}
+                            </select>
+                        </td>
+                        <td>
+                            <div class="form-check form-switch">
+                                <input class="form-check-input" type="checkbox" value="{{ es.id }}" id="delete{{ es.id }}" disabled>
+                                <label class="form-check-label" for="delete{{ es.id }}">
+                                </label>
+                            </div>
                         </td>
                     </tr>
                 {% endfor %}
