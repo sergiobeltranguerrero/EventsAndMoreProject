@@ -130,9 +130,9 @@ class Evento_Stand_Sector(Model):
     stand = models.ForeignKey(Stand, on_delete=models.DO_NOTHING)
     sector = models.ForeignKey(Sector, on_delete=models.DO_NOTHING)
     SIZE = [
-        ('Grande', 'GR'),
-        ('Mediano', 'MD'),
-        ('Pequeño', 'PQ'),
+        ( 'GR', 'Grande'),
+        ('MD','Mediano'),
+        ('PQ', 'Pequeño'),
     ]
     stand_size = models.CharField(max_length=2, choices=SIZE)
 
