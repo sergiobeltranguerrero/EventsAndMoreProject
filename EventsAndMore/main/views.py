@@ -46,7 +46,7 @@ def stand_planning(request,id_event):
 def get_stand(request,id_event):
     if request.method == 'GET':
         evento = Evento.objects.get(id=id_event)
-        cliente = Cliente.objects.get(user=user)
+        cliente = Cliente.objects.get(user=request.user)
         stand = Evento_Stand_Sector.objects.filter(evento=evento,sector=cliente.sector).model.stand
         assignados = Assignacion.objects.get(evento=evento,stand__in=stand.all())
         json = {'stands':stand,'assignados':assignados}

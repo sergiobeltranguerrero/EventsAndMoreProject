@@ -11,6 +11,8 @@ class User(AbstractUser):
     is_organizador_eventos = models.BooleanField(default=False)
     is_personal_direccion = models.BooleanField(default=False)
 
+    def __str__(self):
+        return self.username +' (' + self.id + ')'
 
 class Sector(Model):
     nombre = models.CharField(max_length=50, unique=True)
@@ -44,6 +46,8 @@ class Empleado(Model):
     ciutat = models.CharField(max_length=50)
     direccion = models.CharField(max_length=200)
 
+    def __str__(self):
+        return self.DNI
 
 class Organizador_Evantos(Model):
     user = models.OneToOneField(User, on_delete=models.DO_NOTHING)
@@ -52,27 +56,37 @@ class Organizador_Evantos(Model):
     ciutat = models.CharField(max_length=50)
     direccion = models.CharField(max_length=200)
 
+    def __str__(self):
+        return self.NIF
 
 class Servicio(Model):
     nombre = models.CharField(max_length=50)
     descripcion = models.CharField(max_length=500)
 
+    def __str__(self):
+        return self.nombre + ' (' + self.id + ')'
 
 class Incidencia(Model):
     nombre = models.CharField(max_length=100)
     descripcion = models.CharField(max_length=500)
     cliente = models.ForeignKey(Cliente, on_delete=models.DO_NOTHING)
 
+    def __str__(self):
+        return self.nombre + ' (' + self.id + ')'
 
 class Comentario(Model):
     incidencia = models.ForeignKey(Incidencia, on_delete=models.DO_NOTHING)
     asunto = models.CharField(max_length=100)
     cuerpo = models.CharField(max_length=500)
 
+    def __str__(self):
+        return self.asunto + ' (' + self.id + ')'
 
 class Estado(Model):
     nombre = models.CharField(max_length=50)
 
+    def __str__(self):
+        return self.nombre + ' (' + self.id + ')'
 
 class Evento(Model):
     nombre = models.CharField(max_length=50)
@@ -81,9 +95,14 @@ class Evento(Model):
     fecha_fin = models.DateTimeField()
     capacidad = models.IntegerField()
 
+    def __str__(self):
+        return self.nombre + ' (' + self.id + ')'
 
 class Stand(Model):
     numero_stand = models.IntegerField()
+
+    def __str__(self):
+        return self.numero_stand + ' (' + self.id + ')'
 
 class Servicios_Asignados(Model):
     cliente = models.ForeignKey(Cliente, on_delete=models.DO_NOTHING)
@@ -94,18 +113,32 @@ class Servicios_Asignados(Model):
     # TODO: Preguntar que passa si un cliente que tiene mas de un stand pide el servicio se ha de poner mas de 1 si
     #  no se quita cantidad
 
+    def __str__(self):
+        return self.servicio + ' a '+ self.cliente +' (' + self.id + ')'
+
 
 class Assignacion(Model):
     evento = models.ForeignKey(Evento, on_delete=models.DO_NOTHING)
     stand = models.ForeignKey(Stand, on_delete=models.DO_NOTHING)
     cliente = models.ForeignKey(Cliente, on_delete=models.DO_NOTHING)
 
+    def __str__(self):
+        return self.evento + self.stand + self.cliente +' (' + self.id + ')'
 
 class Evento_Stand_Sector(Model):
     evento = models.ForeignKey(Evento, on_delete=models.DO_NOTHING)
     stand = models.ForeignKey(Stand, on_delete=models.DO_NOTHING)
     sector = models.ForeignKey(Sector, on_delete=models.DO_NOTHING)
-    stand_size = models.CharField(max_length=10)
+    SIZE = [
+        ('Grande', 'GR'),
+        ('Mediano', 'MD'),
+        ('Pequeño', 'PQ'),
+    ]
+    stand_size = models.CharField(max_length=2, choices=SIZE)
+
+    def __str__(self):
+        return self.evento + self.stand + self.sector +' (' + self.id + ')'
+
 
 class Historial_Incidencias(Model):
     comentario = models.ForeignKey(Comentario, on_delete=models.DO_NOTHING)
@@ -113,3 +146,6 @@ class Historial_Incidencias(Model):
     estado = models.ForeignKey(Estado, on_delete=models.DO_NOTHING)
     fecha_inicio = models.DateTimeField()
     fecha_fin = models.DateTimeField()
+
+    def __str__(self):
+        return self.incidencia + self.estado + ' (' + self.id + ')'
