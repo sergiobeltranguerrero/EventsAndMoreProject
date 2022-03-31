@@ -1,11 +1,6 @@
-from django.contrib.auth.decorators import login_required
 from django.shortcuts import render, redirect
 
 # Create your views here.
-from django.utils.decorators import method_decorator
-from django.views.generic import TemplateView
-
-from main.decorators import client_only
 from main.forms import RegisterClientForm
 
 
