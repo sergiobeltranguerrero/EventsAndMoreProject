@@ -139,3 +139,5 @@ GitHub.sublime-settings
 
 
 EventsAndMore/.DS_Store
+
+EventsAndMore/EventsAndMore.sqlite3
