@@ -37,41 +37,6 @@ def stand_planning_original(request,id_event):
     else:
         return render(request, '/')
 
-def stand_planning_edit_original(request,id_event):
-    evento = Evento.objects.get(id=id_event)
-    if request.method == 'GET':
-        ess = Evento_Stand_Sector.objects.filter(evento=evento)
-        ids=[]
-        for es in ess:
-            ids.append(es.stand.id)
-        stand = Stand.objects.exclude(pk__in=ids)
-        sector = Sector.objects.all()
-        sizes = Evento_Stand_Sector.SIZE
-        json = {'ess':ess,'stands':stand,'sectores':sector,'evento':evento,'sizes':sizes}
-        return render(request,'evento\stand_planning_edit.html',json)
-    elif request.method == 'POST':
-        lstValues = []
-        lstDeletes = []
-        for id in range(1,Evento_Stand_Sector.objects.filter(evento=evento).count()+1):
-            id_ess = request.POST["id"+str(id)]
-            ess = Evento_Stand_Sector.objects.get(id=id_ess)
-            ess.stand_size = request.POST["size"+str(id)]
-            id_sector = request.POST["sector"+ str(id)]
-            try:
-                lstDeletes.append(request.POST["delete" + str(id)])
-            except:
-                print('No delete on number'+str(id))
-            if not id_sector == 'none':
-                ess.sector = Sector.objects.get(id=id_sector)
-                lstValues.append(ess)
-        Evento_Stand_Sector.objects.bulk_update(lstValues,['stand_size','sector'])
-        essd = Evento_Stand_Sector.objects.filter(pk__in=lstDeletes)
-        essd.delete()
-
-        return render(request, '/')
-    else:
-        return render(request, '/')
-
 def stand_planning_edit(request,id_event):
     evento = Evento.objects.get(id=id_event)
     if request.method == 'GET':
@@ -95,14 +60,20 @@ def stand_planning_edit(request,id_event):
 def stand_planning(request, id_event):
     evento = Evento.objects.get(id=id_event)
     if request.method == 'GET':
-        stand = Stand.objects.all()
-        sector = Sector.objects.all()
-        sizes = Evento_Stand_Sector.SIZE
-        json = {'stands': stand, 'sectores': sector, 'evento': evento, 'sizes': sizes}
-        return render(request, 'evento\stand_planning.html', json)
+        if Evento_Stand_Sector.objects.filter(evento=evento).count() == 0:
+            stand = Stand.objects.all()
+            sector = Sector.objects.all()
+            sizes = Evento_Stand_Sector.SIZE
+            json = {'stands': stand, 'sectores': sector, 'evento': evento, 'sizes': sizes}
+            return render(request, 'evento\stand_planning.html', json)
+        else:
+            return render(request, 'notAutorized.html')
     elif request.method == 'POST':
-        create_ess(request,id_event)
-        return render(request, '/')
+        if Evento_Stand_Sector.objects.filter(evento=evento).count() == 0:
+            create_ess(request,id_event)
+            return render(request, '/')
+        else:
+            return render(request, 'notAutorized.html')
     else:
         return render(request, '/')
 
