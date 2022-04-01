@@ -137,3 +137,7 @@ GitHub.sublime-settings
 !.vscode/extensions.json
 .history
 
+
+EventsAndMore/.DS_Store
+
+EventsAndMore/EventsAndMore.sqlite3
