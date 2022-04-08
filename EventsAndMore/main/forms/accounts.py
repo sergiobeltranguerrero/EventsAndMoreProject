@@ -1,7 +1,6 @@
 from django import forms
 from django.contrib.auth import get_user_model
 from django.contrib.auth.forms import UserCreationForm
-from django.contrib.auth.models import User
 from django.db import transaction
 
 from main.models import Cliente, Sector
@@ -60,4 +59,17 @@ class RegisterClientForm(UserCreationForm):
         return user
 
 
+class ChangePasswordForm(forms.Form):
+    old_password = forms.CharField(label='Contraseña actual', widget=forms.PasswordInput)
+    new_password = forms.CharField(label='Nueva contraseña', widget=forms.PasswordInput)
+    new_password_confirmation = forms.CharField(label='Confirmar nueva contraseña', widget=forms.PasswordInput)
+
+    def clean_new_password_confirmation(self):
+        new_password = self.cleaned_data.get('new_password')
+        new_password_confirmation = self.cleaned_data.get('new_password_confirmation')
+
+        if new_password and new_password_confirmation and new_password != new_password_confirmation:
+            raise forms.ValidationError('Las contraseñas no coinciden')
+
+        return new_password_confirmation
 
