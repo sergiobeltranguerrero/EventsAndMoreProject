@@ -1,22 +1,60 @@
-{% block content %}
+{% extends "home_base.html" %}
+{% block body %}
     <!DOCTYPE html>
     <html lang="en">
     <head>
         <meta charset="UTF-8">
         <title>Login</title>
+        <style>
+            .login-form {
+                width: 340px;
+                margin: 50px auto;
+                font-size: 15px;
+            }
+
+            .login-form form {
+                margin-bottom: 15px;
+                background: #f7f7f7;
+                box-shadow: 0px 2px 2px rgba(0, 0, 0, 0.3);
+                padding: 30px;
+            }
+
+            .login-form h2 {
+                margin: 0 0 15px;
+            }
+
+            .form-control, .btn {
+                margin-bottom: 15px;
+                min-height: 38px;
+                border-radius: 2px;
+            }
+
+            .btn {
+                font-size: 15px;
+                font-weight: bold;
+            }
+        </style>
     </head>
     <body>
-    <h2>Login</h2>
-    <form method="post">
-      {% csrf_token %}
-      <table>
-        {{ form.as_p }}
-        <tr>
-          <td>&nbsp;</td>
-          <td><input type="submit" value="Submit"></td>
-        </tr>
-      </table>
-    </form>
+    <div class="login-form" style="background-color: #eee;">
+        <form action="" method="post">
+            {% csrf_token %}
+            <h2 class="text-center">Iniciar Sessión</h2>
+            <div class="form-group">
+                <input type="text" class="form-control" placeholder="Username" name="username" required>
+            </div>
+
+            <div class="form-group">
+                <input type="password" class="form-control" placeholder="Password" name="password" required>
+            </div>
+            <div class="form-group">
+                <input type="submit" class="btn btn-primary btn-block btn-lg " value="Iniciar Sessión">
+            </div>
+            <div class="clearfix">
+                <a href={% url 'password_reset' %}>He olvidado mi contraseña</a>
+            </div>
+        </form>
+    </div>
     </body>
     </html>
 {% endblock %}
