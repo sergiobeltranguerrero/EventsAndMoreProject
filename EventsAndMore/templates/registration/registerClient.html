@@ -22,7 +22,7 @@
     <section class="vh-100 gradient-custom">
         <div class="container py-5 h-50">
             <div class="row justify-content-center align-items-center h-100">
-                <div class="col-12 col-lg-9 col-xl-7">
+                <div class="col-12 col-lg-9 col- xl-7">
                     <div class="card shadow-2-strong card-registration"
                          style="border-radius: 15px; background: #f7f7f7;">
                         <div class="card-body p-4 p-md-5">
@@ -30,107 +30,143 @@
                             <form>
 
                                 <div class="row">
-                                    <div class="col-md-6 mb-4">
+                                    <div class="col-md-4 mb-2">
                                         <div class="form-outline">
-                                            <label class="form-label" for="firstName">First Name</label>
-                                            <input type="text" id="firstName" class="form-control form-control-lg"/>
+                                            <label class="form-label" for="username">Nombre de Usuario</label>
+                                            <input type="text" id="username" class="form-control form-control-lg"/>
                                         </div>
 
                                     </div>
-                                    <div class="col-md-6 mb-4">
-
+                                    <div class="col-md-4 mb-2">
                                         <div class="form-outline">
-                                            <input type="text" id="lastName" class="form-control form-control-lg"/>
-                                            <label class="form-label" for="lastName">Last Name</label>
+                                            <label class="form-label" for="password1">Contraseña</label>
+                                            <input type="password" id="password1" class="form-control form-control-lg"/>
                                         </div>
-
+                                    </div>
+                                    <div class="col-md-4 mb-2">
+                                        <div class="form-outline">
+                                            <label class="form-label" for="password2">Repita la contraseña</label>
+                                            <input type="password" id="password2" class="form-control form-control-lg"/>
+                                        </div>
+                                    </div>
+                                    <div class="mb-2 d-flex align-items-center justify-content-center ">
+                                        <p>La contraseña debe contener mínimo 8 caracteres y ...</p>
                                     </div>
                                 </div>
 
                                 <div class="row">
-                                    <div class="col-md-6 mb-4 d-flex align-items-center">
+                                    <div class="col-md-6 mb-3">
+                                        <div class="form-outline">
+                                            <label class="form-label" for="nombre_empresa">Nombre de la empresa</label>
+                                            <input type="text" id="nombre_empresa"
+                                                   class="form-control form-control-lg"/>
+                                        </div>
 
+                                    </div>
+                                    <div class="col-md-6 mb-3">
+                                        <div class="form-outline">
+                                            <label class="form-label" for="nif">NIF</label>
+                                            <input type="text" id="nif" class="form-control form-control-lg"/>
+                                        </div>
+                                    </div>
+                                </div>
+
+                                <div class="row">
+                                    <div class="mb-3 d-flex align-items-center justify-content-center ">
                                         <div class="form-outline datepicker w-100">
-                                            <input
-                                                    type="text"
-                                                    class="form-control form-control-lg"
-                                                    id="birthdayDate"
-                                            />
-                                            <label for="birthdayDate" class="form-label">Birthday</label>
+                                            <label for="direccion" class="form-label">Dirección</label>
+                                            <input type="text" class="form-control form-control-lg" id="direccion"/>
                                         </div>
-
-                                    </div>
-                                    <div class="col-md-6 mb-4">
-
-                                        <h6 class="mb-2 pb-1">Gender: </h6>
-
-                                        <div class="form-check form-check-inline">
-                                            <input
-                                                    class="form-check-input"
-                                                    type="radio"
-                                                    name="inlineRadioOptions"
-                                                    id="femaleGender"
-                                                    value="option1"
-                                                    checked
-                                            />
-                                            <label class="form-check-label" for="femaleGender">Female</label>
-                                        </div>
-
-                                        <div class="form-check form-check-inline">
-                                            <input
-                                                    class="form-check-input"
-                                                    type="radio"
-                                                    name="inlineRadioOptions"
-                                                    id="maleGender"
-                                                    value="option2"
-                                            />
-                                            <label class="form-check-label" for="maleGender">Male</label>
-                                        </div>
-
-                                        <div class="form-check form-check-inline">
-                                            <input
-                                                    class="form-check-input"
-                                                    type="radio"
-                                                    name="inlineRadioOptions"
-                                                    id="otherGender"
-                                                    value="option3"
-                                            />
-                                            <label class="form-check-label" for="otherGender">Other</label>
-                                        </div>
-
                                     </div>
                                 </div>
 
                                 <div class="row">
-                                    <div class="col-md-6 mb-4 pb-2">
-
+                                    <div class="col-md-4 mb-3">
                                         <div class="form-outline">
-                                            <input type="email" id="emailAddress" class="form-control form-control-lg"/>
-                                            <label class="form-label" for="emailAddress">Email</label>
+                                            <label class="form-label" for="poblacion">Población</label>
+                                            <input type="text" id="poblacion" class="form-control form-control-lg"/>
                                         </div>
 
                                     </div>
-                                    <div class="col-md-6 mb-4 pb-2">
-
+                                    <div class="col-md-4 mb-3">
                                         <div class="form-outline">
-                                            <input type="tel" id="phoneNumber" class="form-control form-control-lg"/>
-                                            <label class="form-label" for="phoneNumber">Phone Number</label>
+                                            <label class="form-label" for="provincia">Provincia</label>
+                                            <input type="text" id="provincia" class="form-control form-control-lg"/>
                                         </div>
-
+                                    </div>
+                                    <div class="col-md-4 mb-3">
+                                        <div class="form-outline">
+                                            <label class="form-label" for="pais">País</label>
+                                            <input type="text" id="pais" class="form-control form-control-lg"/>
+                                        </div>
                                     </div>
                                 </div>
 
                                 <div class="row">
-                                    <div class="col-12">
+                                    <div class="col-md-6 mb-3">
+                                        <div class="form-outline">
+                                            <label class="form-label" for="telefono_empresa">Telefono de la
+                                                empresa</label>
+                                            <input type="text" id="telefono_empresa"
+                                                   class="form-control form-control-lg"/>
+                                        </div>
 
-                                        <select class="select form-control-lg">
-                                            <option value="1" disabled>Choose option</option>
-                                            <option value="2">Subject 1</option>
-                                            <option value="3">Subject 2</option>
-                                            <option value="4">Subject 3</option>
-                                        </select>
-                                        <label class="form-label select-label">Choose option</label>
+                                    </div>
+                                    <div class="col-md-6 mb-3">
+                                        <div class="form-outline">
+                                            <label class="form-label" for="email_empresa">Email de la empresa</label>
+                                            <input type="email" id="email_empresa"
+                                                   class="form-control form-control-lg"/>
+                                        </div>
+                                    </div>
+                                </div>
 
+                                <div class="row">
+                                    <div class="col-12 mb-3">
+                                        <label class="form-label select-label">Elegir un sector</label>
+                                        <label>
+                                            <select class="select form-control-sm">
+                                                <option value="0">Elegir un sector</option>
+                                                {% for sector in sectors %}
+                                                    <option value="{{ sector.id }}">{{ sector.nombre }}</option>
+                                                {% endfor %}
+                                            </select>
+                                        </label>
+                                    </div>
+                                </div>
+
+                                <div class="row">
+                                    <div class="col-md-6 mb-3">
+                                        <div class="form-outline">
+                                            <label class="form-label" for="first_name">Nombre representante</label>
+                                            <input type="text" id="first_name"
+                                                   class="form-control form-control-lg"/>
+                                        </div>
+
+                                    </div>
+                                    <div class="col-md-6 mb-3">
+                                        <div class="form-outline">
+                                            <label class="form-label" for="last_name">Apellidos representante</label>
+                                            <input type="text" id="last_name" class="form-control form-control-lg"/>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="row">
+                                    <div class="col-md-6 mb-3">
+                                        <div class="form-outline">
+                                            <label class="form-label" for="telefono_contacto">Telefono
+                                                representante</label>
+                                            <input type="text" id="telefono_contacto"
+                                                   class="form-control form-control-lg"/>
+                                        </div>
+
+                                    </div>
+                                    <div class="col-md-6 mb-3">
+                                        <div class="form-outline">
+                                            <label class="form-label" for="email">Email representante</label>
+                                            <input type="email" id="email"
+                                                   class="form-control form-control-lg"/>
+                                        </div>
                                     </div>
                                 </div>
 

@@ -2,9 +2,11 @@ from django.shortcuts import render, redirect
 
 # Create your views here.
 from main.forms import RegisterClientForm
+from main.models import Sector
 
 
 def RegisterClientView(request):
+    secotres = Sector.objects.all()
     if request.method == 'POST':
         form = RegisterClientForm(request.POST)
         if form.is_valid():
@@ -12,5 +14,5 @@ def RegisterClientView(request):
             return redirect('home')
     else:
         form = RegisterClientForm()
-    return render(request, 'registration/registerClient.html', {'form': form})
+    return render(request, 'registration/registerClient.html', {'form': form, 'sectors': secotres})
 
