@@ -7,7 +7,7 @@ import phonenumbers
 def DNIValidator(value):
     if not dni.is_valid(value):
         raise ValidationError(
-            _('%(value)s is not an even a DNI'),
+            _('%(value) is not an even a DNI'),
             params={'value': value},
         )
     else:
@@ -17,7 +17,7 @@ def DNIValidator(value):
 def NIFValidator(value):
     if not nif.is_valid(value):
         raise ValidationError(
-            _('%(value)s is not an even a NIF'),
+            _('%(value)s no es un NIF correcto'),
             params={'value': value},
         )
     else:
@@ -39,6 +39,28 @@ def PhoneValidator(value):
         return value
     else:
         raise ValidationError(
-            _('%(value)s is not an even a Phone number'),
+            _('%(value)s no es un número de teléfono correcto'),
             params={'value': value},
         )
+
+
+def NIFUniqueValidator(value):
+    from .models import Cliente
+    if Cliente.objects.filter(NIF=value).exists():
+        raise ValidationError(
+            _('%(value)s ya está en uso'),
+            params={'value': value},
+        )
+    else:
+        return value
+
+
+def UniqueEmailValidator(value):
+    from .models import User
+    if User.objects.filter(email=value).exists():
+        raise ValidationError(
+            _('%(value)s ya está en uso'),
+            params={'value': value},
+        )
+    else:
+        return value

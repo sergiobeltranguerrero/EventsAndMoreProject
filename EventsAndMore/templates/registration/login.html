@@ -50,9 +50,14 @@
             <div class="form-group">
                 <input type="submit" class="btn btn-primary btn-block btn-lg " value="Iniciar Sessión">
             </div>
-            <div class="clearfix">
+            <div class="clearfix mb-3">
                 <a href={% url 'password_reset' %}>He olvidado mi contraseña</a>
             </div>
+            {% if form.non_field_errors %}
+                {% for error in form.non_field_errors %}
+                    <div class="alert alert-danger">{{ error }}</div>
+                {% endfor %}
+            {% endif %}
         </form>
     </div>
     </body>
