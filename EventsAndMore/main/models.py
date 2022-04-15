@@ -121,6 +121,13 @@ class Assignacion(Model):
     evento = models.ForeignKey(Evento, on_delete=models.DO_NOTHING)
     stand = models.ForeignKey(Stand, on_delete=models.DO_NOTHING)
     cliente = models.ForeignKey(Cliente, on_delete=models.DO_NOTHING)
+    ESTADO = [
+        ('PD', 'Pendiente'),
+        ('RC', 'Rechazada'),
+        ('AP', 'Aprovada'),
+    ]
+    estado = models.CharField(max_length=2, choices=ESTADO,default=ESTADO[1])
+    comentario = models.CharField(max_length=500,null=True)
 
     def __str__(self):
         return self.evento + self.stand + self.cliente +' (' + str(self.id) + ')'
@@ -138,6 +145,9 @@ class Evento_Stand_Sector(Model):
 
     def __str__(self):
         return self.evento + self.stand + self.sector +' (' + str(self.id) + ')'
+
+    class Meta:
+        unique_together = (("evento", "stand",'sector'),)
 
 
 class Historial_Incidencias(Model):

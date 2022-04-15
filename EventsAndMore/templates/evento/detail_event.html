@@ -1,0 +1,45 @@
+{% extends "base.html" %}
+{% block title %}Eventos disponibles{% endblock %}
+{% block body %}
+    <div class="container">
+        <div class="card text-center col-12">
+          <div class="card-header">
+            Evento
+          </div>
+          <div class="card-body">
+            <h5 class="card-title" style="margin-bottom: 20px">{{ evento.nombre }}</h5>
+            <p class="card-text" style="margin-bottom: 15px">{{ evento.descripcion }}</p>
+            <hr/>
+             <div class="row">
+                 <div class="col-6 col-lg-4 col-xl-3">
+                    <div class="input-group">
+                        <label class="input-group-text" for="inputGroupStartDate">Fecha inicio</label>
+                        <input type="datetime-local" class="form-control" id="month" aria-describedby="inputGroupStartDate" value="{{ evento.fecha_inicio|date:"Y-m-d" }}T{{ evento.fecha_inicio|date:"H:i" }}" READONLY>
+                    </div>
+                </div>
+                <div class="col-6 col-lg-4 col-xl-3">
+                    <div class="input-group col-6">
+                        <label class="input-group-text" for="inputGroupEndDate">Fecha fin</label>
+                        <input type="datetime-local" class="form-control" id="year" aria-describedby="inputGroupEndDate" value="{{ evento.fecha_fin|date:"Y-m-d" }}T{{ evento.fecha_fin|date:"H:i" }}" READONLY>
+                    </div>
+                </div>
+                 <div class="col-lg-4 col-xl-6"></div>
+                 <div class="container">
+                 <hr/>
+                 </div>
+                <div class="col-4 col-xl-2">
+                    <div class="input-group">
+                        <label class="input-group-text" for="inputGroupCapacity">Capacidad</label>
+                        <input type="number" class="form-control" id="capacity" aria-describedby="inputGroupCapacity" value="{{ evento.capacidad }}" READONLY>
+                    </div>
+                </div>
+            </div>
+            <hr/>
+            <a href="{% url "get_stand" evento.id %}" class="btn btn-success">Unirme</a>
+          </div>
+          <div class="card-footer text-muted">
+            EventsAndMore® se reserva el derecho de exclusion
+          </div>
+        </div>
+    </div>
+{% endblock %}

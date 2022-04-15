@@ -1,39 +1,34 @@
 from django.shortcuts import render
 from main.models import *
 
-def get_stand(request,id_event):
+#GET: Gets stands for the client sector and one event
+#POST: Creates new assignations for a event and client sector by selected by the user
+def get_stands_by_sector_event(request, id_event):
+    evento = Evento.objects.get(id=id_event)
+    cliente = Cliente.objects.get(user=request.user)
+    stands_id = []
+    eas = Evento_Stand_Sector.objects.filter(evento=evento, sector=cliente.sector)
+    for stand in eas:
+        stands_id.append(stand.stand.id)
     if request.method == 'GET':
-        evento = Evento.objects.get(id=id_event)
-        cliente = Cliente.objects.get(user=request.user)
-        stand = Evento_Stand_Sector.objects.filter(evento=evento,sector=cliente.sector).model.stand
-        assignados = Assignacion.objects.get(evento=evento,stand__in=stand.all())
-        json = {'stands':stand,'assignados':assignados}
+        assignados = Assignacion.objects.filter(evento=evento,stand_id__in=stands_id)
+        for ea in eas:
+            if assignados.filter(stand_id=ea.stand_id).exists():
+                eas = eas.exclude(stand_id=ea.stand_id)
+        json = {'eas':eas,'assignados':assignados, 'evento':evento}
         return render(request,'stand\get_stand.html',json)
     elif request.method == 'POST':
-        return render(request, 'stand\get_stand.html')
-    else:
-        return render(request, '/')
-
-def stand_planning_original(request,id_event):
-    evento = Evento.objects.get(id=id_event)
-    if request.method == 'GET':
-        stand = Stand.objects.all()
-        sector = Sector.objects.all()
-        sizes = Evento_Stand_Sector.SIZE
-        json = {'stands':stand,'sectores':sector,'evento':evento,'sizes':sizes}
-        return render(request,'evento\stand_planning.html',json)
-    elif request.method == 'POST':
-        lstValues = []
-        for id in range(1,Stand.objects.count()+1):
-            id_stand = request.POST["id_stand"+str(id)]
-            stand = Stand.objects.get(id=id_stand)
-            size = request.POST["size"+str(id)]
-            id_sector = request.POST["sector"+ str(id)]
-            if not id_sector == 'none' and not size == '':
-                sector = Sector.objects.get(id=id_sector)
-                lstValues.append(Evento_Stand_Sector(stand=stand,sector=sector,evento_id=evento.id,stand_size=size))
-        Evento_Stand_Sector.objects.bulk_create(lstValues)
-        return render(request, '/')
+        lst_obj = get_elements_by_request_post(stands_id, ['id', 'size', 'sector'], 'selected', request)
+        assignaciones = []
+        for obj in lst_obj:
+            try:
+                if obj.__getattribute__('selected') == 'true':
+                    assignaciones.append(Assignacion(evento=evento,cliente=cliente,stand_id=obj.__getattribute__('id'),estado='PD'))
+            except:
+                next
+        if len(assignaciones) > 0:
+            Assignacion.objects.bulk_create(assignaciones)
+        return render(request,'home_base.html')
     else:
         return render(request, '/')
 
@@ -111,7 +106,8 @@ def create_ess(request,id_event):
         stand = Stand.objects.get(id=element.__getattribute__('id_stand'))
         if not element.__getattribute__('sector') == 'none' and not element.__getattribute__('size') == '':
             sector = Sector.objects.get(id=element.__getattribute__('sector'))
-            lst_values.append(Evento_Stand_Sector(stand=stand, sector=sector, evento_id=evento.id, stand_size=element.__getattribute__('size')))
+            lst_values.append(Evento_Stand_Sector(stand=stand, sector=sector, evento_id=evento.id,
+                                                  stand_size=element.__getattribute__('size')))
     Evento_Stand_Sector.objects.bulk_create(lst_values)
 
 def get_elements_by_request_post(lst_id,str_post_lst,try_post_elem,request):
@@ -127,7 +123,7 @@ def get_elements_by_request_post(lst_id,str_post_lst,try_post_elem,request):
 
 def get_from_request_post(id,str_post_lst,try_post_elem,request):
     class Dynamic:
-        idess = ''
+        z=''
     dynamic = Dynamic()
     for element in str_post_lst:
         try:
