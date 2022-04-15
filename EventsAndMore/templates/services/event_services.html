@@ -1,0 +1,21 @@
+{% extends "home_base.html" %}
+
+{% block body %}
+    <body>
+    {% for servicio in lista_servicios %}
+        <form method="post">
+        {% csrf_token %}
+            <input type="hidden" name="id_servicio" value="{{ servicio.id }}">
+            <p>{{ servicio.nombre }}</p>
+            <p>{{ servicio.descripcion }}</p>
+            <p>{{ servicio.precio }}€</p>
+            <label for="cantidad_id">Cantidad:</label>
+            <input type="number" name="cantidad" id="cantidad_id" value="1" min="1" >
+            <button type="submit">Agregar</button>
+        </form>
+    {% endfor %}
+    {% for servicio_especial in lista_servicios_especiales %}
+        <p>{{ servicio_especial.servicio.nombre }}</p>
+    {% endfor %}
+    </body>
+{% endblock %}
