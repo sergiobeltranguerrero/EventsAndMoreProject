@@ -1,8 +1,11 @@
 from django.shortcuts import render
 from main.models import *
+from django.contrib.auth.decorators import login_required
+from .evento import my_events
 
 #GET: Gets stands for the client sector and one event
 #POST: Creates new assignations for a event and client sector by selected by the user
+@login_required
 def get_stands_by_sector_event(request, id_event):
     evento = Evento.objects.get(id=id_event)
     cliente = Cliente.objects.get(user=request.user)
@@ -28,7 +31,8 @@ def get_stands_by_sector_event(request, id_event):
                 next
         if len(assignaciones) > 0:
             Assignacion.objects.bulk_create(assignaciones)
-        return render(request,'home_base.html')
+        request.method = 'GET'
+        return my_events(request)
     else:
         return render(request, '/')
 

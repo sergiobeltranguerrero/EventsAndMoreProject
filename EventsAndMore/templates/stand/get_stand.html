@@ -1,9 +1,9 @@
-{% extends "base.html" %}
+{% extends "home_base.html" %}
 {% block title %}Solicitud de stand{% endblock %}
 {% block body %}
-<h1>Evento {{evento.name}}</h1>
-<h2>{{ user.sector }}</h2>
 <div class="container">
+    <h1>Evento: {{evento.nombre}}</h1>
+    <h2>Sector: {{ user.cliente.sector }}</h2>
     <form action="{% url 'get_stand' evento.id %}" method="POST">
     {% csrf_token %}
         <table class="table">

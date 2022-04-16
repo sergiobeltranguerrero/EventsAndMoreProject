@@ -2,6 +2,7 @@ from django.shortcuts import render
 from main.models import *
 from datetime import datetime,date
 from dateutil.relativedelta import relativedelta
+from django.contrib.auth.decorators import login_required
 
 #Shows all events in current year
 def list_events(request):
@@ -31,6 +32,7 @@ def detail_event(request,id):
 
 
 #Shows events that user have solicitated
+@login_required
 def my_events(request):
     states = []
     for estado in Assignacion.ESTADO:

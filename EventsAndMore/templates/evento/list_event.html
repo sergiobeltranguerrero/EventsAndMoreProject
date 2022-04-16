@@ -1,8 +1,8 @@
-{% extends "base.html" %}
+{% extends "home_base.html" %}
 {% block title %}Eventos disponibles{% endblock %}
 {% block body %}
-<h1>Eventos disponibles</h1>
 <div class="container">
+<h1>Eventos disponibles</h1>
     <form action="" method="POST">
         {% csrf_token %}
         <div class="col-12">
@@ -35,7 +35,13 @@
                     <th scope="col">Fecha inicio</th>
                     <th scope="col">Fecha fin</th>
                     <th scope="col">Capacidad</th>
-                    <th scope="col" colspan="2">Acciones</th>
+                    <th scope="col" colspan="
+                    {% if user.is_cliente %}
+                        2
+                    {% else %}
+                        1
+                    {% endif %}
+                    ">Acciones</th>
                 </tr>
             </thead>
             <tbody>
@@ -51,11 +57,13 @@
                                 <a class="btn btn-primary btn-block text-black" href="{% url 'detail_event' evento.id %}">Detalle</a>
                             </div>
                         </td>
+                        {% if user.is_cliente %}
                         <td>
                             <div class="form-group">
                                 <a class="btn btn-success btn-block text-black" href="{% url 'get_stand' evento.id %}">Unirme</a>
                             </div>
                         </td>
+                        {% endif %}
                     </tr>
                 {% endfor %}
             </tbody>

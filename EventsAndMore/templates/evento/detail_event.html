@@ -1,4 +1,4 @@
-{% extends "base.html" %}
+{% extends "home_base.html" %}
 {% block title %}Eventos disponibles{% endblock %}
 {% block body %}
     <div class="container">
@@ -35,7 +35,9 @@
                 </div>
             </div>
             <hr/>
+            {% if user.is_cliente %}
             <a href="{% url "get_stand" evento.id %}" class="btn btn-success">Unirme</a>
+            {% endif %}
           </div>
           <div class="card-footer text-muted">
             EventsAndMore® se reserva el derecho de exclusion
