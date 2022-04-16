@@ -126,7 +126,7 @@ class Assignacion(Model):
         ('RC', 'Rechazada'),
         ('AP', 'Aprovada'),
     ]
-    estado = models.CharField(max_length=2, choices=ESTADO,default=ESTADO[1])
+    estado = models.CharField(max_length=2, choices=ESTADO,default=ESTADO[0])
     comentario = models.CharField(max_length=500,null=True)
 
     def __str__(self):
