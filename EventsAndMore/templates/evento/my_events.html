@@ -1,0 +1,97 @@
+{% extends "base.html" %}
+{% block title %}Mis Eventos{% endblock %}
+{% block body %}
+<div class="container">
+    <h1>Mis Eventos</h1>
+    <form action="" method="POST">
+        {% csrf_token %}
+        <select class="form-select" id="state" name="state" aria-label="Default select example">
+            <option value=""
+            {% if selection == '' %}
+                selected
+            {% endif %}
+            >Seleccionar...</option>
+            {% for state in states %}
+            <option value="{{ state.id }}"
+            {% if selection == state.id %}
+                selected
+            {% endif %}
+            >{{ state.name }}</option>
+            {% endfor %}
+        </select>
+        <div class="input-group">
+            <button class="btn  btn-secondary" type="submit" id="filter">Filtrar</button>
+        </div>
+    </form>
+    <form action="{% url 'my_events' %}" method="POST">
+    {% csrf_token %}
+        <table class="table table-striped table-hover col-12">
+            <thead>
+                <tr>
+                    <th hidden>IdEvent</th>
+                    <th scope="col">Nombre Evento</th>
+                    <th scope="col">Estand/s</th>
+                    <th scope="col">Fecha inicio</th>
+                    <th scope="col">Fecha fin</th>
+                    <th scope="col">Capacidad</th>
+                    <th scope="col">Estado</th>
+                    <th scope="col" colspan="2">Acciones</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for ass in customs %}
+                    <tr class="
+                    {% if ass.state.id == 'PD' %}
+                        table-warning
+                    {% elif ass.state.id == 'RC' %}
+                        table-danger
+                    {% elif ass.state.id == 'AP' %}
+                        table-success
+                    {% else %}
+                        table-danger
+                    {% endif%}
+                    ">
+                        <th scope="row" hidden><input type="number" id="id_evento{{ass.event_id}}" name="id_evento{{ass.event_id}}" value="{{ass.event_id}}" readonly required/></th>
+                        <td>{{ass.event_name}}</td>
+                        <td>{{ass.lst_ass_stand}}</td>
+                        <td>{{ass.start_date|date:"d/m/Y H:i"}}</td>
+                        <td>{{ass.end_date|date:"d/m/Y H:i"}}</td>
+                        <td>{{ass.capacity}}</td>
+                        <td>
+                            <h4>
+                                <span class="badge badge-pill
+                        {% if ass.state.id == 'PD' %}
+                            bg-warning">{{ass.state.name}}
+                        {% elif ass.state.id == 'RC' %}
+                            bg-danger">{{ass.state.name}}
+                        {% elif ass.state.id == 'AP' %}
+                            bg-success">{{ass.state.name}}
+                        {% else %}
+                            bg-danger">Error on state
+                        {% endif%}
+                                </span>
+                            </h4>
+                        </td>
+                        <td>
+                            <div class="form-group">
+                                <a class="btn btn-primary btn-block text-black" href="{% url 'my_stand' ass.event_id %}">Detalle</a>
+                            </div>
+                        </td>
+                        <td>
+                            <div class="form-group">
+                                <a class="btn btn-success btn-block text-black
+                                {% if ass.state.id != 'AP' %}
+                                    disabled" href=""
+                                   {% else %}
+                                   " href=""
+                                {% endif%}
+                            >Solicitar servicios</a>
+                            </div>
+                        </td>
+                    </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+    </form>
+</div>
+{% endblock %}

@@ -3,17 +3,8 @@
 {% block body %}
 <h1>Eventos disponibles</h1>
 <div class="container">
-    <form action="{% url 'filter_events' %}" method="POST">
+    <form action="" method="POST">
         {% csrf_token %}
-        <div class="col-9 col-sm-8 col-md-6 col-lg-5 col-xl-4">
-            <div class="input-group">
-                <label class="input-group-text" for="inputGroupMonth">Mes</label>
-                <input type="number" class="form-control" id="month" aria-describedby="inputGroupMonth" max="12" min="1" value="{{ fecha_now.month }}" maxlength="2">
-                <label class="input-group-text" for="inputGroupMonth">Ano</label>
-                <input type="number" class="form-control" id="year" aria-describedby="inputGroupMonth"  min="{{ fecha_now.year|add:-1 }}" value="{{ fecha_now.year }}" max="{{fecha_now.year|add:5}}" maxlength="4">
-                <button class="btn  btn-secondary" type="button" id="inputGroupMonth">Filtrar</button>
-            </div>
-        </div>
         <div class="col-12">
             <div class="input-group">
                 <label class="input-group-text" for="inputGroupDate">Rango</label>

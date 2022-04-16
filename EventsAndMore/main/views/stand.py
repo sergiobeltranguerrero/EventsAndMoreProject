@@ -93,6 +93,37 @@ def update_delete_ess(request,id_event):
     essd = Evento_Stand_Sector.objects.filter(pk__in=lstDeletes)
     essd.delete()
 
+def my_stand(request,id_event):
+    states = []
+    for estado in Assignacion.ESTADO:
+        states.append(State(estado[0], estado[1]))
+    cliente = Cliente.objects.get(user=request.user)
+    assignaciones = Assignacion.objects.filter(cliente=cliente, evento_id=id_event)
+    if request.method == 'POST':
+        ass_id = []
+        for ass in assignaciones:
+            ass_id.append(ass.id)
+        lst_obj = get_elements_by_request_post(ass_id, ['id'], 'delete', request)
+        ass_id.clear()
+        for obj in lst_obj:
+            try:
+                if obj.__getattribute__('delete') == 'true':
+                    ass_id.append(obj.__getattribute__('id'))
+            except:
+                next
+        assignaciones.filter(pk__in=ass_id).delete()
+    assignaciones = Assignacion.objects.filter(cliente=cliente, evento_id=id_event)
+    if not assignaciones.count() == 0:
+        json = {'assignaciones': assignaciones, 'evento': assignaciones[0].evento, 'states': states}
+        return render(request, 'stand/my_stand.html', json)
+    else:
+        return render(request, 'home.html')
+
+
+
+
+
+
 def create_ess(request,id_event):
     evento = Evento.objects.get(id=id_event)
     sids = get_lst_from_query_set(Evento_Stand_Sector.objects.filter(evento=evento).values('stand_id'),'stand_id')
@@ -143,3 +174,11 @@ def get_lst_from_query_set(query_set,name):
     for element in query_set:
         elements.append(element[name])
     return elements
+
+class State:
+    id = ''
+    name = ''
+
+    def __init__(self,id,name):
+        self.id = id
+        self.name = name
