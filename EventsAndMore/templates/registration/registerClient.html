@@ -22,121 +22,193 @@
     <section class="vh-100 gradient-custom">
         <div class="container py-5 h-50">
             <div class="row justify-content-center align-items-center h-100">
-                <div class="col-12 col-lg-9 col-xl-7">
+                <div class="col-12 col-lg-9 col- xl-7">
                     <div class="card shadow-2-strong card-registration"
                          style="border-radius: 15px; background: #f7f7f7;">
                         <div class="card-body p-4 p-md-5">
-                            <h3 class="mb-4 pb-2 pb-md-0 mb-md-5">Registro Cliente</h3>
-                            <form>
-
-                                <div class="row">
-                                    <div class="col-md-6 mb-4">
-                                        <div class="form-outline">
-                                            <label class="form-label" for="firstName">First Name</label>
-                                            <input type="text" id="firstName" class="form-control form-control-lg"/>
-                                        </div>
-
+                            <h2 class="mb-2 pb-2 pb-md-0 mb-md-4">Registro Cliente</h2>
+                            <form action="" method="POST">
+                                {% csrf_token %}
+                                {% if success %}
+                                    <div class="alert alert-success" role="alert">
+                                        La empresa se ha registrado correctamente.
                                     </div>
-                                    <div class="col-md-6 mb-4">
-
+                                {% endif %}
+                                <div class="row">
+                                    <div class="col-md-4 mb-2">
                                         <div class="form-outline">
-                                            <input type="text" id="lastName" class="form-control form-control-lg"/>
-                                            <label class="form-label" for="lastName">Last Name</label>
+                                            <label class="form-label" for="id_username">Nombre de Usuario</label>
+                                            <input type="text" id="id_username" name="username" maxlength="150"
+                                                   required class="form-control form-control-lg"
+                                                   value="{{ form.data.username }}"/>
                                         </div>
-
+                                    </div>
+                                    <div class="col-md-4 mb-2">
+                                        <div class="form-outline">
+                                            <label class="form-label" for="id_password1">Contraseña</label>
+                                            <input type="password" id="id_password1" name="password1" required
+                                                   class="form-control form-control-lg"/>
+                                        </div>
+                                    </div>
+                                    <div class="col-md-4 mb-2">
+                                        <div class="form-outline">
+                                            <label class="form-label" for="id_password2">Repita la contraseña</label>
+                                            <input type="password" id="id_password2" name="password2" required
+                                                   class="form-control form-control-lg"/>
+                                        </div>
+                                    </div>
+                                    <div class="mb-2 d-flex align-items-center justify-content-center ">
+                                        <p>La contraseña debe contener mínimo 8 caracteres y ...</p>
                                     </div>
                                 </div>
 
                                 <div class="row">
-                                    <div class="col-md-6 mb-4 d-flex align-items-center">
+                                    <div class="col-md-6 mb-3">
+                                        <div class="form-outline">
+                                            <label class="form-label" for="id_nombre_empresa">Nombre de la
+                                                empresa</label>
+                                            <input type="text" id="id_nombre_empresa" name="nombre_empresa"
+                                                   maxlength="100" required class="form-control form-control-lg"
+                                                   value="{{ form.data.nombre_empresa }}"/>
+                                        </div>
 
+                                    </div>
+                                    <div class="col-md-6 mb-3">
+                                        <div class="form-outline">
+                                            <label class="form-label" for="id_nif">NIF</label>
+                                            <input type="text" id="id_nif" name="nif" maxlength="9" required
+                                                   class="form-control form-control-lg"
+                                                   value="{{ form.data.nif }}"/>
+                                        </div>
+                                    </div>
+                                </div>
+
+                                <div class="row">
+                                    <div class="mb-3 d-flex align-items-center justify-content-center ">
                                         <div class="form-outline datepicker w-100">
-                                            <input
-                                                    type="text"
-                                                    class="form-control form-control-lg"
-                                                    id="birthdayDate"
-                                            />
-                                            <label for="birthdayDate" class="form-label">Birthday</label>
+                                            <label for="id_direccion" class="form-label">Dirección</label>
+                                            <input type="text" id="id_direccion" name="direccion" required
+                                                   maxlength="100" class="form-control form-control-lg"
+                                                   value="{{ form.data.direccion }}"/>
                                         </div>
-
-                                    </div>
-                                    <div class="col-md-6 mb-4">
-
-                                        <h6 class="mb-2 pb-1">Gender: </h6>
-
-                                        <div class="form-check form-check-inline">
-                                            <input
-                                                    class="form-check-input"
-                                                    type="radio"
-                                                    name="inlineRadioOptions"
-                                                    id="femaleGender"
-                                                    value="option1"
-                                                    checked
-                                            />
-                                            <label class="form-check-label" for="femaleGender">Female</label>
-                                        </div>
-
-                                        <div class="form-check form-check-inline">
-                                            <input
-                                                    class="form-check-input"
-                                                    type="radio"
-                                                    name="inlineRadioOptions"
-                                                    id="maleGender"
-                                                    value="option2"
-                                            />
-                                            <label class="form-check-label" for="maleGender">Male</label>
-                                        </div>
-
-                                        <div class="form-check form-check-inline">
-                                            <input
-                                                    class="form-check-input"
-                                                    type="radio"
-                                                    name="inlineRadioOptions"
-                                                    id="otherGender"
-                                                    value="option3"
-                                            />
-                                            <label class="form-check-label" for="otherGender">Other</label>
-                                        </div>
-
                                     </div>
                                 </div>
 
                                 <div class="row">
-                                    <div class="col-md-6 mb-4 pb-2">
-
+                                    <div class="col-md-4 mb-3">
                                         <div class="form-outline">
-                                            <input type="email" id="emailAddress" class="form-control form-control-lg"/>
-                                            <label class="form-label" for="emailAddress">Email</label>
+                                            <label class="form-label" for="id_poblacion">Población</label>
+                                            <input type="text" id="id_poblacion" name="poblacion" required
+                                                   maxlength="50" class="form-control form-control-lg"
+                                                   value="{{ form.data.poblacion }}"/>
                                         </div>
 
                                     </div>
-                                    <div class="col-md-6 mb-4 pb-2">
-
+                                    <div class="col-md-4 mb-3">
                                         <div class="form-outline">
-                                            <input type="tel" id="phoneNumber" class="form-control form-control-lg"/>
-                                            <label class="form-label" for="phoneNumber">Phone Number</label>
+                                            <label class="form-label" for="id_provincia">Provincia</label>
+                                            <input type="text" id="id_provincia" name="provincia" required
+                                                   maxlength="50" class="form-control form-control-lg"
+                                                   value="{{ form.data.provincia }}"/>
                                         </div>
+                                    </div>
 
+                                    <div class="col-md-4 mb-3">
+                                        <div class="form-outline">
+                                            <label class="form-label" for="id_pais">País</label>
+                                            <input type="text" id="id_pais" name="pais" required maxlength="50"
+                                                   class="form-control form-control-lg"
+                                                   value="{{ form.data.pais }}"/>
+                                        </div>
                                     </div>
                                 </div>
 
                                 <div class="row">
-                                    <div class="col-12">
+                                    <div class="col-md-6 mb-3">
+                                        <div class="form-outline">
+                                            <label class="form-label" for="id_telefono_empresa">Telefono de la
+                                                empresa</label>
+                                            <input type="text" id="id_telefono_empresa" name="telefono_empresa" required
+                                                   maxlength="14" class="form-control form-control-lg"
+                                                   value="{{ form.data.telefono_empresa }}"/>
+                                        </div>
 
-                                        <select class="select form-control-lg">
-                                            <option value="1" disabled>Choose option</option>
-                                            <option value="2">Subject 1</option>
-                                            <option value="3">Subject 2</option>
-                                            <option value="4">Subject 3</option>
+                                    </div>
+                                    <div class="col-md-6 mb-3">
+                                        <div class="form-outline">
+                                            <label class="form-label" for="id_email_empresa">Email de la empresa</label>
+                                            <input type="email" id="id_email_empresa" name="email_empresa" required
+                                                   maxlength="50" class="form-control form-control-lg"
+                                                   value="{{ form.data.email_empresa }}"/>
+                                        </div>
+                                    </div>
+                                </div>
+
+                                <div class="row">
+                                    <div class="col-12 mb-3">
+                                        <label for="id_sector" class="form-label select-label">Elegir un sector</label>
+                                        <select id="id_sector" name="sector" required class="select form-control-sm">
+                                            <option>Elegir un sector</option>
+                                            {% for sector in sectors %}
+                                                <option value="{{ sector.id }}" {% if sector.id == form.data.sector %}
+                                                    selected {% endif %}>{{ sector.nombre }}</option>
+                                            {% endfor %}
                                         </select>
-                                        <label class="form-label select-label">Choose option</label>
-
                                     </div>
                                 </div>
 
-                                <div class="mt-4 pt-2">
-                                    <input class="btn btn-primary btn-lg" type="submit" value="Submit"/>
+                                <div class="row">
+                                    <div class="col-md-6 mb-3">
+                                        <div class="form-outline">
+                                            <label class="form-label" for="id_first_name">Nombre contacto</label>
+                                            <input type="text" id="id_first_name" name="first_name" required
+                                                   maxlength="50" class="form-control form-control-lg"
+                                                   value="{{ form.data.first_name }}"/>
+                                        </div>
+
+                                    </div>
+                                    <div class="col-md-6 mb-3">
+                                        <div class="form-outline">
+                                            <label class="form-label" for="id_last_name">Apellidos contacto</label>
+                                            <input type="text" id="id_last_name" name="last_name" required
+                                                   maxlength="50" class="form-control form-control-lg"
+                                                   value="{{ form.data.last_name }}"/>
+                                        </div>
+                                    </div>
                                 </div>
+                                <div class="row">
+                                    <div class="col-md-6 mb-3">
+                                        <div class="form-outline">
+                                            <label class="form-label" for="id_telefono_contacto">Telefono
+                                                representante</label>
+                                            <input type="text" id="id_telefono_contacto" name="telefono_contacto"
+                                                   required maxlength="14" class="form-control form-control-lg"
+                                                   value="{{ form.data.telefono_contacto }}"/>
+                                        </div>
+
+                                    </div>
+                                    <div class="col-md-6 mb-3">
+                                        <div class="form-outline">
+                                            <label class="form-label" for="id_email">Email representante</label>
+                                            <input type="email" id="id_email" name="email" required maxlength="50"
+                                                   class="form-control form-control-lg" value="{{ form.data.email }}"/>
+                                        </div>
+                                    </div>
+                                </div>
+
+                                <div class="mt-4 pt-2 mb-3">
+                                    <input class="btn btn-primary btn-lg" type="submit" value="Crear"/>
+                                </div>
+
+                                {% if form.errors %}
+                                    {% for field in form %}
+                                        {% for error in field.errors %}
+                                            <div class="alert alert-danger">
+                                                <strong>{{ error|escape }}</strong>
+                                            </div>
+                                        {% endfor %}
+                                    {% endfor %}
+                                {% endif %}
 
                             </form>
                         </div>

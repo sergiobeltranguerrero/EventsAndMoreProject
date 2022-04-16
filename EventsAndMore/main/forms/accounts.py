@@ -1,26 +1,31 @@
 from django import forms
 from django.contrib.auth import get_user_model
 from django.contrib.auth.forms import UserCreationForm
+from django.core.validators import EmailValidator
 from django.db import transaction
 
 from main.models import Cliente, Sector
-from main.validator import NIFValidator
+from main.validator import NIFValidator, PhoneValidator, NIFUniqueValidator, UniqueEmailValidator
 
 
 class RegisterClientForm(UserCreationForm):
-    telefono_contacto = forms.CharField(max_length=14, required=True, label='Teléfono del contacto')
+    telefono_contacto = forms.CharField(max_length=14, required=True, label='Teléfono del contacto',
+                                        validators=[PhoneValidator])
     nombre_empresa = forms.CharField(max_length=100, required=True, label='Nombre de la empresa')
-    nif = forms.CharField(max_length=9, required=True, label='NIF', validators=[NIFValidator])
+    nif = forms.CharField(max_length=9, required=True, label='NIF', validators=[NIFValidator, NIFUniqueValidator])
     direccion = forms.CharField(max_length=100, required=True, label='Dirección')
     poblacion = forms.CharField(max_length=50, required=True, label='Población')
     provincia = forms.CharField(max_length=50, required=True, label='Provincia')
     pais = forms.CharField(max_length=50, required=True, label='País')
-    telefono_empresa = forms.CharField(max_length=14, required=True, label='Teléfono de la empresa')
-    email_empresa = forms.EmailField(max_length=50, required=True, label='Email de la empresa')
+    telefono_empresa = forms.CharField(max_length=14, required=True, label='Teléfono de la empresa',
+                                       validators=[PhoneValidator])
+    email_empresa = forms.EmailField(max_length=50, required=True, label='Email de la empresa',
+                                     validators=[EmailValidator])
     sector = forms.ModelChoiceField(queryset=Sector.objects.all(), required=True, label='Sector')
     first_name = forms.CharField(max_length=50, required=True, label='Nombre del contacto')
     last_name = forms.CharField(max_length=50, required=True, label='Apellidos del contacto')
-    email = forms.EmailField(max_length=50, required=True, label='Email del contacto')
+    email = forms.EmailField(max_length=50, required=True, label='Email del contacto',
+                             validators=[EmailValidator, UniqueEmailValidator])
 
     class Meta(UserCreationForm.Meta):
         User = get_user_model()
@@ -72,4 +77,3 @@ class ChangePasswordForm(forms.Form):
             raise forms.ValidationError('Las contraseñas no coinciden')
 
         return new_password_confirmation
-
