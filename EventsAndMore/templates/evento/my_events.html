@@ -6,8 +6,8 @@
     <form action="" method="POST">
         {% csrf_token %}
         <select class="form-select" id="state" name="state" aria-label="Default select example">
-            <option value=""
-            {% if selection == '' %}
+            <option value="%"
+            {% if selection == '%' %}
                 selected
             {% endif %}
             >Seleccionar...</option>

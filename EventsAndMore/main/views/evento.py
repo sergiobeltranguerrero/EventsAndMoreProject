@@ -7,18 +7,21 @@ from django.contrib.auth.decorators import login_required
 #Shows all events in current year
 def list_events(request):
     if request.method == 'GET':
-        #TODO: FILTRAR PER SECTOR D'USUARI
         eventos = Evento.objects.filter(fecha_inicio__gt=datetime.now())
         json = set_dates()
     elif request.method == 'POST':
         json = get_dates(request=request)
-        eventos = Evento.objects.filter(fecha_inicio__gt=json.get('date_start_start',json['mindate']),
-                                        fecha_inicio__lt=json.get('date_start_end',json['maxdate']),
-                                        fecha_fin__gt=json.get('date_end_start',json['mindate']),
-                                        fecha_fin__lt=json.get('date_end_end',json['maxdate']))
+        eventos = Evento.objects.filter(fecha_inicio__gt=json.get('date_start_start', json['mindate']),
+                                        fecha_inicio__lt=json.get('date_start_end', json['maxdate']),
+                                        fecha_fin__gt=json.get('date_end_start', json['mindate']),
+                                        fecha_fin__lt=json.get('date_end_end', json['maxdate']))
     else:
         return render(request, '/')
-    json['eventos'] = eventos
+    if request.user.is_cliente:
+        ids2 = Evento_Stand_Sector.objects.filter(sector=request.user.cliente.sector).values('evento_id').order_by('evento_id')
+        ids = ids2.distinct()
+        events = eventos.filter(pk__in=ids)
+    json['eventos'] = events
     return render(request, 'evento\list_event.html', json)
 
 #Shows an specific event passed by paramether
@@ -41,7 +44,7 @@ def my_events(request):
     if request.method == 'GET':
         assignaciones = Assignacion.objects.filter(cliente=cliente)
     elif request.method == 'POST':
-        if not request.POST['state'] == '':
+        if not request.POST['state'] == '%':
             assignaciones = Assignacion.objects.filter(cliente=cliente,estado=request.POST['state'])
         else:
             assignaciones = Assignacion.objects.filter(cliente=cliente)
