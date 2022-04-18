@@ -17,11 +17,11 @@ def list_events(request):
                                         fecha_fin__lt=json.get('date_end_end', json['maxdate']))
     else:
         return render(request, '/')
-    if request.user.is_cliente:
-        ids2 = Evento_Stand_Sector.objects.filter(sector=request.user.cliente.sector).values('evento_id').order_by('evento_id')
-        ids = ids2.distinct()
-        events = eventos.filter(pk__in=ids)
-    json['eventos'] = events
+    if not request.user.is_anonymous and request.user.is_cliente:
+            ids2 = Evento_Stand_Sector.objects.filter(sector=request.user.cliente.sector).values('evento_id').order_by('evento_id')
+            ids = ids2.distinct()
+            eventos = eventos.filter(pk__in=ids)
+    json['eventos'] = eventos
     return render(request, 'evento\list_event.html', json)
 
 #Shows an specific event passed by paramether
