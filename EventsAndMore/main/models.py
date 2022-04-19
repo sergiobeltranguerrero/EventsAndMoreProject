@@ -21,15 +21,15 @@ class Sector(Model):
 
 class Cliente(Model):
     user = models.OneToOneField(User, on_delete=models.DO_NOTHING)
-    telefono = models.CharField(max_length=14, validators=[PhoneValidator])
-    NIF = models.CharField(unique=True, max_length=9, validators=[NIFValidator])
+    telefono = models.CharField(max_length=14)
+    NIF = models.CharField(unique=True, max_length=9)
     nombre_empresa = models.CharField(max_length=50)
     direccion = models.CharField(max_length=200)
     poblacion = models.CharField(max_length=50)
     provincia = models.CharField(max_length=50)
     pais = models.CharField(max_length=50)
     sector = models.ForeignKey(Sector, on_delete=models.DO_NOTHING, null=True, blank=True)
-    telefono_empresa = models.CharField(max_length=14, validators=[PhoneValidator])
+    telefono_empresa = models.CharField(max_length=14)
     email_empresa = models.EmailField()
     mostrar_servicios = models.BooleanField(default=False)
 
@@ -102,10 +102,17 @@ class Servicios_Asignados(Model):
     #  no se quita cantidad
 
 
+class Servicios_Especiales(Model):
+    evento = models.ForeignKey(Evento, on_delete=models.DO_NOTHING)
+    servicio = models.ForeignKey(Servicio, on_delete=models.DO_NOTHING)
+
+
 class Assignacion(Model):
     evento = models.ForeignKey(Evento, on_delete=models.DO_NOTHING)
     stand = models.ForeignKey(Stand, on_delete=models.DO_NOTHING)
     cliente = models.ForeignKey(Cliente, on_delete=models.DO_NOTHING)
+    es_valido_por_gestor = models.BooleanField(default=False)
+    es_valido_por_organizador_eventos = models.BooleanField(default=False)
 
 
 class Evento_Stand_Sector(Model):

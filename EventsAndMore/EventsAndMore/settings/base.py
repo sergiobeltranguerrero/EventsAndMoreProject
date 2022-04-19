@@ -30,7 +30,8 @@ INSTALLED_APPS = [
     'django.contrib.sessions',
     'django.contrib.messages',
     'django.contrib.staticfiles',
-    'main'
+    'main',
+    'carton',
 ]
 
 MIDDLEWARE = [
@@ -86,7 +87,7 @@ AUTH_PASSWORD_VALIDATORS = [
 # Internationalization
 # https://docs.djangoproject.com/en/3.1/topics/i18n/
 
-LANGUAGE_CODE = 'en-us'
+LANGUAGE_CODE = 'es'
 
 TIME_ZONE = 'UTC'
 
@@ -101,7 +102,7 @@ USE_TZ = True
 
 STATIC_URL = '/static/'
 STATIC_ROOT = BASE_DIR
-STATICFILES_DIRS = (os.path.join(BASE_DIR, 'static'), )
+STATICFILES_DIRS = (os.path.join(BASE_DIR, 'static'),)
 STATICFILES_STORAGE = 'whitenoise.storage.CompressedManifestStaticFilesStorage'
 
 AUTH_USER_MODEL = 'main.User'
@@ -115,3 +116,6 @@ LOGOUT_REDIRECT_URL = 'home'
 EMAIL_BACKEND = "django.core.mail.backends.filebased.EmailBackend"
 
 EMAIL_FILE_PATH = BASE_DIR / "tmp" / "sent_emails"
+
+# Services cart
+CART_PRODUCT_MODEL = 'main.models.Servicio'

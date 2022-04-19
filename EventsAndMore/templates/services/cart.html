@@ -1,0 +1,66 @@
+{% extends "home_base.html" %}
+{% load carton_tags %}
+
+{% get_cart as cart %}
+
+{% block title %}Cart{% endblock %}
+
+
+{% block body %}
+    <div>
+        <table>
+            <tr>
+                <th></th>
+                <th>Product</th>
+                <th>Quantity</th>
+                <th>Price</th>
+                <th>Total</th>
+                <th></th>
+            </tr>
+            {% for item in cart.items %}
+                <tr>
+                    <form action='/cart/update/' method="post">
+                        {% csrf_token %}
+                        <td><input type="hidden" name="id_servicio" value="{{ item.product.id }}"/></td>
+                        <td class="product_name">{{ item.product.nombre }}</td>
+                        <td><input type="number" name="cantidad" value="{{ item.quantity }}" min="1"/></td>
+                        <td id="precio_{{ item.product.id }}">{{ item.product.precio }}</td>
+                        <td id="subtotal_{{ item.product.id }}">{{ item.subtotal }}</td>
+                        <td><a href={% url 'remove_cart_element' item.product.id %}>Eliminar</a></td>
+                    </form>
+                </tr>
+            {% endfor %}
+        </table>
+
+        <div>Total:</div>
+        <div id="id_total">{{ cart.total }}</div>
+    </div>
+{% endblock %}
+
+{% block javascript %}
+    <script>
+        $(document).ready(function () {
+            $('input[name="cantidad"]').on('change', function () {
+                const cantidad = Number($(this).val());
+                const id_servicio = Number($(this).parent().parent().find('input[name="id_servicio"]').val());
+                const str_precio = $('#precio_' + id_servicio).text();
+                const precio = parseFloat(str_precio.replace(',', '.').replace(' ', ''))
+                const subtotal = Number(precio * Number(cantidad)).toFixed(2).replace('.', ',');
+                $('#subtotal_' + id_servicio).text(subtotal);
+                $.ajax({
+                    url: '/cart/update/',
+                    type: 'POST',
+                    data: {
+                        'quantity': cantidad,
+                        'id_product': id_servicio,
+                        'csrfmiddlewaretoken': '{{ csrf_token }}'
+                    },
+                    success: function (data) {
+                        const total = data.total;
+                        $('#id_total').text(total.replace('.', ','));
+                    }
+                })
+            });
+        });
+    </script>
+{% endblock javascript %}

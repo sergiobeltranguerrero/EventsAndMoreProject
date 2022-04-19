@@ -3,15 +3,22 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8">
-    <title>Events And More</title>
+    <title>{% block title %}EventsAndMore{% endblock %}</title>
     <link rel="stylesheet" href="{% static 'css/bootstrap.min.css' %}"/>
-</head>
-<body>
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.8.1/font/bootstrap-icons.css">
+    {% block stylesheet %}{% endblock %}
 
+    <script src="{% static 'js/bootstrap.min.js' %}"></script>
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+    <script src='https://cdnjs.cloudflare.com/ajax/libs/axios/0.9.1/axios.js'></script>
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script>
+
+    {% block javascript %}{% endblock %}
+</head>
+
+<body>
 <div>
-    {% block content %}
-    {% endblock %}
+    {% block content %}{% endblock %}
 </div>
-<script src="{% static 'js/bootstrap.min.js' %}"></script>
 </body>
 </html>
