@@ -55,7 +55,9 @@ class Organizador_Evantos(Model):
 
 class Servicio(Model):
     nombre = models.CharField(max_length=50)
-    descripcion = models.CharField(max_length=500)
+    descripcion = models.CharField(max_length=500, null=True, blank=True)
+    precio = models.DecimalField(max_digits=6, decimal_places=2)
+    is_generic = models.BooleanField(default=False)
 
 
 class Incidencia(Model):
@@ -84,6 +86,10 @@ class Evento(Model):
 
 class Stand(Model):
     numero_stand = models.IntegerField()
+
+class Servicios_Especiales(Model):
+    evento = models.ForeignKey(Evento, on_delete=models.DO_NOTHING)
+    servicio = models.ForeignKey(Servicio, on_delete=models.DO_NOTHING)
 
 
 class Servicios_Asignados(Model):

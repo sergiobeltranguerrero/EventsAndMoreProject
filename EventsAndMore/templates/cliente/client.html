@@ -1,0 +1,39 @@
+{% block title %} List Products {% endblock %}
+
+{% block body %}
+    <style>
+        body{
+            background-color: skyblue;
+        }
+    </style>
+<h2 style="text-align: center">List of services</h2>
+<div class="row" id="list1">
+    <div class="col-sm-12 col-md-12 col-lg-12 col-xl-12">
+        <div clas="table-responsive py-2">
+            <table class="table table-striped">
+                <thead>
+                <tr>
+                    <th style="background-color:lightblue; text-align: center">Name</th>
+                    <th style="background-color:lightblue; text-align: center">Description</th>
+                    <th style="background-color:lightblue; text-align: center">Detail</th>
+                </thead>
+                <tbody>
+                <tr style="background-color: white">
+                    <td style="text-align: center">{{servicios.}}</td>
+                    <td style="text-align: center">{{cliente.descripcion}}</td>
+                    <td style="text-align: center"><a class="btn btn-primary" href="#">More Details</a></td>
+                </tr>
+                {% endfor %}
+                {% else %}
+                <tr>
+                    <td>{{ "No hay nada" }}</td>
+                    <td></td>
+                </tr>
+                {% endif %}
+                </tbody>
+            </table>
+        </div>
+    </div>
+</div>
+
+{% endblock %}

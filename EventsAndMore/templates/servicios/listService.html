@@ -1,43 +1,51 @@
-{% extends "../home.html"%}
-
-{% block title %} List Products {% endblock %}
+{% extends "home_base.html" %}
 
 {% block body %}
-    <style>
-        body{
-            background-color: skyblue;
-        }
-    </style>
-<h2 style="text-align: center">List of services</h2>
-<div class="row" id="list1">
-    <div class="col-sm-12 col-md-12 col-lg-12 col-xl-12">
-        <div clas="table-responsive py-2">
-            <table class="table table-striped">
-                <thead>
-                <tr>
-                    <th style="background-color:lightblue; text-align: center">Name</th>
-                    <th style="background-color:lightblue; text-align: center">Description</th>
-                    <th style="background-color:lightblue; text-align: center">Detail</th>
-                </thead>
-                <tbody>
-                {% if servicios|length != 0 %}
-                {% for services in servicios %}
-                <tr style="background-color: white">
-                    <td style="text-align: center">{{services.nombre}}</td>
-                    <td style="text-align: center">{{services.descripcion}}</td>
-                    <td style="text-align: center"><a class="btn btn-primary" href="#">More Details</a></td>
-                </tr>
+    <section style="background-color: #fff">
+        <div class="text-center container py-5">
+            <div class="row">
+                <div class=" text-right m-lg-auto">
+                    <a href="{% url 'cart' %}"class="btn btn-success">Carrito</a>
+                </div>
+            </div>
+            <h3 class="mt-4 mb-5" style="color: #0283b4"><strong>Servicios</strong></h3>
+            <div class="row">
+                {% for servicio in lista_servicios %}
+                    <div class="col col-lg-4 mb-4">
+                        <div class="card">
+                            <div
+                                    class="bg-image hover-zoom ripple ripple-surface ripple-surface-light"
+                                    data-mdb-ripple-color="light"
+                            >
+                                <img
+                                        src="https://picsum.photos/100/"
+                                        class="w-100"
+                                />
+                            </div>
+                            <form method="post">
+                                {% csrf_token %}
+                                <input type="hidden" name="id_servicio" value="{{ servicio.id }}">
+                                <div class="card-body">
+                                    <p class="text-reset">
+                                    <h5 class="card-title mb-3" style="color: #0283b4">{{ servicio.nombre }}</h5>
+                                    </p>
+                                    <div class="text-reset">
+                                        {% if servicio.descripcion %}
+                                            <p class="card-text text-secondary">{{ servicio.descripcion }}</p>
+                                        {% endif %}
+                                    </div>
+                                    <h6 class="mb-3">{{ servicio.precio }} €</h6>
+                                    <button class="btn btn-primary" type="submit"><i class="bi bi-cart"> Agregar</i>
+                                    </button>
+                                </div>
+                            </form>
+
+                        </div>
+                    </div>
                 {% endfor %}
-                {% else %}
-                <tr>
-                    <td>{{ "No hay nada" }}</td>
-                    <td></td>
-                </tr>
-                {% endif %}
-                </tbody>
-            </table>
+            </div>
         </div>
-    </div>
-</div>
+    </section>
+
 
 {% endblock %}
