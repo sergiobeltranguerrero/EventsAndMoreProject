@@ -82,6 +82,7 @@ class Evento(Model):
     fecha_inicio = models.DateTimeField()
     fecha_fin = models.DateTimeField()
     capacidad = models.IntegerField()
+    activo = models.BooleanField(default=True)
 
 
 class Stand(Model):
@@ -123,3 +124,18 @@ class Historial_Incidencias(Model):
     estado = models.ForeignKey(Estado, on_delete=models.DO_NOTHING)
     fecha_inicio = models.DateTimeField()
     fecha_fin = models.DateTimeField()
+
+
+class Carro(Model):
+    cliente = models.ForeignKey(Cliente, on_delete=models.DO_NOTHING)
+    evento = models.ForeignKey(Evento, on_delete=models.DO_NOTHING)
+    stand = models.ForeignKey(Stand, on_delete=models.DO_NOTHING)
+
+
+class Elementos_Carro(Model):
+    carro = models.ForeignKey(Carro, on_delete=models.DO_NOTHING)
+    servicio = models.ForeignKey(Servicio, on_delete=models.DO_NOTHING)
+    cantidad = models.IntegerField()
+
+    def subtotal(self):
+        return self.servicio.precio * self.cantidad
