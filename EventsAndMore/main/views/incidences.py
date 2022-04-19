@@ -1,13 +1,18 @@
 # this lets the user create an incidence
 from django.shortcuts import render
 from django.contrib.auth.decorators import login_required
-from main.models import *
+from ..models import Incidencia, Cliente
 
 
 
 @login_required
 def Incidencias(request):
+
     if request.method == 'GET':
+        cliente = Cliente.objects.get(user=request.user)
+        incidencia = Incidencia.objects.filter(cliente_id =cliente.id)
+        return render(request, "incidencia.html", {"incidencia": incidencia})
+
 
 
 

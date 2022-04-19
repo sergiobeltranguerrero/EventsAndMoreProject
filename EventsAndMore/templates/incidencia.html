@@ -1,0 +1,41 @@
+{% extends "home_base.html" %}
+
+{% block title %} Visualizar Incidencias {% endblock %}
+
+{% block body %}
+
+<h1>Product Lists</h1>
+<div class="row">
+    <div class="col-sm-12 col-md-12 col-lg-12 col-xl-12">
+        <div clas="table-responsive py-2">
+            <table class="table table-striped">
+                <thead>
+                <tr>
+                    <th>Nombre</th>
+                    <th>Descripcion</th>
+                </tr>
+                </thead>
+                <tbody>
+                {% if incidencia|length != 0 %}
+                {% for inciden in incidencia %}
+                <tr>
+                    <td>{{inciden.nombre}}</td>
+                    <td>{{inciden.descripcion}}</td>
+
+                </tr>
+                {% endfor %}
+                {% else %}
+                <tr>
+                    <td></td>
+                    <td></td>
+                    <td></td>
+                </tr>
+                {% endif %}
+                </tbody>
+            </table>
+        </div>
+    </div>
+</div>
+
+{% endblock %}
+
