@@ -3,13 +3,22 @@
 from django.shortcuts import render
 from django.contrib.auth.decorators import login_required
 from ..models import Assignacion, Cliente
+from .evento import State
 
 
 @login_required
 def mostrar_assignaciones(request):
-    if request.method == 'GET':
-        assignaciones = Assignacion.objects.all()
-        return render(request, "assignaciones.html", {"assignaciones": assignaciones})
+    assignaciones = Assignacion.objects.all()
+    states = []
+    for estado in Assignacion.ESTADO:
+        states.append(State(estado[0], estado[1]))
+    if request.method == 'POST':
+        if not request.POST['state'] == '%':
+            assignaciones = Assignacion.objects.filter(estado=request.POST['state'])
+        else:
+            assignaciones = Assignacion.objects.all()
+
+    return render(request, "assignaciones.html", {"assignaciones": assignaciones, 'estado': states})
 
 
 

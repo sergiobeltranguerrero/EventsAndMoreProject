@@ -2,7 +2,7 @@
 {% block title %}Todas las assignaciones{% endblock %}
 {% block body %}
 <div class="container">
-<h1>Eventos disponibles</h1>
+<h1>Assignaciones de stands</h1>
 <!-- arreglar los tipos de busqueda -->
     <form action="" method="POST">
         {% csrf_token %}
@@ -12,7 +12,7 @@
                 selected
             {% endif %}
             >Seleccionar...</option>
-            {% for state in states %}
+            {% for state in estado %}
             <option value="{{ state.id }}"
             {% if selection == state.id %}
                 selected
@@ -34,21 +34,48 @@
                     <th scope="col">Evento</th>
                     <th scope="col">Stand</th>
                     <th scope="col">Estado</th>
+                    <th scope="col">Acciones</th>
 
 
                 </tr>
             </thead>
             <tbody>
                 {% for assignacion in assignaciones %}
-                    <tr>
+                    <tr class="
+                    {% if assignacion.estado == 'PD' %}
+                        table-warning
+                    {% elif assignacion.estado == 'RC' %}
+                        table-danger
+                    {% elif assignacion.estado == 'AP' %}
+                        table-success
+                    {% else %}
+                        table-danger
+                    {% endif%}
+                    ">
+
                         <th scope="row" hidden><input type="number" id="id_evento{{assignacion.id}}" name="id_evento{{assignacion.id}}" value="{{assignacion.id}}" readonly required/></th>
                         <td>{{assignacion.cliente.user.first_name}}</td>
                         <td>{{assignacion.evento.nombre}}</td>
                         <td>{{assignacion.stand.numero_stand}}</td>
-                        <td>{{assignacion.estado}}</td>
+
+                        <td>
+                            <h4>
+                                <span class="badge badge-pill
+                        {% if assignacion.estado == 'PD' %}
+                            bg-warning">{{assignacion.estado}}
+                        {% elif assignacion.estado == 'RC' %}
+                            bg-danger">{{assignacion.estado}}
+                        {% elif assignacion.estado == 'AP' %}
+                            bg-success">{{assignacion.estado}}
+                        {% else %}
+                            bg-danger">Error on state
+                        {% endif%}
+                                </span>
+                            </h4>
+                        </td>
                         <td>
                             <div class="form-group">
-                                <a class="btn btn-primary btn-block text-black" href="#">Detalle</a>
+                                <a class="btn btn-primary btn-block text-black" href="#">Detalles</a>
                             </div>
                         </td>
                     </tr>
