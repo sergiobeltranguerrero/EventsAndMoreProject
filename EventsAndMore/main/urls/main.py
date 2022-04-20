@@ -5,6 +5,7 @@ from main.views import services_view
 from main.views.accounts import RegisterClientView
 from main.views.cart import remove_cart_element, show_cart_view, update_producto_view
 from main.views.incidences import NuevaIncidencia, Incidencias
+from main.views.solicitudes import mostrar_assignaciones
 
 
 urlpatterns_main = [
@@ -16,4 +17,6 @@ urlpatterns_main = [
     path('cart/update/', update_producto_view, name='update_product'),
     path('incidencies/', Incidencias, name='incidencias'),
     path('incidencies/nueva', NuevaIncidencia, name='nueva_incidencia'),
+    path('assignaciones/', mostrar_assignaciones, name='mostrar_assignaciones'),
+
 ]
