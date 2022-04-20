@@ -11,7 +11,7 @@ def Incidencias(request):
     if request.method == 'GET':
         cliente = Cliente.objects.get(user=request.user)
         incidencia = Incidencia.objects.filter(cliente_id =cliente.id)
-        return render(request, "incidencia.html", {"incidencia": incidencia})
+        return render(request, "incidencia/incidencia.html", {"incidencia": incidencia})
 
 
 
@@ -24,7 +24,7 @@ def NuevaIncidencia(request):
         descripcion = request.POST['descripcion']
         cliente = Cliente.objects.get(user=request.user)
         Incidencia.objects.create(nombre=nombre, descripcion=descripcion, cliente=cliente)
-        return render(request,'nuevaincidencia.html')
+        return render(request, 'incidencia/nuevaincidencia.html')
     else:
-        return render(request, 'nuevaincidencia.html')
+        return render(request, 'incidencia/nuevaincidencia.html')
 
