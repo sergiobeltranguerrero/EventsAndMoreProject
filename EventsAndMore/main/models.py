@@ -61,7 +61,9 @@ class Organizador_Evantos(Model):
 
 class Servicio(Model):
     nombre = models.CharField(max_length=50)
-    descripcion = models.CharField(max_length=500)
+    descripcion = models.CharField(max_length=500, null=True, blank=True)
+    precio = models.DecimalField(max_digits=6, decimal_places=2)
+    is_generic = models.BooleanField(default=False)
 
     def __str__(self):
         return self.nombre + ' (' + str(self.id) + ')'
@@ -94,6 +96,7 @@ class Evento(Model):
     fecha_inicio = models.DateTimeField()
     fecha_fin = models.DateTimeField()
     capacidad = models.IntegerField()
+    activo = models.BooleanField(default=True)
 
     def __str__(self):
         return self.nombre + ' (' + str(self.id) + ')'
@@ -117,6 +120,11 @@ class Servicios_Asignados(Model):
         return self.servicio + ' a '+ self.cliente +' (' + str(self.id) + ')'
 
 
+class Servicios_Especiales(Model):
+    evento = models.ForeignKey(Evento, on_delete=models.DO_NOTHING)
+    servicio = models.ForeignKey(Servicio, on_delete=models.DO_NOTHING)
+
+
 class Assignacion(Model):
     evento = models.ForeignKey(Evento, on_delete=models.DO_NOTHING)
     stand = models.ForeignKey(Stand, on_delete=models.DO_NOTHING)
@@ -128,6 +136,8 @@ class Assignacion(Model):
     ]
     estado = models.CharField(max_length=2, choices=ESTADO,default=ESTADO[0])
     comentario = models.CharField(max_length=500,null=True)
+    es_valido_por_gestor = models.BooleanField(default=False)
+    es_valido_por_organizador_eventos = models.BooleanField(default=False)
 
     def __str__(self):
         return self.evento + self.stand + self.cliente +' (' + str(self.id) + ')'
@@ -159,3 +169,17 @@ class Historial_Incidencias(Model):
 
     def __str__(self):
         return self.incidencia + self.estado + ' (' + str(self.id) + ')'
+
+class Carro(Model):
+    cliente = models.ForeignKey(Cliente, on_delete=models.DO_NOTHING)
+    evento = models.ForeignKey(Evento, on_delete=models.DO_NOTHING)
+    stand = models.ForeignKey(Stand, on_delete=models.DO_NOTHING)
+
+
+class Elementos_Carro(Model):
+    carro = models.ForeignKey(Carro, on_delete=models.DO_NOTHING)
+    servicio = models.ForeignKey(Servicio, on_delete=models.DO_NOTHING)
+    cantidad = models.IntegerField()
+
+    def subtotal(self):
+        return self.servicio.precio * self.cantidad
