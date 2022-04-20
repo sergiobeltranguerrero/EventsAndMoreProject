@@ -4,10 +4,12 @@ from django.shortcuts import render
 from django.urls import reverse
 
 from main.cart import Cart
+from main.decorators import event_is_validated, cliente_only
 from main.models import Cliente
 
 
-@login_required
+@cliente_only
+@event_is_validated
 def show_cart_view(request, **kwargs):
     id_evento = kwargs.get('evento')
     id_stand = kwargs.get('stand')

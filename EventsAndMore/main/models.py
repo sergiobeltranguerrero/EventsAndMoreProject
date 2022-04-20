@@ -1,7 +1,8 @@
+from django.contrib import admin
 from django.db.models import Model
 from django.db import models
 from django.contrib.auth.models import AbstractUser
-from .validator import DNIValidator, PhoneValidator, IBANValidator, NIFValidator
+from .validator import PhoneValidator, NIFValidator
 
 
 class User(AbstractUser):
@@ -12,7 +13,8 @@ class User(AbstractUser):
     is_personal_direccion = models.BooleanField(default=False)
 
     def __str__(self):
-        return self.username +' (' + str(self.id) + ')'
+        return self.username + ' (' + str(self.id) + ')'
+
 
 class Sector(Model):
     nombre = models.CharField(max_length=50, unique=True)
@@ -49,6 +51,7 @@ class Empleado(Model):
     def __str__(self):
         return self.DNI
 
+
 class Organizador_Evantos(Model):
     user = models.OneToOneField(User, on_delete=models.DO_NOTHING)
     telefono = models.CharField(max_length=14, validators=[PhoneValidator])
@@ -59,14 +62,17 @@ class Organizador_Evantos(Model):
     def __str__(self):
         return self.NIF
 
+
 class Servicio(Model):
     nombre = models.CharField(max_length=50)
     descripcion = models.CharField(max_length=500, null=True, blank=True)
     precio = models.DecimalField(max_digits=6, decimal_places=2)
+    imagen = models.ImageField(upload_to='servicios', null=True, blank=True)
     is_generic = models.BooleanField(default=False)
 
     def __str__(self):
         return self.nombre + ' (' + str(self.id) + ')'
+
 
 class Incidencia(Model):
     nombre = models.CharField(max_length=100)
@@ -76,6 +82,7 @@ class Incidencia(Model):
     def __str__(self):
         return self.nombre + ' (' + str(self.id) + ')'
 
+
 class Comentario(Model):
     incidencia = models.ForeignKey(Incidencia, on_delete=models.DO_NOTHING)
     asunto = models.CharField(max_length=100)
@@ -84,11 +91,13 @@ class Comentario(Model):
     def __str__(self):
         return self.asunto + ' (' + str(self.id) + ')'
 
+
 class Estado(Model):
     nombre = models.CharField(max_length=50)
 
     def __str__(self):
         return self.nombre + ' (' + str(self.id) + ')'
+
 
 class Evento(Model):
     nombre = models.CharField(max_length=50)
@@ -101,11 +110,13 @@ class Evento(Model):
     def __str__(self):
         return self.nombre + ' (' + str(self.id) + ')'
 
+
 class Stand(Model):
     numero_stand = models.IntegerField()
 
     def __str__(self):
-        return self.numero_stand + ' (' + str(self.id) + ')'
+        return str(self.numero_stand) + ' (' + str(self.id) + ')'
+
 
 class Servicios_Asignados(Model):
     cliente = models.ForeignKey(Cliente, on_delete=models.DO_NOTHING)
@@ -113,11 +124,12 @@ class Servicios_Asignados(Model):
     evento = models.ForeignKey(Evento, on_delete=models.DO_NOTHING)
     stand = models.ForeignKey(Stand, on_delete=models.DO_NOTHING)
     cantidad = models.IntegerField()
+
     # TODO: Preguntar que passa si un cliente que tiene mas de un stand pide el servicio se ha de poner mas de 1 si
     #  no se quita cantidad
 
     def __str__(self):
-        return self.servicio + ' a '+ self.cliente +' (' + str(self.id) + ')'
+        return str(self.servicio) + ' a ' + str(self.cliente) + ' (' + str(self.id) + ')'
 
 
 class Servicios_Especiales(Model):
@@ -134,30 +146,31 @@ class Assignacion(Model):
         ('RC', 'Rechazada'),
         ('AP', 'Aprovada'),
     ]
-    estado = models.CharField(max_length=2, choices=ESTADO,default=ESTADO[0])
-    comentario = models.CharField(max_length=500,null=True)
+    estado = models.CharField(max_length=2, choices=ESTADO, default=ESTADO[0])
+    comentario = models.CharField(max_length=500, null=True)
     es_valido_por_gestor = models.BooleanField(default=False)
     es_valido_por_organizador_eventos = models.BooleanField(default=False)
 
     def __str__(self):
-        return self.evento + self.stand + self.cliente +' (' + str(self.id) + ')'
+        return str(self.evento) + str(self.stand) + str(self.cliente) + ' (' + str(self.id) + ')'
+
 
 class Evento_Stand_Sector(Model):
     evento = models.ForeignKey(Evento, on_delete=models.DO_NOTHING)
     stand = models.ForeignKey(Stand, on_delete=models.DO_NOTHING)
     sector = models.ForeignKey(Sector, on_delete=models.DO_NOTHING)
     SIZE = [
-        ( 'GR', 'Grande'),
-        ('MD','Mediano'),
+        ('GR', 'Grande'),
+        ('MD', 'Mediano'),
         ('PQ', 'Pequeño'),
     ]
     stand_size = models.CharField(max_length=2, choices=SIZE)
 
     def __str__(self):
-        return self.evento + self.stand + self.sector +' (' + str(self.id) + ')'
+        return str(self.evento) + str(self.stand) + str(self.sector) + ' (' + str(self.id) + ')'
 
     class Meta:
-        unique_together = (("evento", "stand",'sector'),)
+        unique_together = (("evento", "stand", 'sector'),)
 
 
 class Historial_Incidencias(Model):
@@ -168,12 +181,16 @@ class Historial_Incidencias(Model):
     fecha_fin = models.DateTimeField()
 
     def __str__(self):
-        return self.incidencia + self.estado + ' (' + str(self.id) + ')'
+        return str(self.incidencia) + str(self.estado) + ' (' + str(self.id) + ')'
+
 
 class Carro(Model):
     cliente = models.ForeignKey(Cliente, on_delete=models.DO_NOTHING)
     evento = models.ForeignKey(Evento, on_delete=models.DO_NOTHING)
     stand = models.ForeignKey(Stand, on_delete=models.DO_NOTHING)
+
+    def __str__(self):
+        return str(self.cliente) + str(self.evento) + str(self.stand) + ' (' + str(self.id) + ')'
 
 
 class Elementos_Carro(Model):
@@ -183,3 +200,4 @@ class Elementos_Carro(Model):
 
     def subtotal(self):
         return self.servicio.precio * self.cantidad
+
