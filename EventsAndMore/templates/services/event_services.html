@@ -3,12 +3,12 @@
 {% block body %}
     <section style="background-color: #fff">
         <div class="text-center container py-5">
-            <div class="row">
-                <div class=" text-right m-lg-auto">
-                    <a href="{% url 'cart' %}"class="btn btn-success">Carrito</a>
+            <h2 class="mt-4 mb-5"><strong>Servicios</strong></h2>
+            <div class="row mb-5">
+                <div class="m-lg-auto">
+                    <a href="{% url 'cart' evento=evento.id stand=stand.id %}" class="btn btn-success">Carrito</a>
                 </div>
             </div>
-            <h3 class="mt-4 mb-5" style="color: #0283b4"><strong>Servicios</strong></h3>
             <div class="row">
                 {% for servicio in lista_servicios %}
                     <div class="col col-lg-4 mb-4">
@@ -46,6 +46,4 @@
             </div>
         </div>
     </section>
-
-
 {% endblock %}

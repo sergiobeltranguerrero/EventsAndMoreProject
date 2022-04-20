@@ -1,0 +1,45 @@
+{% extends "home_base.html" %}
+{% block title %}Solicitud de stand{% endblock %}
+{% block body %}
+<div class="container">
+    <h1>Evento: {{evento.nombre}}</h1>
+    <h2>Sector: {{ user.cliente.sector }}</h2>
+    <form action="{% url 'get_stand' evento.id %}" method="POST">
+    {% csrf_token %}
+        <table class="table">
+            <thead>
+                <tr>
+                    <th scope="col" hidden>idStand</th>
+                    <th scope="col">Numero estand</th>
+                    <th scope="col">Tamaño</th>
+                    <th scope="col">Sector</th>
+                    <th scope="col">Seleccionar stand/s deseado/s</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for ea in eas %}
+                    <tr>
+                        <td hidden><input type="text" id="id{{ea.stand_id}}"name="id{{ea.stand_id}}" value="{{ea.stand_id}}" readonly required hidden/></td>
+                        <td>{{ea.stand.numero_stand}}</td>
+                        {% for size in ea.SIZE %}
+                            {% if size.0 == ea.stand_size  %}
+                        <td><input type="text" id="size{{ea.stand_id}}"name="size{{ea.stand_id}}" value="{{ size.1 }}" readonly required/></td>
+                            {% endif %}
+                        {% endfor %}
+                        <td><input type="text" id="sector{{ea.stand_id}}"name="sector{{ea.stand_id}}" value="{{ ea.sector.nombre }}" readonly required/></td>
+                        <td>
+                            <div class="form-check form-switch">
+                                <input class="form-check-input" type="checkbox" value="true" id="selected{{ea.stand_id}}"name="selected{{ea.stand_id}}">
+                                <label class="form-check-label" for="flexCheckDefault"></label>
+                            </div>
+                        </td>
+                    </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+        <div class="form-group">
+            <button type="submit" class="btn btn-success btn-block text-black">Solicitar</button>
+        </div>
+    </form>
+</div>
+{% endblock %}

@@ -1,0 +1,47 @@
+{% extends "base.html" %}
+{% block title %}Planificacion del pavellon{% endblock %}
+{% block body %}
+<h1>Evento {{evento.nombre}}</h1>
+<div class="container">
+    <form action="{% url 'stand_planning'  evento.id %}" method="POST">
+    {% csrf_token %}
+        <table class="table table-striped table-hover">
+            <thead>
+                <tr>
+                    <th hidden>IdStand</th>
+                    <th scope="col">Numero estand</th>
+                    <th scope="col">Tamaño</th>
+                    <th scope="col">Sector</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for stand in stands %}
+                    <tr>
+                        <th scope="row" hidden><input type="number" id="id_stand{{stand.id}}" name="id_stand{{stand.id}}" value="{{stand.id}}" readonly required/></th>
+                        <td>{{stand.numero_stand}}</td>
+                        <td>
+                            <select class="form-select" id="size{{stand.id}}" name="size{{stand.id}}" aria-label="Size">
+                                <option value="" selected>Seleccionar...</option>
+                                {% for size in sizes %}
+                                    <option value="{{size.0}}">{{size.1}}</option>
+                                {% endfor %}
+                            </select>
+                        </td>
+                        <td>
+                            <select class="form-select" id="sector{{stand.id}}" name="sector{{stand.id}}" aria-label="Sector">
+                                <option value="none" selected>Seleccionar...</option>
+                                {% for sector in sectores %}
+                                    <option value="{{sector.id}}">{{sector.nombre}}</option>
+                                {% endfor %}
+                            </select>
+                        </td>
+                    </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+        <div class="form-group float-end mb-4">
+            <button type="submit" class="btn btn-success btn-block">Guardar</button>
+        </div>
+    </form>
+</div>
+{% endblock %}
