@@ -35,8 +35,6 @@
                     <th scope="col">Stand</th>
                     <th scope="col">Estado</th>
                     <th scope="col">Acciones</th>
-
-
                 </tr>
             </thead>
             <tbody>
@@ -62,11 +60,11 @@
                             <h4>
                                 <span class="badge badge-pill
                         {% if assignacion.estado == 'PD' %}
-                            bg-warning">{{assignacion.estado}}
+                            bg-warning">{{'Pendiente'}}
                         {% elif assignacion.estado == 'RC' %}
-                            bg-danger">{{assignacion.estado}}
+                            bg-danger">{{'Rechazado'}}
                         {% elif assignacion.estado == 'AP' %}
-                            bg-success">{{assignacion.estado}}
+                            bg-success">{{'Aprobado'}}
                         {% else %}
                             bg-danger">Error on state
                         {% endif%}
