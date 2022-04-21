@@ -11,10 +11,8 @@ def list_events(request):
         json = set_dates()
     elif request.method == 'POST':
         json = get_dates(request=request)
-        eventos = Evento.objects.filter(fecha_inicio__gt=json.get('date_start_start', json['mindate']),
-                                        fecha_inicio__lt=json.get('date_start_end', json['maxdate']),
-                                        fecha_fin__gt=json.get('date_end_start', json['mindate']),
-                                        fecha_fin__lt=json.get('date_end_end', json['maxdate']))
+        eventos = Evento.objects.filter(fecha_inicio__range=(json.get('date_start_start', json['mindate']),json.get('date_start_end', json['maxdate'])),
+                                        fecha_fin__range=(json.get('date_end_start', json['mindate']),json.get('date_end_end', json['maxdate'])))
     else:
         return render(request, '/')
     if not request.user.is_anonymous and request.user.is_cliente:
