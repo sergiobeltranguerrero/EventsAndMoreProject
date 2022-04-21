@@ -24,7 +24,7 @@ def NuevaIncidencia(request):
         descripcion = request.POST['descripcion']
         cliente = Cliente.objects.get(user=request.user)
         Incidencia.objects.create(nombre=nombre, descripcion=descripcion, cliente=cliente)
-        return render(request, 'incidencia/nuevaincidencia.html')
+        return render(request, 'incidencia/nueva_incidencia.html')
     else:
-        return render(request, 'incidencia/nuevaincidencia.html')
+        return render(request, 'incidencia/nueva_incidencia.html')
 

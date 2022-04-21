@@ -12,7 +12,7 @@
                 selected
             {% endif %}
             >Seleccionar...</option>
-            {% for state in estado %}
+            {% for state in states %}
             <option value="{{ state.id }}"
             {% if selection == state.id %}
                 selected
@@ -72,8 +72,13 @@
                             </h4>
                         </td>
                         <td>
+                    <!-- Falta arreglar el boton aqui    -->
+    <!-- Falta arreglar el boton aqui    -->
+    <!-- Falta arreglar el boton aqui    -->
+    <!-- Falta arreglar el boton aqui    -->
+    <!-- Falta arreglar el boton aqui    -->
                             <div class="form-group">
-                                <a class="btn btn-primary btn-block text-black" href="#">Detalles</a>
+                                <a class="btn btn-primary btn-block text-black" href="{% url 'detalles_assignacion' 3 %}">Detalles</a>
                             </div>
                         </td>
                     </tr>

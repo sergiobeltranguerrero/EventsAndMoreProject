@@ -1,0 +1,106 @@
+{% extends "home_base.html" %}
+{% block title %}Detalles de la assignación{% endblock %}
+{% block body %}
+<div class="container">
+    <div class="row">
+        <div class="col-12">
+            <h1><b>Cliente:</b> {{ cliente.user.first_name }}</h1>
+        </div>
+    </div>
+    <br/>
+    <form action=# method="POST">
+    {% csrf_token %}
+        <table class="table table-striped table-hover col-12">
+            <thead>
+                <tr>
+                    <th hidden>idAssignacio</th>
+                    <th scope="col">Evento</th>
+                    <th scope="col">Numero del stand</th>
+                    <th scope="col">Comentario</th>
+                    <th scope="col">Estado</th>
+                    <th scope="col">Acciones</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for assignacion in assignaciones %}
+                    <tr class="
+                    {% if assignacion.estado == 'PD' %}
+                        table-warning
+                    {% elif assignacion.estado == 'RC' %}
+                        table-danger
+                    {% elif assignacion.estado == 'AP' %}
+                        table-success
+                    {% else %}
+                        table-danger
+                    {% endif%}
+                    ">
+                        <th scope="row" hidden><input type="number" id="id{{assignacion.id}}" name="id{{assignacion.id}}" value="{{assignacion.id}}" readonly required/></th>
+                        <td>{{assignacion.evento.nombre}}</td>
+                        <td>{{assignacion.stand.numero_stand}}</td>
+                        <td>
+                            {% if assignacion.comentario == None %}
+                                No hay comentario
+                            {% else %}
+                                {{assignacion.comentario}}
+                            {% endif %}
+                        </td>
+                        <td>
+                            <h4>
+                                <span class="badge badge-pill
+                        {% if assignacion.estado == 'PD' %}
+                            bg-warning">
+                        {% elif assignacion.estado == 'RC' %}
+                            bg-danger">
+                        {% elif assignacion.estado == 'AP' %}
+                            bg-success">
+                        {% else %}
+                            bg-danger">Error on state
+                        {% endif%}
+                                {% for state in states %}
+                                    {% if state.id == assignacion.estado %}
+                                        {{ state.name }}
+                                    {% endif %}
+                                {% endfor %}
+                                </span>
+                            </h4>
+                        </td>
+                        <td>
+                            <div class="form-check form-switch">
+                                <input class="form-check-input" type="checkbox" value="true" id="delete{{ ass.id }}" name="delete{{ ass.id }}"
+                                {% if assignacion.estado == 'AP' %}
+                                    disabled
+                                {% endif%}
+                                >
+                                <label class="form-check-label" for="delete{{ assignacion.id }}">
+                                </label>
+                            </div>
+                        </td>
+                    </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+        <div class="form-group">
+            <input type="text" id="comentario" name="comentario" class="form-control" placeholder="Escriba aquí el comentario de la incidencia" minlength="10" maxlength="500"/>
+        </div>
+        <table class="table table-borderless table-hover col-4">
+            <thead>
+                <tr>
+                    <th scope="col">Nombre Evento</th>
+                    <th scope="col">Estand/s</th>
+                </tr>
+            </thead>
+            <tbody>
+            <td>
+            <div class="form-group">
+                <button class="btn btn-secondary btn-block" type="button" href="{% url 'detalles_assignacion' 4 %}" >Enviar</button>
+             </div>
+            </td>
+            <td></td>
+            <div class="form-group">
+                <button class="btn btn-secondary btn-block" type="submit" href="{% url 'detalles_assignacion' 4 %}" >Enviar</button>
+            </div>
+            </tbody>
+        </table>
+    </form>
+</div>
+{% endblock %}
