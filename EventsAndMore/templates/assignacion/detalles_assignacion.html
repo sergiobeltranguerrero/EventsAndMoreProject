@@ -8,7 +8,7 @@
         </div>
     </div>
     <br/>
-    <form action=# method="POST">
+    <form action="" method="POST">
     {% csrf_token %}
         <table class="table table-striped table-hover col-12">
             <thead>
@@ -82,25 +82,18 @@
         <div class="form-group">
             <input type="text" id="comentario" name="comentario" class="form-control" placeholder="Escriba aquí el comentario de la incidencia" minlength="10" maxlength="500"/>
         </div>
-        <table class="table table-borderless table-hover col-4">
-            <thead>
-                <tr>
-                    <th scope="col">Nombre Evento</th>
-                    <th scope="col">Estand/s</th>
-                </tr>
-            </thead>
-            <tbody>
-            <td>
+
             <div class="form-group">
-                <button class="btn btn-secondary btn-block" type="button" href="{% url 'detalles_assignacion' 4 %}" >Enviar</button>
-             </div>
-            </td>
-            <td></td>
-            <div class="form-group">
-                <button class="btn btn-secondary btn-block" type="submit" href="{% url 'detalles_assignacion' 4 %}" >Enviar</button>
+                <button class="btn btn-secondary btn-block" type="submit" href="{% url 'detalles_assignacion' comentario %}" >Enviar</button>
             </div>
-            </tbody>
-        </table>
+
+
+    </form>
+    <form action="{% url 'mostrar_assignaciones' %}" method="GET">
+        {% csrf_token %}
+            <div class="form-group">
+                <button class="btn btn-danger    btn-block" type="submit" href="{% url 'mostrar_assignaciones' %}" >Atras</button>
+             </div>
     </form>
 </div>
 {% endblock %}

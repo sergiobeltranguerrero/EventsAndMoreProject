@@ -17,7 +17,8 @@ def mostrar_assignaciones(request):
             assignaciones = Assignacion.objects.filter(estado=request.POST['state'])
         else:
             assignaciones = Assignacion.objects.all()
-
+    if request.method == 'GET':
+        assignaciones = Assignacion.objects.all()
     return render(request, "assignacion/assignaciones.html", {"assignaciones": assignaciones, 'states': states})
 
 
