@@ -1,12 +1,13 @@
 from django.shortcuts import render
 
-from main.decorators import cliente_only, event_is_validated
+from main.decorators import cliente_only, event_is_validated, reserva_realizada
 from main.models import Evento, Servicios_Especiales, Servicio, Cliente, Assignacion, Stand, Elementos_Carro
 from main.cart import Cart
 
 
 @cliente_only
 @event_is_validated
+@reserva_realizada
 def services_view(request, **kwargs):
     id_evento = kwargs.get('evento')
     id_stand = kwargs.get('stand')
@@ -21,6 +22,8 @@ def services_view(request, **kwargs):
     lista_servicios_genericos = list(Servicio.objects.filter(is_generic=True))
     lista_servicios = lista_servicios_genericos + lista_servicios_especiales
 
+    servicios_carro = Cart(cliente=cliente, evento=evento, stand=stand)
+
     if request.method == 'GET':
         return render(request, 'services/event_services.html', {'lista_servicios': lista_servicios,
                                                                 'evento': evento,
@@ -29,7 +32,6 @@ def services_view(request, **kwargs):
     if request.method == 'POST':
         servicio = Servicio.objects.get(id=request.POST.get('id_servicio'))
 
-        servicios_carro = Cart(cliente=cliente, evento=evento, stand=stand)
         servicios_carro.add(servicio)
 
         return render(request, 'services/event_services.html', {'lista_servicios': lista_servicios,
@@ -39,3 +41,5 @@ def services_view(request, **kwargs):
     return render(request, 'services/event_services.html', {'lista_servicios': lista_servicios,
                                                             'evento': evento,
                                                             'stand': stand})
+
+# TODO: Añadir la cantidad maxima que se puede adquirir de un servicio
