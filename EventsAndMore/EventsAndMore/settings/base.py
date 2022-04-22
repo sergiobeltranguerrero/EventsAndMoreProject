@@ -117,5 +117,3 @@ EMAIL_BACKEND = "django.core.mail.backends.filebased.EmailBackend"
 
 EMAIL_FILE_PATH = BASE_DIR / "tmp" / "sent_emails"
 
-# Services cart
-CART_PRODUCT_MODEL = 'main.models.Servicio'

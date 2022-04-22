@@ -1,0 +1,27 @@
+{% extends "home_base.html" %}
+
+{% block title %} Crear una nueva incidencia {% endblock %}
+
+{% block body %}
+
+<h2>Add Product</h2>
+
+<div class="card">
+  <div class="card-body">
+    <form action="{% url 'nueva_incidencia' %}" method="POST">
+        {% csrf_token%}
+        <div class="form-group">
+            <input type="text" id="nombre" name="nombre" class="form-control" placeholder="Adri" minlength="2" maxlength="50" required/>
+        </div>
+        <div class="form-group">
+            <input type="text" id="descripcion" name="descripcion" class="form-control" placeholder="Se ha caido una pared" minlength="10" maxlength="500" required/>
+        </div>
+
+        <div class="form-group">
+            <button type="submit" class="btn btn-success btn-block text-black">Save</button>
+        </div>
+    </form>
+  </div>
+</div>
+
+{% endblock %}
