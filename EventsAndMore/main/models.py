@@ -69,6 +69,16 @@ class Gestor_solicitudes(Model):
     def __str__(self):
         return self.NIF
 
+class Servicios_adicionales(Model):
+    user = models.OneToOneField(User, on_delete=models.DO_NOTHING)
+    telefono = models.CharField(max_length=14, validators=[PhoneValidator])
+    NIF = models.CharField(unique=True, max_length=9, validators=[NIFValidator])
+    ciutat = models.CharField(max_length=50)
+    direccion = models.CharField(max_length=200)
+
+    def __str__(self):
+        return self.NIF
+
 class Servicio(Model):
     nombre = models.CharField(max_length=50)
     descripcion = models.CharField(max_length=500, null=True, blank=True)
@@ -82,8 +92,12 @@ class Incidencia(Model):
     nombre = models.CharField(max_length=100)
     descripcion = models.CharField(max_length=500, null = True, blank = True)
     cliente = models.ForeignKey(Cliente, on_delete=models.DO_NOTHING)
-    estado = models.BooleanField(default=False)
-
+    ESTADO = [
+        ('PD', 'Pendiente'),
+        ('EP', 'En progreso'),
+        ('SC', 'Solucionada'),
+    ]
+    estadoIn = models.CharField(max_length=2, choices=ESTADO, default=ESTADO[0])
     def __str__(self):
         return self.nombre + ' (' + str(self.id) + ')'
 
