@@ -82,14 +82,11 @@ class Evento(Model):
     fecha_inicio = models.DateTimeField()
     fecha_fin = models.DateTimeField()
     capacidad = models.IntegerField()
+    activo = models.BooleanField(default=True)
 
 
 class Stand(Model):
     numero_stand = models.IntegerField()
-
-class Servicios_Especiales(Model):
-    evento = models.ForeignKey(Evento, on_delete=models.DO_NOTHING)
-    servicio = models.ForeignKey(Servicio, on_delete=models.DO_NOTHING)
 
 
 class Servicios_Asignados(Model):
@@ -111,6 +108,13 @@ class Assignacion(Model):
     evento = models.ForeignKey(Evento, on_delete=models.DO_NOTHING)
     stand = models.ForeignKey(Stand, on_delete=models.DO_NOTHING)
     cliente = models.ForeignKey(Cliente, on_delete=models.DO_NOTHING)
+    ESTADO = [
+        ('PD','Pendiente'),
+        ('RC','Rechazado'),
+        ('AP','Aprobado')
+    ]
+    estado = models.CharField(max_length=2,choices=ESTADO,default=ESTADO[0])
+    comentario = models.CharField(max_length=500,null=True)
     es_valido_por_gestor = models.BooleanField(default=False)
     es_valido_por_organizador_eventos = models.BooleanField(default=False)
 
@@ -127,3 +131,17 @@ class Historial_Incidencias(Model):
     estado = models.ForeignKey(Estado, on_delete=models.DO_NOTHING)
     fecha_inicio = models.DateTimeField()
     fecha_fin = models.DateTimeField()
+
+class Carro(Model):
+    cliente = models.ForeignKey(Cliente, on_delete=models.DO_NOTHING)
+    evento = models.ForeignKey(Evento, on_delete=models.DO_NOTHING)
+    stand = models.ForeignKey(Stand, on_delete=models.DO_NOTHING)
+
+
+class Elementos_Carro(Model):
+    carro = models.ForeignKey(Carro, on_delete=models.DO_NOTHING)
+    servicio = models.ForeignKey(Servicio, on_delete=models.DO_NOTHING)
+    cantidad = models.IntegerField()
+
+    def subtotal(self):
+        return self.servicio.precio * self.cantidad
