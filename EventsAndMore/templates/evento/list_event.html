@@ -6,7 +6,7 @@
     <form action="" method="POST">
         {% csrf_token %}
         <div class="col-12">
-            <div class="input-group">
+            <div class="input-group" style="margin-bottom: 5px; margin-top: 15px">
                 <label class="input-group-text" for="inputGroupDate">Rango</label>
                 <label class="input-group-text" for="inputGroupDate">Fecha inicio</label>
                 <input type="date" class="form-control" id="date_start_start" name="date_start_start" aria-describedby="inputGroupDate" min="{{ mindate|date:'Y-m-d' }}" value="{{ date_start_start|date:'Y-m-d' }}">
@@ -14,7 +14,7 @@
             </div>
         </div>
         <div class="col-12">
-            <div class="input-group">
+            <div class="input-group" style="margin-bottom: 5px">
                 <label class="input-group-text" for="inputGroupDate">Rango</label>
                 <label class="input-group-text" for="inputGroupDate">Fecha fin&nbsp;&nbsp;&nbsp;&nbsp;</label>
                 <input type="date" class="form-control" id="start_date_end" name="date_end_start" aria-describedby="inputGroupDate" min="{{ mindate|date:'Y-m-d' }}" value="{{ date_end_start|date:'Y-m-d' }}">
