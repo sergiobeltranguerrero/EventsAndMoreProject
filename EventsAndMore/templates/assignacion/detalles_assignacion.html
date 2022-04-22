@@ -82,18 +82,16 @@
         <div class="form-group">
             <input type="text" id="comentario" name="comentario" class="form-control" placeholder="Escriba aquí el comentario de la incidencia" minlength="10" maxlength="500"/>
         </div>
-
+            <th><button class="btn hidden "></button></th>
             <div class="form-group">
-                <button class="btn btn-secondary btn-block" type="submit" href="{% url 'detalles_assignacion' comentario %}" id="Valor" value="Comentario" name="Valor"  >Enviar</button>
+                <thead>
+                <tr>
+                    <th><button class="btn btn-danger  btn-block" type="submit" href="{% url 'mostrar_assignaciones' %}" id="Valor" value="Return" name="Valor">Atras</button>
+                    <th><button class="btn hidden "></button></th>
+                    <th><button class="btn btn-secondary btn-block" type="submit" href="{% url 'detalles_assignacion' comentario %}" id="Valor" value="Comentario" name="Valor"  >Enviar</button>
+                </tr>
+                </thead>
             </div>
-
-
-    </form>
-    <form action="{% url 'mostrar_assignaciones' %}" method="GET">
-        {% csrf_token %}
-            <div class="form-group">
-                <button class="btn btn-danger  btn-block" type="submit" href="{% url 'mostrar_assignaciones' %}" >Atras</button>
-             </div>
     </form>
 </div>
 {% endblock %}
