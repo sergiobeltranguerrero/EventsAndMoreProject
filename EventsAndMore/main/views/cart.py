@@ -1,12 +1,10 @@
-from django import template
-from django.contrib.auth.decorators import login_required
-from django.http import HttpResponseRedirect, JsonResponse, HttpResponse
-from django.shortcuts import render, redirect
+from django.http import HttpResponseRedirect, JsonResponse
+from django.shortcuts import render
 from django.urls import reverse
 
-from main.cart import Cart
+from main.utils.cart import Cart
 from main.decorators import event_is_validated, cliente_only, reserva_realizada
-from main.models import Cliente, Orden_Servicios, Elementos_Carro, Servicios_Orden, Evento, Stand
+from main.models import Cliente, Orden_Servicios, Servicios_Orden, Evento, Stand
 
 
 @cliente_only

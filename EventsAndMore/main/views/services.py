@@ -1,8 +1,8 @@
 from django.shortcuts import render
 
 from main.decorators import cliente_only, event_is_validated, reserva_realizada
-from main.models import Evento, Servicios_Especiales, Servicio, Cliente, Assignacion, Stand, Elementos_Carro
-from main.cart import Cart
+from main.models import Evento, Servicios_Especiales, Servicio, Cliente, Stand
+from main.utils.cart import Cart
 
 
 @cliente_only
