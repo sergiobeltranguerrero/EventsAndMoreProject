@@ -82,6 +82,7 @@ class Incidencia(Model):
     nombre = models.CharField(max_length=100)
     descripcion = models.CharField(max_length=500, null = True, blank = True)
     cliente = models.ForeignKey(Cliente, on_delete=models.DO_NOTHING)
+    estado = models.BooleanField(default=False)
 
     def __str__(self):
         return self.nombre + ' (' + str(self.id) + ')'

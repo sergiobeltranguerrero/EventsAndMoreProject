@@ -7,10 +7,9 @@ from ..models import Incidencia, Cliente
 
 @login_required
 def Incidencias(request):
-
     if request.method == 'GET':
         cliente = Cliente.objects.get(user=request.user)
-        incidencia = Incidencia.objects.filter(cliente_id =cliente.id)
+        incidencia = Incidencia.objects.filter(cliente_id=cliente.id)
         return render(request, "incidencia/incidencia.html", {"incidencia": incidencia})
 
 

@@ -4,8 +4,9 @@
 
 {% block body %}
 
-<h1>Product Lists</h1>
-<div class="row">
+
+<div class="container">
+    <h1>Product Lists</h1>
     <div class="col-sm-12 col-md-12 col-lg-12 col-xl-12">
         <div clas="table-responsive py-2">
             <table class="table table-striped">
@@ -13,23 +14,44 @@
                 <tr>
                     <th>Nombre</th>
                     <th>Descripcion</th>
+                    <th>Estado de la solicitud</th>
+                    <th><Acciones></Acciones></th>
                 </tr>
                 </thead>
                 <tbody>
                 {% if incidencia|length != 0 %}
                 {% for inciden in incidencia %}
-                <tr>
+                <tr class="
+                    {% if inciden.estado == True %}
+                        table-success
+                    {% elif inciden.estado == False %}
+                        table-danger
+                    {% else %}
+                        table-danger
+                    {% endif%}
+                    ">
                     <td>{{inciden.nombre}}</td>
                     <td>{{inciden.descripcion}}</td>
-
+                    <td>
+                            <h4>
+                                <span class="badge badge-pill
+                        {% if inciden.estado == False %}
+                            bg-danger">{{'No solucionado'}}
+                        {% elif inciden.estado == True %}
+                            bg-success">{{'Solucionado'}}
+                        {% else %}
+                            bg-danger">Error en la solicitud
+                        {% endif%}
+                                </span>
+                            </h4>
+                        </td>
+                        <td>
+                            <div class="form-group">
+                                <a class="btn btn-primary btn-block text-black" href=# >Detalles</a>
+                            </div>
+                        </td>
                 </tr>
                 {% endfor %}
-                {% else %}
-                <tr>
-                    <td></td>
-                    <td></td>
-                    <td></td>
-                </tr>
                 {% endif %}
                 </tbody>
             </table>
