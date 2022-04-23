@@ -32,7 +32,15 @@ def detalles_incidencia(request,id_incidencia):
     else:
         cliente = Cliente.objects.get(user=request.user)
         incidencia = Incidencia.objects.filter(id = id_incidencia)
-        return render(request,"incidencia/detalles_incidencia.html",{"indicencia" : incidencia, 'id' : incidencia[0].id, "cliente" : cliente, 'states': states, "descripcion" : incidencia[0].descripcion})
+        incidencia2 = Incidencia.objects.get(id = id_incidencia)
+        if request.user.id == incidencia2.cliente.user.id:
+            if not incidencia2.estadoIn == 'SC':
+                return render(request,"incidencia/detalles_incidencia.html",{"indicencia" : incidencia, 'id' : incidencia[0].id, "cliente" : cliente, 'states': states, "descripcion" : incidencia[0].descripcion})
+            else:
+                incidencia = Incidencia.objects.filter(cliente_id=cliente.id)
+                return render(request, "incidencia/incidencia.html", {"incidencia": incidencia, 'states': states})
+        else:
+            return render(request, "home.html")
 
 
 
