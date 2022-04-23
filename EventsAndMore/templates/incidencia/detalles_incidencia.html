@@ -25,6 +25,7 @@
                 <tr>
                     <th hidden>idIncidencia</th>
                     <th scope="col"colspan="2">Nombre del gestor</th>
+                    <th></th>
                     <th scope="col">Correo</th>
                     <th scope="col">Telefono</th>
                     <th scope="col">Estado</th>
@@ -46,10 +47,11 @@
                         <th scope="row" hidden><input type="number" id="id{{inc.id}}" name="id{{inc.id}}" value="{{inc.id}}" readonly required/></th>
 
 
+                        <td>{{inc.gestion.user.first_name}}</td>
+                        <td>{{inc.gestion.user.last_name}}</td>
                         <td></td>
-                        <td></td>
-                        <td></td>
-                        <td></td>
+                        <td>{{inc.gestion.user.email}}</td>
+                        <td>{{inc.gestion.telefono}}</td>
                         <td>
                             <h4>
                                 <span class="badge badge-pill
@@ -70,6 +72,13 @@
                 {% endfor %}
             </tbody>
         </table>
+        <div class="form-group">
+                <thead>
+                <tr>
+                    <th><button class="btn btn-danger  btn-block" type="submit" href="{% url 'incidencias' %}" id="Valor" value="Return" name="Valor">Atras</button>
+                </tr>
+                </thead>
+            </div>
     </form>
 </div>
 {% endblock %}

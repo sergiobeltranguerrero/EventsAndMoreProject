@@ -16,7 +16,7 @@ def Incidencias(request):
         cliente = Cliente.objects.get(user=request.user)
         incidencia = Incidencia.objects.filter(cliente_id=cliente.id)
         return render(request, "incidencia/incidencia.html", {"incidencia": incidencia, 'states': states})
-    #if request.method == 'POST':
+
 
 
 @login_required()
@@ -24,9 +24,15 @@ def detalles_incidencia(request,id_incidencia):
     states = []
     for estado in Incidencia.ESTADO:
         states.append(State(estado[0], estado[1]))
-    cliente = Cliente.objects.get(user=request.user)
-    incidencia = Incidencia.objects.filter(id = id_incidencia)
-    return render(request,"incidencia/detalles_incidencia.html",{"indicencia" : incidencia, 'id' : incidencia[0].id, "cliente" : cliente, 'states': states, "descripcion" : incidencia[0].descripcion})
+    if request.method == 'POST':
+        if request.POST['Valor'] == 'Return':
+            cliente = Cliente.objects.get(user=request.user)
+            incidencia = Incidencia.objects.filter(cliente_id=cliente.id)
+            return render(request, "incidencia/incidencia.html", {"incidencia": incidencia, 'states': states})
+    else:
+        cliente = Cliente.objects.get(user=request.user)
+        incidencia = Incidencia.objects.filter(id = id_incidencia)
+        return render(request,"incidencia/detalles_incidencia.html",{"indicencia" : incidencia, 'id' : incidencia[0].id, "cliente" : cliente, 'states': states, "descripcion" : incidencia[0].descripcion})
 
 
 
