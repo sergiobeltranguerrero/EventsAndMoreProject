@@ -18,9 +18,8 @@
                                     data-mdb-ripple-color="light"
                             >
                                 <img
-                                        src="https://picsum.photos/100/"
-                                        class="w-100"
-                                />
+                                        src="{{ MEDIA_URL }}{{ servicio.imagen }}"
+                                        class="w-75" alt="{{ servicio.nombre }}" width="100"/>
                             </div>
                             <form method="post">
                                 {% csrf_token %}
@@ -46,4 +45,14 @@
             </div>
         </div>
     </section>
+{% endblock %}
+
+{% block stylesheet %}
+    <style>
+        .card-img-top {
+            width: 100%;
+            height: 20vw;
+            object-fit: cover;
+        }
+    </style>
 {% endblock %}
