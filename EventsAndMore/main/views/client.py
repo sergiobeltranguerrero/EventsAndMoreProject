@@ -1,7 +1,7 @@
 from django.contrib.auth.decorators import login_required
 from django.shortcuts import render
 
-from ..models import Evento,Assignacion,Stand,Servicios_Asignados,Cliente, Servicio
+from main.models.servicios import Assignacion
 
 @login_required
 def show_info_client(request):

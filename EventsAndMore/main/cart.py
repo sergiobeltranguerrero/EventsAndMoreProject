@@ -55,4 +55,3 @@ class Cart(object):
     @property
     def total(self):
         return sum(item.cantidad * item.servicio.precio for item in self.items)
-
