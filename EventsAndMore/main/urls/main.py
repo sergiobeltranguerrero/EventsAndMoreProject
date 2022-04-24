@@ -19,10 +19,10 @@ urlpatterns_main = [
     path('cart/delete/', remove_cart_element, name='remove_cart_element'),
     path('cart/update/', update_producto_view, name='update_product'),
     path('cart/reserve/', reservation, name='reserve'),
-] + static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)
     path('incidencies/', Incidencias, name='incidencias'),
-    path('incidencies/detalles/<int:id_incidencia>', detalles_incidencia, name= 'detalles_incidencia'),
+    path('incidencies/detalles/<int:id_incidencia>', detalles_incidencia,name='detalles_incidencia'),
     path('incidencies/nueva/', NuevaIncidencia, name='nueva_incidencia'),
     path('assignaciones/', mostrar_assignaciones, name='mostrar_assignaciones'),
-    path('assignaciones/detalles/<int:id_assignacion>', detalles_assignacion, name='detalles_assignacion')
-]
+    path('assignaciones/detalles/<int:id_assignacion>', detalles_assignacion,name='detalles_assignacion'),
+
+] + static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)
