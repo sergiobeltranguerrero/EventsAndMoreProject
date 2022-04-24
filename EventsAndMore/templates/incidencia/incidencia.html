@@ -4,8 +4,11 @@
 
 {% block body %}
 
-<h1>Product Lists</h1>
-<div class="row">
+
+<div class="container">
+    <h1>Lista de incidencias</h1>
+
+
     <div class="col-sm-12 col-md-12 col-lg-12 col-xl-12">
         <div clas="table-responsive py-2">
             <table class="table table-striped">
@@ -13,23 +16,54 @@
                 <tr>
                     <th>Nombre</th>
                     <th>Descripcion</th>
+                    <th>Estado de la solicitud</th>
+                    <th>Acciones</th>
                 </tr>
                 </thead>
                 <tbody>
                 {% if incidencia|length != 0 %}
                 {% for inciden in incidencia %}
-                <tr>
+                <tr class="
+                    {% if inciden.estadoIn == 'SC' %}
+                        table-success
+                    {% elif inciden.estadoIn == 'PD' %}
+                        table-warning
+                    {% elif inciden.estadoIn == 'EP' %}
+                        table-info
+                    {% else %}
+                        table-danger
+                    {% endif%}
+                    ">
+
+                    <th scope="row" hidden><input type="number" id="id_incidencia{{inciden.id}}" name="id_assignacion{{inciden.id}}" value="{{inciden.id}}" readonly required/></th>
                     <td>{{inciden.nombre}}</td>
                     <td>{{inciden.descripcion}}</td>
-
+                    <td>
+                            <h4>
+                                <span class="badge badge-pill
+                        {% if inciden.estadoIn == 'PD' %}
+                            bg-warning">{{'Incidencia pendiente'}}
+                        {% elif inciden.estadoIn == 'SC' %}
+                            bg-success">{{'Incidencia solucionada'}}
+                        {% elif inciden.estadoIn == 'EP' %}
+                            bg-info">{{'Incidencia en progreso'}}
+                        {% else %}
+                            bg-danger">Error en la solicitud
+                        {% endif%}
+                                </span>
+                            </h4>
+                        </td>
+                        <td>
+                            <div class="form-group">
+                                {% if not inciden.estadoIn == 'SC' %}
+                                    <a class="btn btn-primary btn-block text-black" href="{% url 'detalles_incidencia' inciden.id %}" >Detalles</a>
+                                {% else %}
+                                    <a class="btn btn-danger btn-block text-white" href=# >Cerrada</a>
+                                {% endif %}
+                            </div>
+                        </td>
                 </tr>
                 {% endfor %}
-                {% else %}
-                <tr>
-                    <td></td>
-                    <td></td>
-                    <td></td>
-                </tr>
                 {% endif %}
                 </tbody>
             </table>

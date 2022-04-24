@@ -60,3 +60,23 @@ class Organizador_Evantos(Model):
 
     def __str__(self):
         return self.NIF
+
+class Gestor_solicitudes(Model):
+    user = models.OneToOneField(User, on_delete=models.DO_NOTHING)
+    telefono = models.CharField(max_length=14, validators=[PhoneValidator])
+    NIF = models.CharField(unique=True, max_length=9, validators=[NIFValidator])
+    ciutat = models.CharField(max_length=50)
+    direccion = models.CharField(max_length=200)
+
+    def __str__(self):
+        return self.NIF
+
+class Servicios_adicionales(Model):
+    user = models.OneToOneField(User, on_delete=models.DO_NOTHING)
+    telefono = models.CharField(max_length=14, validators=[PhoneValidator])
+    NIF = models.CharField(unique=True, max_length=9, validators=[NIFValidator])
+    ciutat = models.CharField(max_length=50)
+    direccion = models.CharField(max_length=200)
+
+    def __str__(self):
+        return self.NIF
