@@ -1,7 +1,7 @@
 from django.db.models import Model
 from django.db import models
 from django.contrib.auth.models import AbstractUser
-from .validator import DNIValidator, PhoneValidator, IBANValidator, NIFValidator
+from EventsAndMore.main.validator import DNIValidator, PhoneValidator, IBANValidator, NIFValidator
 
 
 class User(AbstractUser):

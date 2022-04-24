@@ -1,5 +1,5 @@
 from django.shortcuts import render
-from main.models import *
+from ..models import *
 from datetime import datetime,date
 from dateutil.relativedelta import relativedelta
 from django.contrib.auth.decorators import login_required
