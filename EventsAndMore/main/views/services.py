@@ -22,7 +22,7 @@ def services_view(request,**kwargs):
     if not Assignacion.objects.filter(evento=id_evento, cliente=cliente, stand=id_stand).exists():
         return render(request, 'error/404.html')
 
-    if not Assignacion.objects.get(evento=id_evento, cliente=cliente, stand=id_stand).es_valido_por_gestor:
+    if not Assignacion.objects.get(evento=id_evento,    cliente=cliente, stand=id_stand).es_valido_por_gestor:
         return render(request, 'error/404.html')
 
     if not Assignacion.objects.get(evento=id_evento, cliente=cliente, stand=id_stand).es_valido_por_organizador_eventos:

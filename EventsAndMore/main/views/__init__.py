@@ -1,4 +1,4 @@
 from .accounts import *
-from .servicces import *
+from .services import *
 from .cart import *
 from .incidences import *
