@@ -7,7 +7,26 @@
 
 <div class="container">
     <h1>Lista de incidencias</h1>
-
+    <form action="" method="POST">
+        {% csrf_token %}
+        <select class="form-select" id="state" name="state" aria-label="Default select example">
+            <option value="%"
+            {% if selection == '%' %}
+                selected
+            {% endif %}
+            >Seleccionar...</option>
+            {% for state in states %}
+            <option value="{{ state.id }}"
+            {% if selection == state.id %}
+                selected
+            {% endif %}
+            >{{ state.name }}</option>
+            {% endfor %}
+        </select>
+        <div class="input-group">
+            <button class="btn  btn-secondary" type="submit" id="filter">Filtrar</button>
+        </div>
+    </form>
 
     <div class="col-sm-12 col-md-12 col-lg-12 col-xl-12">
         <div clas="table-responsive py-2">

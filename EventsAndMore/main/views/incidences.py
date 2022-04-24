@@ -11,6 +11,14 @@ def Incidencias(request):
     states = []
     for estado in Incidencia.ESTADO:
         states.append(State(estado[0], estado[1]))
+    if request.method == 'POST':
+        if not request.POST['state']== '%':
+            cliente = Cliente.objects.get(user=request.user)
+            incidencia = Incidencia.objects.filter(estadoIn = request.POST['state'], cliente_id=cliente.id)
+        else:
+            cliente = Cliente.objects.get(user=request.user)
+            incidencia = Incidencia.objects.filter(cliente_id=cliente.id)
+        return render(request, "incidencia/incidencia.html", {"incidencia": incidencia, 'states': states})
 
     if request.method == 'GET':
         cliente = Cliente.objects.get(user=request.user)
@@ -52,7 +60,7 @@ def NuevaIncidencia(request):
         nombre = request.POST['nombre']
         descripcion = request.POST['descripcion']
         cliente = Cliente.objects.get(user=request.user)
-        Incidencia.objects.create(nombre=nombre, descripcion=descripcion, cliente=cliente)
+        Incidencia.objects.create(nombre=nombre, descripcion=descripcion,estadoIn='PD', cliente=cliente, gestion_id=1)
         return render(request, 'incidencia/nueva_incidencia.html')
     else:
         return render(request, 'incidencia/nueva_incidencia.html')
