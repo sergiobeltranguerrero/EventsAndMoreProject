@@ -11,7 +11,8 @@ def RegisterClientView(request):
         form = RegisterClientForm(request.POST)
         if form.is_valid():
             form.save()
-            return render(request, 'registration/registerClient.html', {'success': True})
+            return render(request, 'registration/registerClient.html',
+                          {'success': True, 'message': 'Thank for registering'})
     else:
         form = RegisterClientForm()
     return render(request, 'registration/registerClient.html', {'form': form, 'sectors': secotres, 'success': False})

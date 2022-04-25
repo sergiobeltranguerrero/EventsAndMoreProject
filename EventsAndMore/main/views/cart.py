@@ -1,24 +1,39 @@
-from django.contrib.auth.decorators import login_required
 from django.http import HttpResponseRedirect, JsonResponse
 from django.shortcuts import render
 from django.urls import reverse
 
-from main.cart import Cart
-from main.models import Cliente
+from main.utils.cart import Cart
+from main.decorators import event_is_validated, cliente_only, reserva_realizada
+from main.models import Cliente, Orden_Servicios, Servicios_Orden, Evento, Stand
 
 
-@login_required
+@cliente_only
+@event_is_validated
+@reserva_realizada
 def show_cart_view(request, **kwargs):
-    id_evento = kwargs.get('evento')
-    id_stand = kwargs.get('stand')
-    cliente = Cliente.objects.get(user=request.user)
+    try:
+        id_evento = kwargs.get('evento')
+        id_stand = kwargs.get('stand')
+        cliente = Cliente.objects.get(user=request.user)
 
-    cart = Cart(evento=id_evento, stand=id_stand, cliente=cliente)
+        if request.method == 'GET':
+            cart = Cart(evento=id_evento, stand=id_stand, cliente=cliente)
+            return render(request, 'services/cart.html', {'cart': cart})
 
-    return render(request, 'services/cart.html', {'cart': cart})
+        return render(request, 'error/error_generico.html', {'error': {
+            'title': 'Algo ha ido mal...',
+            'message': 'No se ha podido mostrar el carrito.'
+        }})
+    except KeyError:
+        return render(request, 'error/error_generico.html', {'error': {
+            'title': 'ALgo ha ido mal :(',
+            'message': 'No se ha podido mostrar el carrito'
+        }})
 
 
-@login_required
+@cliente_only
+@event_is_validated
+@reserva_realizada
 def remove_cart_element(request):
     if request.POST:
         try:
@@ -36,7 +51,9 @@ def remove_cart_element(request):
     return HttpResponseRedirect(reverse('cart'))
 
 
-@login_required
+@cliente_only
+@event_is_validated
+@reserva_realizada
 def update_producto_view(request):
     if request.POST:
         try:
@@ -55,3 +72,45 @@ def update_producto_view(request):
             return HttpResponseRedirect(reverse('cart'))
 
     return HttpResponseRedirect(reverse('cart'))
+
+
+@cliente_only
+@event_is_validated
+@reserva_realizada
+def reservation(request):
+    try:
+        if request.method == 'POST':
+            id_evento = request.POST.get('id_evento')
+            id_stand = request.POST.get('id_stand')
+            evento = Evento.objects.get(pk=id_evento)
+            stand = Stand.objects.get(pk=id_stand)
+            cliente = Cliente.objects.get(user=request.user)
+
+            cart = Cart(evento=evento, stand=stand, cliente=cliente)
+            if cart.is_empty():
+                return render(request, 'error/error_generico.html', {'error': {
+                    'title': 'No hay productos en el carrito',
+                    'message': 'No se puede realizar la reserva sin productos en el carrito.'
+                }})
+
+            orden = Orden_Servicios.objects.create(cliente=cliente, evento=evento, stand=stand)
+            total = cart.total
+            for element in cart.items:
+                Servicios_Orden(orden=orden, servicio=element.servicio, cantidad=element.cantidad).save()
+
+            cart.clear()
+            servicios_orden = Servicios_Orden.objects.filter(orden=orden)
+
+            return render(request, 'services/success_reservation.html',
+                          {'servicios_orden': servicios_orden, 'total': total})
+
+        return render(request, 'error/error_generico.html', {'error': {
+            'title': 'Algo ha ido mal...',
+            'message': 'No se ha podido realizar la reserva.'
+        }})
+
+    except KeyError:
+        return render(request, 'error/error_generico.html', {'error': {
+            'title': 'Algo ha ido mal :(',
+            'message': 'No se ha podido realizar la reserva.'
+        }})

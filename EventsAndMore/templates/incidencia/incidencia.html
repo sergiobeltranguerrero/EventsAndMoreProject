@@ -41,7 +41,7 @@
                 </thead>
                 <tbody>
                 {% if incidencia|length != 0 %}
-                {% for inciden in incidencia %}
+                {% for inciden in  incidencia%}
                 <tr class="
                     {% if inciden.estadoIn == 'SC' %}
                         table-success
@@ -86,6 +86,7 @@
                 {% endif %}
                 </tbody>
             </table>
+            <a class="btn btn-success" href="{% url 'nueva_incidencia' %}">Crear nueva incidencias</a>
         </div>
     </div>
 </div>

@@ -1,104 +1,54 @@
 {% extends "base.html" %}
 {% block content %}
-    <!DOCTYPE html>
-    <html lang="en">
-    <head>
-        <meta charset="UTF-8">
-        <title>EventsAndMore</title>
-    </head>
-    <body>
-    <nav class="navbar navbar-expand-lg navbar-light bg-light">
-        <div class="container px-5">
-            <a class="navbar-brand" href={% url 'home' %}>EventsAndMore</a>
-            <button class="navbar-toggler" type="button" data-bs-toggle="collapse"
-                    data-bs-target="#navbarSupportedContent" aria-controls="navbarSupportedContent"
-                    aria-expanded="false" aria-label="Toggle navigation"><span class="navbar-toggler-icon"></span>
-            </button>
-            <div class="collapse navbar-collapse" id="navbarSupportedContent">
-                <ul class="navbar-nav ms-auto mb-2 mb-lg-0">
-                    <li class="nav-item"><a
-                    {% url 'home' as home %}
-                    {% if request.path == home %}
-                    class="nav-link active" href=""
-                    {% else %}
-                    class="nav-link" href="{% url 'home' %}"
-                    {% endif %}
-                    >Home</a></li>
-                    <li class="nav-item"><a
-                    {% url 'list_events' as list_events_url %}
-                    {% if request.path == list_events_url %}
-                    class="nav-link active" href=""
-                    {% else %}
-                    class="nav-link" href="{% url 'list_events' %}"
-                    {% endif %}
-                    >Eventos</a></li>
-                    <li class="nav-item"><a class="nav-link" href="about.html">About</a></li>
-                    <li class="nav-item"><a class="nav-link" href="contact.html">Contact</a></li>
-                    <li class="nav-item"><a class="nav-link" href="pricing.html">Pricing</a></li>
-                    <li class="nav-item"><a class="nav-link" href="faq.html">FAQ</a></li>
-                    <li class="nav-item dropdown">
-                        <a class="nav-link dropdown-toggle" id="navbarDropdownBlog" href="#" role="button"
-                           data-bs-toggle="dropdown" aria-expanded="false">Blog</a>
-                        <ul class="dropdown-menu dropdown-menu-end" aria-labelledby="navbarDropdownBlog">
-                            <li><a class="dropdown-item" href="blog-home.html">Blog Home</a></li>
-                            <li><a class="dropdown-item" href="blog-post.html">Blog Post</a></li>
-                        </ul>
-                    </li>
-                    <li class="nav-item dropdown">
-                        <a class="nav-link dropdown-toggle" id="navbarDropdownPortfolio" href="#" role="button"
-                           data-bs-toggle="dropdown" aria-expanded="false">Portfolio</a>
-                        <ul class="dropdown-menu dropdown-menu-end" aria-labelledby="navbarDropdownPortfolio">
-                            <li><a class="dropdown-item" href="portfolio-overview.html">Portfolio Overview</a></li>
-                            <li><a class="dropdown-item" href="portfolio-item.html">Portfolio Item</a></li>
-                        </ul>
-                    </li>
-
-                    {% if user.is_cliente %}
-                    <li class="nav-item"><a
-                    {% url 'my_events' as my_events_url %}
-                    {% if request.path == my_events_url %}
-                    class="nav-link active" href=""
-                    {% else %}
-                    class="nav-link" href="{% url 'my_events' %}"
-                    {% endif %}
-                    >Mis eventos</a></li>
-                    {% endif %}
-
-                    {% if user.is_cliente %}
-                    <li class="nav-item"><a
-                    {% url 'incidencias' as inciden %}
-                    {% if request.path == inciden %}
-                    class="nav-link active" href=""
-                    {% else %}
-                    class="nav-link" href="{% url 'incidencias' %}"
-                    {% endif %}
-                    >Mis incidencias</a></li>
-                    {% endif %}
-
-                    {% if user.is_gestor_solicitudes %}
-                    <li class="nav-item"><a
-                    {% url 'mostrar_assignaciones' as assignations %}
-                    {% if request.path == assignations %}
-                    class="nav-link active" href=""
-                    {% else %}
-                    class="nav-link" href="{% url 'mostrar_assignaciones' %}"
-                    {% endif %}
-                    >Assignaciones</a></li>
-                    {% endif %}
-                    {% if user.is_authenticated %}
-                        <li class="nav-item"><a class="btn btn-outline-secondary" href={% url 'logout' %}>Logout</a></li>
-                    {% else %}
-                        <li class="nav-item"><a class="btn btn-outline-primary" href={% url 'login' %}>Login</a></li>
-                        &nbsp
-                        <li class="nav-item"><a class="btn btn-outline-secondary" href={% url 'register_client' %}>Registrar</a>
+    <div>
+        <nav class="navbar navbar-expand-lg navbar-light bg-light">
+            <div class="container px-5">
+                <a class="navbar-brand" href={% url 'home' %}>EventsAndMore</a>
+                <button class="navbar-toggler" type="button" data-bs-toggle="collapse"
+                        data-bs-target="#navbarSupportedContent" aria-controls="navbarSupportedContent"
+                        aria-expanded="false" aria-label="Toggle navigation"><span class="navbar-toggler-icon"></span>
+                </button>
+                <div class="collapse navbar-collapse" id="navbarSupportedContent">
+                    <ul class="navbar-nav ms-auto mb-2 mb-lg-0">
+                        <li class="nav-item"><a class="nav-link" href="">Home</a></li>
+                        <li class="nav-item"><a class="nav-link" href="about.html">About</a></li>
+                        <li class="nav-item"><a class="nav-link" href="contact.html">Contact</a></li>
+                        <li class="nav-item"><a class="nav-link" href="pricing.html">Pricing</a></li>
+                        <li class="nav-item"><a class="nav-link" href="faq.html">FAQ</a></li>
+                        <li class="nav-item dropdown">
+                            <a class="nav-link dropdown-toggle" id="navbarDropdownBlog" href="#" role="button"
+                               data-bs-toggle="dropdown" aria-expanded="false">Blog</a>
+                            <ul class="dropdown-menu dropdown-menu-end" aria-labelledby="navbarDropdownBlog">
+                                <li><a class="dropdown-item" href="blog-home.html">Blog Home</a></li>
+                                <li><a class="dropdown-item" href="blog-post.html">Blog Post</a></li>
+                            </ul>
                         </li>
-                    {% endif %}
-                </ul>
+                        <li class="nav-item dropdown">
+                            <a class="nav-link dropdown-toggle" id="navbarDropdownPortfolio" href="#" role="button"
+                               data-bs-toggle="dropdown" aria-expanded="false">Portfolio</a>
+                            <ul class="dropdown-menu dropdown-menu-end" aria-labelledby="navbarDropdownPortfolio">
+                                <li><a class="dropdown-item" href="portfolio-overview.html">Portfolio Overview</a></li>
+                                <li><a class="dropdown-item" href="portfolio-item.html">Portfolio Item</a></li>
+                            </ul>
+                        </li>
+                        <li class="nav-item"><a class="nav-link" href={% url 'info_client' %}>My Events</a></li>
+                        {% if user.is_authenticated %}
+                            <li class="nav-item"><a class="btn btn-outline-secondary" href={% url 'logout' %}>Logout</a>
+                            </li>
+                        {% else %}
+                            <li class="nav-item"><a class="btn btn-outline-primary" href={% url 'login' %}>Login</a>
+                            </li>
+                            &nbsp
+                            <li class="nav-item"><a class="btn btn-outline-secondary" href={% url 'register_client' %}>Registrar</a>
+                            </li>
+                        {% endif %}
+                    </ul>
+                </div>
             </div>
-        </div>
-    </nav>
-    {% block body %}
-    {% endblock %}
-    </body>
-    </html>
+        </nav>
+    </div>
+    <div>
+        {% block body %}
+        {% endblock %}
+    </div>
 {% endblock %}
