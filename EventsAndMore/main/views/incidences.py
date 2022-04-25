@@ -1,7 +1,7 @@
 # this lets the user create an incidence
 from django.shortcuts import render
 from django.contrib.auth.decorators import login_required
-from ..models import Incidencia, Cliente
+from ..models import Incidencia, Cliente, Servicios_adicionales
 from .evento import State
 
 
@@ -47,13 +47,13 @@ def detalles_incidencia(request,id_incidencia):
 
 @login_required
 def NuevaIncidencia(request):
-
     if request.method == 'POST':
         nombre = request.POST['nombre']
         descripcion = request.POST['descripcion']
         cliente = Cliente.objects.get(user=request.user)
-        Incidencia.objects.create(nombre=nombre, descripcion=descripcion, cliente=cliente)
-        return render(request, 'incidencia/nueva_incidencia.html')
+        Incidencia.objects.create(nombre=nombre, descripcion=descripcion, cliente=cliente,gestion_id=1,estadoIn='PD')
+        return render(request, 'incidencia/nueva_incidencia.html', {'success': True})
     else:
         return render(request, 'incidencia/nueva_incidencia.html')
+
 

@@ -50,7 +50,7 @@ def my_events(request):
         else:
             assignaciones = Assignacion.objects.filter(cliente=cliente)
     else:
-        return render(request, 'errorpageee.html')
+        return render(request, 'error/error_generico.html')
     asss = create_Ass(assignaciones)
     json = {'customs': asss, 'states': states}
     if request.method == 'GET':

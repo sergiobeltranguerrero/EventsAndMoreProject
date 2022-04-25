@@ -1,0 +1,77 @@
+{% extends "home_base.html" %}
+{% block body %}
+    <!DOCTYPE html>
+    <html lang="en">
+    <head>
+        <meta charset="UTF-8">
+        <title>Registro de un Cliente</title>
+    </head>
+    <style>
+        .card-solituds {
+            font-size: 1rem;
+            line-height: 2.15;
+            padding-left: .75em;
+            padding-right: .75em;
+        }
+
+        .card-solituds .select-arrow {
+            top: 13px;
+        }
+    </style>
+    <body>
+    <section class="vh-100 gradient-custom">
+        <div class="container py-5 h-50">
+            <div class="row justify-content-center align-items-center h-100">
+                <div class="col-12 col-lg-9 col- xl-7">
+                    <div class="card shadow-2-strong card-solituds"
+                         style="border-radius: 15px; background: #f7f7f7;">
+                        <div class="card-body p-4 p-md-5">
+                            <h2 class="mb-2 pb-2 pb-md-0 mb-md-4">Lista Solicitudes</h2>
+                            {% if request.user.is_authenticated %}
+                                {% for assignacion in lista %}
+                                    <div class="row">
+                                    <div class="col-md-3 mb-2">
+                                        <div class="form-outline">
+                                            <label class="form-label" for="event_name">{{ assignacion.evento.nombre }}</label>
+                                        </div>
+                                    </div>
+                                    <div class="col-md-4 mb-2">
+                                        <div class="form-outline">
+                                            <label class="form-label" for="event_name">{{ assignacion.evento.descripcion }}</label>
+                                        </div>
+                                    </div>
+                                    <div class="col-md-1 mb-2">
+                                        <div class="form-outline">
+                                            <label class="form-label" for="event_name">{{ assignacion.stand.numero_stand }}</label>
+                                        </div>
+                                    </div>
+                                    <div class="col-md-1 mb-2">
+                                        <div class="form-outline">
+                                            <label class="form-label" for="event_name">{{ assignacion.estado }}</label>
+                                        </div>
+                                    </div>
+                                    <div class="col-md-2 mb-2">
+                                        <div class="form-outline">
+                                            {% if assignacion.estado != 'AP' %}
+                                                <a class="btn btn-dark
+                                                disabled" href=""
+                                                >Ver servicios</a>
+                                            {% else %}
+                                                <a class="btn btn-success
+                                                " href="{% url 'servicios' evento=assignacion.evento.id stand=assignacion.stand.id %}"
+                                                >Ver servicios</a>
+                                            {% endif%}
+                                        </div>
+                                    </div>
+                                    </div>
+                                {% endfor %}
+                            {% else %}
+                                <p>User not logged in</p>
+                            {% endif %}
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+{% endblock %}
