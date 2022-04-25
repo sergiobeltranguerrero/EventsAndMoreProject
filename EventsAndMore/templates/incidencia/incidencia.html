@@ -35,6 +35,7 @@
                 <tr>
                     <th>Nombre</th>
                     <th>Descripcion</th>
+                    <th>Evento</th>
                     <th>Estado de la solicitud</th>
                     <th>Acciones</th>
                 </tr>
@@ -57,6 +58,8 @@
                     <th scope="row" hidden><input type="number" id="id_incidencia{{inciden.id}}" name="id_assignacion{{inciden.id}}" value="{{inciden.id}}" readonly required/></th>
                     <td>{{inciden.nombre}}</td>
                     <td>{{inciden.descripcion}}</td>
+                    <td>{{inciden.evento.nombre}}</td>
+
                     <td>
                             <h4>
                                 <span class="badge badge-pill

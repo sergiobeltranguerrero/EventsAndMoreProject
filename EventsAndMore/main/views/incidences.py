@@ -1,8 +1,9 @@
 # this lets the user create an incidence
 from django.shortcuts import render
 from django.contrib.auth.decorators import login_required
-from ..models import Incidencia, Cliente
+from ..models import Incidencia, Cliente, Evento, Assignacion
 from .evento import State
+from django import forms
 
 
 
@@ -11,6 +12,7 @@ def Incidencias(request):
     states = []
     for estado in Incidencia.ESTADO:
         states.append(State(estado[0], estado[1]))
+
     if request.method == 'POST':
         if not request.POST['state']== '%':
             cliente = Cliente.objects.get(user=request.user)
@@ -55,13 +57,17 @@ def detalles_incidencia(request,id_incidencia):
 
 @login_required
 def NuevaIncidencia(request):
+    eventos_list = list()
+    for assignaciones in Assignacion.objects.filter(cliente_id=request.user.id):
+        eventos_list.append(assignaciones.evento)
 
     if request.method == 'POST':
         nombre = request.POST['nombre']
         descripcion = request.POST['descripcion']
+        event = Evento.objects.get(pk=request.POST['Evento'])
         cliente = Cliente.objects.get(user=request.user)
-        Incidencia.objects.create(nombre=nombre, descripcion=descripcion,estadoIn='PD', cliente=cliente, gestion_id=1)
-        return render(request, 'incidencia/nueva_incidencia.html', {'success': True})
+        Incidencia.objects.create(nombre=nombre, descripcion=descripcion,estadoIn='PD', cliente=cliente, gestion_id=1,evento=event)
+        return render(request, 'incidencia/nueva_incidencia.html', {'success': True},{"eventos": eventos_list})
     else:
-        return render(request, 'incidencia/nueva_incidencia.html')
+        return render(request, 'incidencia/nueva_incidencia.html', {"eventos": eventos_list})
 

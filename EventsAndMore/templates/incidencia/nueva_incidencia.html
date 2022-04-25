@@ -23,6 +23,14 @@
         <div class="form-group">
             <input type="text" id="descripcion" name="descripcion" class="form-control" placeholder="Describa brevemente su incidencia" minlength="10" maxlength="500" required/>
         </div>
+            <label for="Evento" class="form-label select-label">Elegir un evento</label>
+            <select id="Evento" name="Evento" required class="select form-control-sm">
+                <option>Elegir un Evento</option>
+                {% for event in eventos %}
+                    <option value="{{ event.id }}" {% if sector.id == form.data.sector %}
+                            selected {% endif %}>{{ event.nombre }}</option>
+                {% endfor %}
+            </select>
 
         <div class="form-group">
             <button type="submit" class="btn btn-success btn-block text-black">Save</button>
