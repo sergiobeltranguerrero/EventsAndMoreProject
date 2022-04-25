@@ -102,7 +102,7 @@ def reservation(request):
             servicios_orden = Servicios_Orden.objects.filter(orden=orden)
 
             return render(request, 'services/success_reservation.html',
-                          {'servicios_orden': servicios_orden, 'total': total})
+                          {'servicios_orden': servicios_orden, 'orden':orden, 'total': total})
 
         return render(request, 'error/error_generico.html', {'error': {
             'title': 'Algo ha ido mal...',

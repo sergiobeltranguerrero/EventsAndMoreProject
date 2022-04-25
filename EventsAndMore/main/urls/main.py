@@ -14,11 +14,6 @@ from main.views.solicitudes import mostrar_assignaciones , detalles_assignacion
 urlpatterns_main = [
     path('', TemplateView.as_view(template_name='home.html'), name='home'),
     path('register/client', RegisterClientView, name='register_client'),
-    path('servicios/<int:evento>/<int:stand>', services_view, name='servicios'),
-    path('cart/<int:evento>/<int:stand>', show_cart_view, name='cart'),
-    path('cart/delete/', remove_cart_element, name='remove_cart_element'),
-    path('cart/update/', update_producto_view, name='update_product'),
-    path('cart/reserve/', reservation, name='reserve'),
     path('incidencies/', Incidencias, name='incidencias'),
     path('incidencies/detalles/<int:id_incidencia>', detalles_incidencia,name='detalles_incidencia'),
     path('incidencies/nueva/', NuevaIncidencia, name='nueva_incidencia'),

@@ -61,6 +61,7 @@ class Organizador_Evantos(Model):
     def __str__(self):
         return self.NIF
 
+
 class Gestor_solicitudes(Model):
     user = models.OneToOneField(User, on_delete=models.DO_NOTHING)
     telefono = models.CharField(max_length=14, validators=[PhoneValidator])
@@ -71,6 +72,7 @@ class Gestor_solicitudes(Model):
     def __str__(self):
         return self.NIF
 
+
 class Servicios_adicionales(Model):
     user = models.OneToOneField(User, on_delete=models.DO_NOTHING)
     telefono = models.CharField(max_length=14, validators=[PhoneValidator])
@@ -80,3 +82,5 @@ class Servicios_adicionales(Model):
 
     def __str__(self):
         return self.NIF
+
+

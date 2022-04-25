@@ -19,7 +19,7 @@ def Incidencias(request):
 
 
 
-@login_required()
+@login_required
 def detalles_incidencia(request,id_incidencia):
     states = []
     for estado in Incidencia.ESTADO:
@@ -47,13 +47,12 @@ def detalles_incidencia(request,id_incidencia):
 
 @login_required
 def NuevaIncidencia(request):
-
     if request.method == 'POST':
         nombre = request.POST['nombre']
         descripcion = request.POST['descripcion']
         cliente = Cliente.objects.get(user=request.user)
         Incidencia.objects.create(nombre=nombre, descripcion=descripcion, cliente=cliente)
-        return render(request, 'incidencia/nueva_incidencia.html')
+        return render(request, 'incidencia/nueva_incidencia.html', {'success': True})
     else:
-        return render(request, 'incidencia/nueva_incidencia.html')
+        return render(request, 'incidencia/nueva_incidencia.html', {'success': False})
 
