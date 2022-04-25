@@ -32,6 +32,12 @@
                             </ul>
                         </li>
                         <li class="nav-item"><a class="nav-link" href={% url 'info_client' %}>My Events</a></li>
+                        {% if user.is_cliente %}
+                        <li class="nav-item"><a class="nav-link" href={% url 'incidencias' %}>My Incidences</a></li>
+                        {% endif %}
+                        {% if user.is_gestor_solicitudes %}
+                        <li class="nav-item"><a class="nav-link" href={% url 'mostrar_assignaciones' %}>Assignations</a></li>
+                        {% endif %}
                         {% if user.is_authenticated %}
                             <li class="nav-item"><a class="btn btn-outline-secondary" href={% url 'logout' %}>Logout</a>
                             </li>

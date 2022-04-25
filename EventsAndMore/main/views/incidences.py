@@ -1,7 +1,7 @@
 # this lets the user create an incidence
 from django.shortcuts import render
 from django.contrib.auth.decorators import login_required
-from ..models import Incidencia, Cliente, Servicios_adicionales
+from ..models import Incidencia, Cliente
 from .evento import State
 
 
@@ -11,6 +11,14 @@ def Incidencias(request):
     states = []
     for estado in Incidencia.ESTADO:
         states.append(State(estado[0], estado[1]))
+    if request.method == 'POST':
+        if not request.POST['state']== '%':
+            cliente = Cliente.objects.get(user=request.user)
+            incidencia = Incidencia.objects.filter(estadoIn = request.POST['state'], cliente_id=cliente.id)
+        else:
+            cliente = Cliente.objects.get(user=request.user)
+            incidencia = Incidencia.objects.filter(cliente_id=cliente.id)
+        return render(request, "incidencia/incidencia.html", {"incidencia": incidencia, 'states': states})
 
     if request.method == 'GET':
         cliente = Cliente.objects.get(user=request.user)
@@ -25,7 +33,7 @@ def detalles_incidencia(request,id_incidencia):
     for estado in Incidencia.ESTADO:
         states.append(State(estado[0], estado[1]))
     if request.method == 'POST':
-        if request.POST['Valor'] == 'Return':
+        if request.POST['id'] == 'Return':
             cliente = Cliente.objects.get(user=request.user)
             incidencia = Incidencia.objects.filter(cliente_id=cliente.id)
             return render(request, "incidencia/incidencia.html", {"incidencia": incidencia, 'states': states})
@@ -40,20 +48,20 @@ def detalles_incidencia(request,id_incidencia):
                 incidencia = Incidencia.objects.filter(cliente_id=cliente.id)
                 return render(request, "incidencia/incidencia.html", {"incidencia": incidencia, 'states': states})
         else:
-            return render(request, "home.html")
+            return render(request, "sin_permiso.html")
 
 
 
 
 @login_required
 def NuevaIncidencia(request):
+
     if request.method == 'POST':
         nombre = request.POST['nombre']
         descripcion = request.POST['descripcion']
         cliente = Cliente.objects.get(user=request.user)
-        Incidencia.objects.create(nombre=nombre, descripcion=descripcion, cliente=cliente,gestion_id=1,estadoIn='PD')
+        Incidencia.objects.create(nombre=nombre, descripcion=descripcion,estadoIn='PD', cliente=cliente, gestion_id=1)
         return render(request, 'incidencia/nueva_incidencia.html', {'success': True})
     else:
         return render(request, 'incidencia/nueva_incidencia.html')
-
 
