@@ -48,7 +48,7 @@ def detalles_incidencia(request,id_incidencia):
                 incidencia = Incidencia.objects.filter(cliente_id=cliente.id)
                 return render(request, "incidencia/incidencia.html", {"incidencia": incidencia, 'states': states})
         else:
-            return render(request, "home.html")
+            return render(request, "sin_permiso.html")
 
 
 

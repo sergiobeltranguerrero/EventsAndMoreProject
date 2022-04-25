@@ -21,7 +21,7 @@ def mostrar_assignaciones(request):
                 assignaciones = Assignacion.objects.all()
         return render(request, "assignacion/assignaciones.html", {"assignaciones": assignaciones, 'states': states})
     else:
-        return render(request, "home.html")
+        return render(request, "sin_permiso.html")
 
 @login_required
 def detalles_assignacion(request,id_assignacion):
@@ -33,12 +33,14 @@ def detalles_assignacion(request,id_assignacion):
             if request.POST['Valor'] == 'RC':
                 assignaciones = Assignacion.objects.get(id=id_assignacion)
                 assignaciones.estado = 'RC'
+                assignaciones.es_valido_por_gestor = False
                 assignaciones.save()
                 assignaciones2 = Assignacion.objects.filter(id=id_assignacion)
                 return render(request, "assignacion/detalles_assignacion.html",{"assignaciones": assignaciones2, 'cliente': assignaciones2[0].cliente,'comentario': assignaciones2[0].id, 'states': states})
             if request.POST['Valor'] == 'AP':
                 assignaciones = Assignacion.objects.get(id=id_assignacion)
                 assignaciones.estado = 'AP'
+                assignaciones.es_valido_por_gestor = True
                 assignaciones.save()
                 assignaciones2 = Assignacion.objects.filter(id=id_assignacion)
                 return render(request, "assignacion/detalles_assignacion.html",
@@ -76,4 +78,4 @@ def detalles_assignacion(request,id_assignacion):
             assignaciones = Assignacion.objects.filter(id=id_assignacion)
             return render(request, "assignacion/detalles_assignacion.html", {"assignaciones": assignaciones, 'cliente' : assignaciones[0].cliente,'comentario' : assignaciones[0].id,'states': states})
     else:
-        return render(request, "home.html")
+        return render(request, "sin_permiso.html")
