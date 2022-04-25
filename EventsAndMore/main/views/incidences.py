@@ -32,12 +32,7 @@ def detalles_incidencia(request,id_incidencia):
     states = []
     for estado in Incidencia.ESTADO:
         states.append(State(estado[0], estado[1]))
-    if request.method == 'POST':
-        if request.POST['id'] == 'Return':
-            cliente = Cliente.objects.get(user=request.user)
-            incidencia = Incidencia.objects.filter(cliente_id=cliente.id)
-            return render(request, "incidencia/incidencia.html", {"incidencia": incidencia, 'states': states})
-    else:
+
         cliente = Cliente.objects.get(user=request.user)
         incidencia = Incidencia.objects.filter(id = id_incidencia)
         incidencia2 = Incidencia.objects.get(id = id_incidencia)

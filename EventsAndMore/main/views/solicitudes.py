@@ -69,10 +69,6 @@ def detalles_assignacion(request,id_assignacion):
                 assignaciones2 = Assignacion.objects.filter(id=id_assignacion)
                 return render(request, "assignacion/detalles_assignacion.html", {"assignaciones": assignaciones2, 'cliente' : assignaciones2[0].cliente,'comentario' : assignaciones2[0].id,'states': states})
 
-            if request.POST['Valor'] == 'Return':
-                assignaciones = Assignacion.objects.all()
-                return render(request, "assignacion/assignaciones.html", {"assignaciones": assignaciones, 'states': states})
-
 
         else:
             assignaciones = Assignacion.objects.filter(id=id_assignacion)
