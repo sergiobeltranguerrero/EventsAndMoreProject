@@ -1,0 +1,80 @@
+{% extends "home_base.html" %}
+{% block title %}Detalles de la incidencia{% endblock %}
+{% block body %}
+<div class="container">
+    <div class="row">
+        <div class="col-12">
+            <h1><b>Cliente:</b> {{ cliente.user.first_name }}</h1>
+        </div>
+    </div>
+    <br/>
+    <div class="row">
+        <div class="col-sm-12 col-md-2 col-xl-1">
+            <p><b>Descripción:</b></p>
+        </div>
+        <div class="col-sm-12 col-md-10 col-xl-11">
+            <p>{{ descripcion }}</p>
+        </div>
+    </div>
+
+
+    <form action="{% url 'detalles_incidencia' id %}" method="POST">
+    {% csrf_token %}
+        <table class="table table-striped table-hover col-12">
+            <thead>
+                <tr>
+                    <th hidden>idIncidencia</th>
+                    <th scope="col"colspan="2">Nombre del gestor</th>
+                    <th></th>
+                    <th scope="col">Correo</th>
+                    <th scope="col">Telefono</th>
+                    <th scope="col">Estado</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for inc in indicencia %}
+                    <tr class="
+                    {% if inc.estadoIn == 'PD' %}
+                        table-warning
+                    {% elif inc.estadoIn == 'EP' %}
+                        table-info
+                    {% elif inc.estadoIn == 'SC' %}
+                        table-success
+                    {% else %}
+                        table-danger
+                    {% endif%}
+                    ">
+                        <th scope="row" hidden><input type="number" id="id{{inc.id}}" name="id{{inc.id}}" value="{{inc.id}}" readonly required/></th>
+
+
+                        <td>{{inc.gestion.user.first_name}}</td>
+                        <td>{{inc.gestion.user.last_name}}</td>
+                        <td></td>
+                        <td>{{inc.gestion.user.email}}</td>
+                        <td>{{inc.gestion.telefono}}</td>
+                        <td>
+                            <h4>
+                                <span class="badge badge-pill
+                        {% if inc.estadoIn == 'PD' %}
+                            bg-warning">Pendiente
+                        {% elif inc.estadoIn == 'EP' %}
+                            bg-info">En progreso
+                        {% elif inc.estadoIn == 'SC' %}
+                            bg-success">Solucionada
+                        {% else %}
+                            bg-danger">Error on state
+                        {% endif%}
+                                </span>
+                            </h4>
+                        </td>
+
+                    </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+    </form>
+    <div>
+            <a class="btn btn-danger " href="{% url 'incidencias' %}">Atras</a>
+        </div>
+</div>
+{% endblock %}

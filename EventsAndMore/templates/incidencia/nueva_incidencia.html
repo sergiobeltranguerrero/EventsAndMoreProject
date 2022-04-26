@@ -1,0 +1,45 @@
+{% extends "home_base.html" %}
+
+{% block title %} Crear una nueva incidencia {% endblock %}
+
+{% block body %}
+<div class="container">
+    <div class="row">
+        <div class="col-12">
+            <h1>Crear Incidencia</h1>
+            <div class="card">
+  <div class="card-body">
+    <form action="{% url 'nueva_incidencia' %}" method="POST">
+        {% csrf_token%}
+        <table class="table table-striped table-hover col-2">
+            {% if success %}
+            <div class="alert alert-success" role="alert">
+                La incidencia se ha creado correctamente.
+            </div>
+            {% endif %}
+        <div class="form-group">
+            <input type="text" id="nombre" name="nombre" class="form-control" placeholder="Titulo para la incidencia" minlength="2" maxlength="50" required/>
+        </div>
+        <div class="form-group">
+            <input type="text" id="descripcion" name="descripcion" class="form-control" placeholder="Describa brevemente su incidencia" minlength="10" maxlength="500" required/>
+        </div>
+
+        <div class="form-group">
+            <button type="submit" class="btn btn-success btn-block text-black">Save</button>
+        </div>
+        </table>
+    </form>
+  </div>
+</div>
+</div>
+    </div>
+    <div>
+            <a class="btn btn-success" href="{% url 'incidencias' %}">Volver a mis incidencias</a>
+        </div>
+
+</div>
+
+
+
+
+{% endblock %}

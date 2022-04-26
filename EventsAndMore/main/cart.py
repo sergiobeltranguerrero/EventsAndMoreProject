@@ -29,6 +29,10 @@ class Cart(object):
     def clear(self):
         Elementos_Carro.objects.filter(carro=self.carro).delete()
 
+    def remove_cart(self):
+        self.clear()
+        self.carro.delete()
+
     def set_quantity(self, servicio, cantidad):
 
         if int(cantidad) < 1:
@@ -40,6 +44,9 @@ class Cart(object):
     def __iter__(self):
         for item in self.items:
             yield item
+
+    def is_empty(self):
+        return self.total == 0
 
     @property
     def items(self):
