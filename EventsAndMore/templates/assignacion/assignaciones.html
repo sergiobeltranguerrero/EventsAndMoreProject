@@ -2,7 +2,7 @@
 {% block title %}Todas las assignaciones{% endblock %}
 {% block body %}
 <div class="container">
-<h1>Assignaciones de stands</h1>
+<h1>Asignaciones de stands</h1>
 <!-- arreglar los tipos de busqueda -->
     <form action="" method="POST">
         {% csrf_token %}
@@ -34,6 +34,7 @@
                     <th scope="col">Evento</th>
                     <th scope="col">Stand</th>
                     <th scope="col">Estado</th>
+                    <th scope="col">comentario</th>
                     <th scope="col">Acciones</th>
                 </tr>
             </thead>
@@ -72,9 +73,22 @@
                             </h4>
                         </td>
                         <td>
+                            {% if not assignacion.estado == 'PD' %}
+                            {{assignacion.comentario}}
+                            {% else %}
+                                {{ 'Esta asignacion esta pendiente de revision' }}
+                            {% endif %}
+                        </td>
+                        <td>
+                            {% if user.is_gestor_solicitudes %}
                             <div class="form-group">
                                 <a class="btn btn-primary btn-block text-black" href="{% url 'detalles_assignacion' assignacion.id %}">Detalles</a>
                             </div>
+                            {% elif user.is_cliente %}
+                            <div class="form-group">
+                                <a class="btn btn-danger btn-block text-white">No Accesible</a>
+                            </div>
+                            {% endif %}
                         </td>
                     </tr>
                 {% endfor %}

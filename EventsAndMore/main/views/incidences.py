@@ -43,7 +43,7 @@ def detalles_incidencia(request,id_incidencia):
                 incidencia = Incidencia.objects.filter(cliente_id=cliente.id)
                 return render(request, "incidencia/incidencia.html", {"incidencia": incidencia, 'states': states})
         else:
-            return render(request, "sin_permiso.html")
+            return render(request, "error/error_generico.html",{'error' : 'No tienes permiso para acceder'})
 
 
 

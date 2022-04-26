@@ -9,19 +9,33 @@ from django.core.mail import send_mail
 
 @login_required
 def mostrar_assignaciones(request):
+    states = []
+    for estado in Assignacion.ESTADO:
+        states.append(State(estado[0], estado[1]))
     if request.user.is_gestor_solicitudes:
+        user = request.user
         assignaciones = Assignacion.objects.all()
-        states = []
-        for estado in Assignacion.ESTADO:
-            states.append(State(estado[0], estado[1]))
         if request.method == 'POST':
             if not request.POST['state'] == '%':
                 assignaciones = Assignacion.objects.filter(estado=request.POST['state'])
             else:
                 assignaciones = Assignacion.objects.all()
-        return render(request, "assignacion/assignaciones.html", {"assignaciones": assignaciones, 'states': states})
+        return render(request, "assignacion/assignaciones.html", {"assignaciones": assignaciones, 'states': states, 'user' : user})
+
+    elif request.user.is_cliente:
+        cliente = Cliente.objects.get(user = request.user)
+        user = request.user
+        assignaciones = Assignacion.objects.filter(cliente_id=cliente.id)
+
+        if request.method == 'POST':
+            if not request.POST['state'] == '%':
+                assignaciones = Assignacion.objects.filter(estado=request.POST['state'], cliente_id=cliente.id)
+            else:
+                assignaciones = Assignacion.objects.filter(cliente_id=cliente.id)
+        return render(request, "assignacion/assignaciones.html", {"assignaciones": assignaciones, 'states': states, 'user' : user})
+
     else:
-        return render(request, "sin_permiso.html")
+        return render(request, "error/error_generico.html",{'error' : 'No tienes permiso para acceder'})
 
 @login_required
 def detalles_assignacion(request,id_assignacion):
@@ -74,4 +88,4 @@ def detalles_assignacion(request,id_assignacion):
             assignaciones = Assignacion.objects.filter(id=id_assignacion)
             return render(request, "assignacion/detalles_assignacion.html", {"assignaciones": assignaciones, 'cliente' : assignaciones[0].cliente,'comentario' : assignaciones[0].id,'states': states})
     else:
-        return render(request, "sin_permiso.html")
+        return render(request, "error/error_generico.html",{'error' : 'No tienes permiso para acceder'})
