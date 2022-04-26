@@ -35,7 +35,9 @@
                     <th scope="col">Stand</th>
                     <th scope="col">Estado</th>
                     <th scope="col">comentario</th>
+                    {% if user.is_gestor_solicitudes %}
                     <th scope="col">Acciones</th>
+                    {% endif %}
                 </tr>
             </thead>
             <tbody>
@@ -83,10 +85,6 @@
                             {% if user.is_gestor_solicitudes %}
                             <div class="form-group">
                                 <a class="btn btn-primary btn-block text-black" href="{% url 'detalles_assignacion' assignacion.id %}">Detalles</a>
-                            </div>
-                            {% elif user.is_cliente %}
-                            <div class="form-group">
-                                <a class="btn btn-danger btn-block text-white">No Accesible</a>
                             </div>
                             {% endif %}
                         </td>

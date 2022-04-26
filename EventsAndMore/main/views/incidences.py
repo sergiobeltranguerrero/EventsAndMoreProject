@@ -3,10 +3,10 @@ from django.shortcuts import render
 from django.contrib.auth.decorators import login_required
 from ..models import Incidencia, Cliente
 from .evento import State
+from main.decorators import servicios_adiciones_only, servicios_adiciones_and_cliente, cliente_only
 
 
-
-@login_required
+@servicios_adiciones_and_cliente
 def Incidencias(request):
     states = []
     for estado in Incidencia.ESTADO:
@@ -27,7 +27,7 @@ def Incidencias(request):
 
 
 
-@login_required()
+@cliente_only
 def detalles_incidencia(request,id_incidencia):
     states = []
     for estado in Incidencia.ESTADO:
@@ -40,15 +40,19 @@ def detalles_incidencia(request,id_incidencia):
             if not incidencia2.estadoIn == 'SC':
                 return render(request,"incidencia/detalles_incidencia.html",{"indicencia" : incidencia, 'id' : incidencia[0].id, "cliente" : cliente, 'states': states, "descripcion" : incidencia[0].descripcion})
             else:
-                incidencia = Incidencia.objects.filter(cliente_id=cliente.id)
-                return render(request, "incidencia/incidencia.html", {"incidencia": incidencia, 'states': states})
+                return render(request, "error/error_generico.html",{'error':{
+                    'title': 'Esta pagina no existe',
+                    'message': 'O usted no tiene los permisos necesarios'
+                }})
         else:
-            return render(request, "error/error_generico.html",{'error' : 'No tienes permiso para acceder'})
+            return render(request, "error/error_generico.html", {'error': {
+                'title': 'Esta pagina no existe',
+                'message': 'O usted no tiene los permisos necesarios'
+            }})
 
 
 
-
-@login_required
+@cliente_only
 def NuevaIncidencia(request):
 
     if request.method == 'POST':
