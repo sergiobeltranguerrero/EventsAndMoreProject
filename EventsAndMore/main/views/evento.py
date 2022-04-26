@@ -29,7 +29,7 @@ def detail_event(request,id):
         json = {'evento': evento}
         return render(request, 'evento/detail_event.html', json)
     if request.method == 'POST':
-        return null
+        return 'null'
 
 
 #Shows events that user have solicitated

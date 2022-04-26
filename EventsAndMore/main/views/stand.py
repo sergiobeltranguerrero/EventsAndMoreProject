@@ -70,11 +70,12 @@ def stand_planning(request, id_event):
     elif request.method == 'POST':
         if Evento_Stand_Sector.objects.filter(evento=evento).count() == 0:
             create_ess(request,id_event)
-            return render(request, '/')
+            return render(request, 'home.html')
         else:
             return render(request, 'notAutorized.html')
     else:
         return render(request, '/')
+#TODO: Revisar retorns de funcio
 
 def update_delete_ess(request,id_event):
     evento = Evento.objects.get(id=id_event)
