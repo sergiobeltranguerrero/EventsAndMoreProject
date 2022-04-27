@@ -3,6 +3,9 @@ from main.models import *
 from django.contrib.auth.decorators import login_required
 from .evento import my_events
 
+error_title = 'Esta pagina no existe o no tiene los permisos necessarios'
+error_description = 'Esta intentando acceder a una pagina inexistente o usted no tiene permisos para acceder'
+
 #GET: Gets stands for the client sector and one event
 #POST: Creates new assignations for a event and client sector by selected by the user
 @login_required
@@ -34,7 +37,8 @@ def get_stands_by_sector_event(request, id_event):
         request.method = 'GET'
         return my_events(request)
     else:
-        return render(request, '/')
+        return render(request, "error/error_generico.html",
+                      {'error': {'title': error_title, 'message': error_description}})
 
 def stand_planning_edit(request,id_event):
     evento = Evento.objects.get(id=id_event)
@@ -52,9 +56,10 @@ def stand_planning_edit(request,id_event):
     elif request.method == 'POST':
         update_delete_ess(request,id_event)
         create_ess(request,id_event)
-        return render(request, '/')
+        return render(request, 'home.html')
     else:
-        return render(request, '/')
+        return render(request, "error/error_generico.html",
+                      {'error': {'title': error_title, 'message': error_description}})
 
 def stand_planning(request, id_event):
     evento = Evento.objects.get(id=id_event)
@@ -66,13 +71,15 @@ def stand_planning(request, id_event):
             json = {'stands': stand, 'sectores': sector, 'evento': evento, 'sizes': sizes}
             return render(request, 'evento\stand_planning.html', json)
         else:
-            return render(request, 'notAutorized.html')
+            return render(request, "error/error_generico.html",
+                          {'error': {'title': error_title, 'message': error_description}})
     elif request.method == 'POST':
         if Evento_Stand_Sector.objects.filter(evento=evento).count() == 0:
             create_ess(request,id_event)
             return render(request, 'home.html')
         else:
-            return render(request, 'notAutorized.html')
+            return render(request, "error/error_generico.html",
+                          {'error': {'title': error_title, 'message': error_description}})
     else:
         return render(request, '/')
 #TODO: Revisar retorns de funcio
