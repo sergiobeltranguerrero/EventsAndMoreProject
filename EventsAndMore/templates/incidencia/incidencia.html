@@ -33,6 +33,10 @@
             <table class="table table-striped">
                 <thead>
                 <tr>
+
+                    {% if user.is_servicios_adicionales %}
+                        <th colspan="2">Cliente</th>
+                    {% endif %}
                     <th>Titulo incidencia</th>
                     <th>Descripcion</th>
                     <th>Estado de la solicitud</th>
@@ -55,6 +59,10 @@
                     ">
 
                     <th scope="row" hidden><input type="number" id="id_incidencia{{inciden.id}}" name="id_assignacion{{inciden.id}}" value="{{inciden.id}}" readonly required/></th>
+                    {% if user.is_servicios_adicionales %}
+                        <td>{{inciden.cliente.user.first_name}}</td>
+                        <td>{{inciden.cliente.user.last_name}}</td>
+                    {% endif %}
                     <td>{{inciden.nombre}}</td>
                     <td>{{inciden.descripcion}}</td>
                     <td>
@@ -74,16 +82,21 @@
                         </td>
                         <td>
                             <div class="form-group">
-                                {% if not inciden.estadoIn == 'SC' %}
-                                    <a class="btn btn-primary btn-block text-black" href="{% url 'detalles_incidencia' inciden.id %}" >Detalles</a>
-                                {% else %}
-                                    <a class="btn btn-danger btn-block text-white" href=# >Cerrada</a>
+                                {% if  user.is_cliente %}
+                                    {% if not inciden.estadoIn == 'SC' %}
+                                        <a class="btn btn-primary btn-block text-black" href="{% url 'detalles_incidencia' inciden.id %}" >Detalles</a>
+                                    {% else %}
+                                        <a class="btn btn-danger btn-block text-white" href=# >Cerrada</a>
+                                    {% endif %}
+                                {% elif user.is_servicios_adicionales %}
+                                    <a class="btn btn-primary btn-block text-black text-truncate" href="" >Editar incidencia</a>
                                 {% endif %}
                             </div>
                         </td>
                 </tr>
                 {% endfor %}
                 {% endif %}
+
                 </tbody>
             </table>
             <a class="btn btn-success" href="{% url 'nueva_incidencia' %}">Crear nueva incidencias</a>

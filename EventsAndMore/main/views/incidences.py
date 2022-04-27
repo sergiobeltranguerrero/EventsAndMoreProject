@@ -1,7 +1,7 @@
 # this lets the user create an incidence
 from django.shortcuts import render
 from django.contrib.auth.decorators import login_required
-from ..models import Incidencia, Cliente
+from ..models import Incidencia, Cliente, User, Servicios_adicionales
 from .evento import State
 from main.decorators import servicios_adiciones_only, servicios_adiciones_and_cliente, cliente_only
 
@@ -11,19 +11,39 @@ def Incidencias(request):
     states = []
     for estado in Incidencia.ESTADO:
         states.append(State(estado[0], estado[1]))
+    user = request.user
     if request.method == 'POST':
-        if not request.POST['state']== '%':
-            cliente = Cliente.objects.get(user=request.user)
-            incidencia = Incidencia.objects.filter(estadoIn = request.POST['state'], cliente_id=cliente.id)
-        else:
-            cliente = Cliente.objects.get(user=request.user)
-            incidencia = Incidencia.objects.filter(cliente_id=cliente.id)
-        return render(request, "incidencia/incidencia.html", {"incidencia": incidencia, 'states': states})
+
+        if request.user.is_servicios_adicionales:
+            if not request.POST['state'] == '%':
+                adicional = Servicios_adicionales.objects.get(user=request.user)
+                incidencia = Incidencia.objects.filter(estadoIn=request.POST['state'],gestion_id=adicional.id)
+            else:
+                adicional = Servicios_adicionales.objects.get(user=request.user)
+                incidencia = Incidencia.objects.filter(gestion_id=adicional.id)
+
+
+        elif request.user.is_cliente:
+            if not request.POST['state']== '%':
+                cliente = Cliente.objects.get(user=request.user)
+                incidencia = Incidencia.objects.filter(estadoIn = request.POST['state'], cliente_id=cliente.id)
+            else:
+                cliente = Cliente.objects.get(user=request.user)
+                incidencia = Incidencia.objects.filter(cliente_id=cliente.id)
+                #for inci in incidencia:
+                 #   inci.cliente.user.nombre
+
+        return render(request, "incidencia/incidencia.html", {"incidencia": incidencia, 'states': states, 'user' : user})
 
     if request.method == 'GET':
-        cliente = Cliente.objects.get(user=request.user)
-        incidencia = Incidencia.objects.filter(cliente_id=cliente.id)
-        return render(request, "incidencia/incidencia.html", {"incidencia": incidencia, 'states': states})
+        if request.user.is_servicios_adicionales:
+            adicional = Servicios_adicionales.objects.get(user = request.user)
+            incidencia = Incidencia.objects.filter(gestion_id=adicional.id)
+
+        elif request.user.is_cliente:
+            cliente = Cliente.objects.get(user=request.user)
+            incidencia = Incidencia.objects.filter(cliente_id=cliente.id)
+        return render(request, "incidencia/incidencia.html", {"incidencia": incidencia, 'states': states, 'user' : user})
 
 
 
