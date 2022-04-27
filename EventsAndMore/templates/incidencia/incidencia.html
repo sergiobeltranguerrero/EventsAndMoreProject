@@ -75,7 +75,7 @@
                         <td>
                             <div class="form-group">
                                 {% if not inciden.estadoIn == 'SC' %}
-                                    <a class="btn btn-primary btn-block text-black" href="{% url 'detalles_incidencia' inciden.id %}" >Detalles</a>
+                                    <a class="btn btn-primary btn-block" href="{% url 'detalles_incidencia' inciden.id %}" >Detalles</a>
                                 {% else %}
                                     <a class="btn btn-danger btn-block text-white" href=# >Cerrada</a>
                                 {% endif %}

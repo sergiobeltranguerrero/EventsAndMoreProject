@@ -84,7 +84,7 @@
                         <td>
                             {% if user.is_gestor_solicitudes %}
                             <div class="form-group">
-                                <a class="btn btn-primary btn-block text-black" href="{% url 'detalles_assignacion' assignacion.id %}">Detalles</a>
+                                <a class="btn btn-primary btn-block" href="{% url 'detalles_assignacion' assignacion.id %}">Detalles</a>
                             </div>
                             {% endif %}
                         </td>
