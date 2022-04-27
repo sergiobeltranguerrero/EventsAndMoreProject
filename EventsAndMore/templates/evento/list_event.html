@@ -54,13 +54,13 @@
                         <td>{{evento.capacidad}}</td>
                         <td>
                             <div class="form-group">
-                                <a class="btn btn-primary btn-block text-black" href="{% url 'detail_event' evento.id %}">Detalle</a>
+                                <a class="btn btn-primary btn-block" href="{% url 'detail_event' evento.id %}">Detalle</a>
                             </div>
                         </td>
                         {% if user.is_cliente %}
                         <td>
                             <div class="form-group">
-                                <a class="btn btn-success btn-block text-black" href="{% url 'get_stand' evento.id %}">Unirme</a>
+                                <a class="btn btn-success btn-block" href="{% url 'get_stand' evento.id %}">Unirme</a>
                             </div>
                         </td>
                         {% endif %}

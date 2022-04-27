@@ -70,12 +70,12 @@
                         </td>
                         <td>
                             <div class="form-group">
-                                <a class="btn btn-primary btn-block text-black" href="{% url 'my_stand' ass.event_id %}">Detalle</a>
+                                <a class="btn btn-primary btn-block" href="{% url 'my_stand' ass.event_id %}">Detalle</a>
                             </div>
                         </td>
                         <td>
                             <div class="form-group">
-                                <a class="btn btn-success btn-block text-black
+                                <a class="btn btn-success btn-block
                                 {% if ass.state.id != 'AP' %}
                                     disabled" href=""
                                    {% else %}
