@@ -4,6 +4,8 @@ from datetime import datetime, date
 from dateutil.relativedelta import relativedelta
 from django.contrib.auth.decorators import login_required
 
+error_title = 'Esta pagina no existe o no tiene los permisos necessarios'
+error_description = 'Esta intentando acceder a una pagina inexistente o usted no tiene permisos para acceder'
 
 # Shows all events in current year
 def list_events(request):
@@ -31,7 +33,7 @@ def detail_event(request, id):
         json = {'evento': evento}
         return render(request, 'evento/detail_event.html', json)
     if request.method == 'POST':
-        return 'null'
+        return render(request, "error/error_generico.html", {'error': {'title': error_title,'message': error_description}})
 
 
 # Shows events that user have solicitated
@@ -49,7 +51,7 @@ def my_events(request):
         else:
             assignaciones = Assignacion.objects.filter(cliente=cliente)
     else:
-        return render(request, 'error/error_generico.html')
+        return render(request, "error/error_generico.html", {'error': {'title': error_title,'message': error_description}})
     asss = create_Ass(assignaciones)
     json = {'customs': asss, 'states': states}
     if request.method == 'GET':
