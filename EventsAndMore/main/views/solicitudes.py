@@ -83,4 +83,10 @@ def detalles_assignacion(request,id_assignacion):
 
     else:
         assignaciones = Assignacion.objects.filter(id=id_assignacion)
-        return render(request, "assignacion/detalles_assignacion.html", {"assignaciones": assignaciones, 'cliente' : assignaciones[0].cliente,'comentario' : assignaciones[0].id,'states': states})
+        try:
+            return render(request, "assignacion/detalles_assignacion.html", {"assignaciones": assignaciones, 'cliente' : assignaciones[0].cliente,'comentario' : assignaciones[0].id,'states': states})
+        except:
+            return render(request, "error/error_generico.html", {'error': {
+                'title': 'Esta pagina no existe',
+                'message': 'O usted no tiene los permisos necesarios'
+            }})
