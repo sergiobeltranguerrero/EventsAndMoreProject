@@ -72,13 +72,10 @@
                 {% endfor %}
             </tbody>
         </table>
-        <div class="form-group">
-                <thead>
-                <tr>
-                    <th><button class="btn btn-danger  btn-block" type="submit" href="{% url 'incidencias' %}" id="id" value="Return" name="id">Atras</button>
-                </tr>
-                </thead>
-            </div>
+    <div>
+            <a class="btn btn-danger" href="{% url 'incidencias' %}">Volver a mis incidencias</a>
+        </div>
+
     </form>
 </div>
 {% endblock %}
