@@ -34,7 +34,7 @@ def gestor_solicitudes_only(func):
 def servicios_adiciones_only(func):
     def wrap(request, *args, **kwargs):
         user = request.user
-        if user.is_authenticated and user.is_servicios_adiciones:
+        if user.is_authenticated and user.is_servicios_adicionales:
             return func(request, *args, **kwargs)
         else:
             return render(request, 'error/error_generico.html', {'error': {

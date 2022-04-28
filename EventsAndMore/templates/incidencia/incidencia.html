@@ -29,8 +29,8 @@
     </form>
 
     <div class="col-sm-12 col-md-12 col-lg-12 col-xl-12">
-        <div clas="table-responsive py-2">
-            <table class="table table-striped">
+        <div clas="table-responsive py-2 ">
+            <table class="table table-striped text-truncate">
                 <thead>
                 <tr>
 
@@ -83,13 +83,13 @@
                         <td>
                             <div class="form-group">
                                 {% if  user.is_cliente %}
-                                    {% if not inciden.estadoIn == 'SC' %}
+                                    {% if not inciden.estadoIn == 'PD'  %}
                                         <a class="btn btn-primary btn-block" href="{% url 'detalles_incidencia' inciden.id %}" >Detalles</a>
                                     {% else %}
-                                        <a class="btn btn-danger btn-block text-white" href=# >Cerrada</a>
+                                        <a class="btn btn-danger btn-block text-white disabled " href=# >Cerrada</a>
                                     {% endif %}
                                 {% elif user.is_servicios_adicionales %}
-                                    <a class="btn btn-primary btn-block text-black text-truncate" href="" >Editar incidencia</a>
+                                    <a class="btn btn-primary btn-block text-white text-truncate" href="{% url 'valorar_incidencia' inciden.id %}" >Valorar incidencia</a>
                                 {% endif %}
                             </div>
                         </td>
