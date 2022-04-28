@@ -36,7 +36,7 @@
                             <li class="nav-item"><a class="nav-link" href={% url 'my_events' %}>My Events</a></li>
                             <li class="nav-item"><a class="nav-link" href={% url 'incidencias' %}>My Incidences</a></li>
                         {% endif %}
-                        {% if user.is_gestor_solicitudes %}
+                        {% if user.is_gestor_solicitudes or user.is_cliente %}
                         <li class="nav-item"><a class="nav-link" href={% url 'mostrar_assignaciones' %}>Assignations</a></li>
                         {% endif %}
                         {% if user.is_authenticated %}

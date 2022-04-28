@@ -10,8 +10,8 @@ def cliente_only(func):
             return func(request, *args, **kwargs)
         else:
             return render(request, 'error/error_generico.html', {'error': {
-                'title': 'Sin permiso',
-                'message': 'Acceso excusivo para el cliente'
+                'title': 'Esta pagina no existe',
+                'message': 'O usted no tiene los permisos necesarios'
             }})
 
     return wrap
@@ -24,8 +24,8 @@ def gestor_solicitudes_only(func):
             return func(request, *args, **kwargs)
         else:
             return render(request, 'error/error_generico.html', {'error': {
-                'title': 'Sin permiso',
-                'message': 'Acceso excusivo para el gestor de solicitudes'
+                'title': 'Esta pagina no existe',
+                'message': 'O usted no tiene los permisos necesarios'
             }})
 
     return wrap
@@ -38,8 +38,8 @@ def servicios_adiciones_only(func):
             return func(request, *args, **kwargs)
         else:
             return render(request, 'error/error_generico.html', {'error': {
-                'title': 'Sin permiso',
-                'message': 'Acceso excusivo para el personal de servicios adicionales'
+                'title': 'Esta pagina no existe',
+                'message': 'O usted no tiene los permisos necesarios'
             }})
 
     return wrap
@@ -52,8 +52,8 @@ def organizador_eventos_only(func):
             return func(request, *args, **kwargs)
         else:
             return render(request, 'error/error_generico.html', {'error': {
-                'title': 'Sin permiso',
-                'message': 'Acceso excusivo para el organizador de eventos'
+                'title': 'Esta pagina no existe',
+                'message': 'O usted no tiene los permisos necesarios'
             }})
 
     return wrap
@@ -66,8 +66,8 @@ def personal_direccion_only(func):
             return func(request, *args, **kwargs)
         else:
             return render(request, 'error/error_generico.html', {'error': {
-                'title': 'Sin permiso',
-                'message': 'Acceso excusivo para personal de dirección'
+                'title': 'Esta pagina no existe',
+                'message': 'O usted no tiene los permisos necesarios'
             }})
 
     return wrap
@@ -146,4 +146,30 @@ def reserva_realizada(func):
                 'title': 'Algo a ido mal :(',
                 'message': 'No tienes permiso para acceder a este evento.',
             }})
+    return wrap
+
+def gestor_solicitudes_and_cliente(func):
+    def wrap(request, *args, **kwargs):
+        user = request.user
+        if user.is_authenticated and user.is_gestor_solicitudes or user.is_authenticated and user.is_cliente:
+            return func(request, *args, **kwargs)
+        else:
+            return render(request, 'error/error_generico.html', {'error': {
+                'title': 'Esta pagina no existe',
+                'message': 'O usted no tiene los permisos necesarios'
+            }})
+
+    return wrap
+
+def servicios_adiciones_and_cliente(func):
+    def wrap(request, *args, **kwargs):
+        user = request.user
+        if user.is_authenticated and user.is_servicios_adicionales or user.is_authenticated and user.is_cliente:
+            return func(request, *args, **kwargs)
+        else:
+            return render(request, 'error/error_generico.html', {'error': {
+                'title': 'Esta pagina no existe',
+                'message': 'O usted no tiene los permisos necesarios'
+            }})
+
     return wrap
