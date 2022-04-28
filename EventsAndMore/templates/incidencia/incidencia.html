@@ -7,14 +7,33 @@
 
 <div class="container">
     <h1>Lista de incidencias</h1>
-
+    <form action="" method="POST">
+        {% csrf_token %}
+        <select class="form-select" id="state" name="state" aria-label="Default select example">
+            <option value="%"
+            {% if selection == '%' %}
+                selected
+            {% endif %}
+            >Seleccionar...</option>
+            {% for state in states %}
+            <option value="{{ state.id }}"
+            {% if selection == state.id %}
+                selected
+            {% endif %}
+            >{{ state.name }}</option>
+            {% endfor %}
+        </select>
+        <div class="input-group">
+            <button class="btn  btn-secondary" type="submit" id="filter">Filtrar</button>
+        </div>
+    </form>
 
     <div class="col-sm-12 col-md-12 col-lg-12 col-xl-12">
         <div clas="table-responsive py-2">
             <table class="table table-striped">
                 <thead>
                 <tr>
-                    <th>Nombre</th>
+                    <th>Titulo incidencia</th>
                     <th>Descripcion</th>
                     <th>Estado de la solicitud</th>
                     <th>Acciones</th>
@@ -22,7 +41,7 @@
                 </thead>
                 <tbody>
                 {% if incidencia|length != 0 %}
-                {% for inciden in incidencia %}
+                {% for inciden in  incidencia%}
                 <tr class="
                     {% if inciden.estadoIn == 'SC' %}
                         table-success
@@ -56,7 +75,7 @@
                         <td>
                             <div class="form-group">
                                 {% if not inciden.estadoIn == 'SC' %}
-                                    <a class="btn btn-primary btn-block text-black" href="{% url 'detalles_incidencia' inciden.id %}" >Detalles</a>
+                                    <a class="btn btn-primary btn-block" href="{% url 'detalles_incidencia' inciden.id %}" >Detalles</a>
                                 {% else %}
                                     <a class="btn btn-danger btn-block text-white" href=# >Cerrada</a>
                                 {% endif %}
@@ -67,6 +86,7 @@
                 {% endif %}
                 </tbody>
             </table>
+            <a class="btn btn-success" href="{% url 'nueva_incidencia' %}">Crear nueva incidencias</a>
         </div>
     </div>
 </div>

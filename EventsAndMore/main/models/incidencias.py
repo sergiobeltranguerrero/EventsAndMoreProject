@@ -14,7 +14,7 @@ class Incidencia(Model):
         ('EP', 'En progreso'),
         ('SC', 'Solucionada'),
     ]
-    estadoIn = models.CharField(max_length=2, choices=ESTADO, default=ESTADO[0])
+    estadoIn = models.CharField(max_length=2, choices=ESTADO, default=ESTADO[0][0])
 
     def __str__(self):
         return self.nombre + ' (' + str(self.id) + ')'

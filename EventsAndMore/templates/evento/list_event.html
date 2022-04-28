@@ -9,21 +9,14 @@
             <div class="input-group" style="margin-bottom: 5px; margin-top: 15px">
                 <label class="input-group-text" for="inputGroupDate">Rango</label>
                 <label class="input-group-text" for="inputGroupDate">Fecha inicio</label>
-                <input type="date" class="form-control" id="date_start_start" name="date_start_start" aria-describedby="inputGroupDate" min="{{ mindate|date:'Y-m-d' }}" value="{{ date_start_start|date:'Y-m-d' }}">
-                <input type="date" class="form-control" id="date_start_end" name="date_start_end" aria-describedby="inputGroupDate" max="{{ maxdate|date:'Y-m-d' }}" value="{{ date_start_end|date:'Y-m-d' }}">
+                <input type="date" class="form-control" id="date_start" name="date_start" aria-describedby="inputGroupDate" min="{{ mindate|date:'Y-m-d' }}" value="{{ date_start|date:'Y-m-d' }}">
+                <input type="date" class="form-control" id="date_end" name="date_end" aria-describedby="inputGroupDate" max="{{ maxdate|date:'Y-m-d' }}" value="{{ date_end|date:'Y-m-d' }}">
+                <div class="input-group-append">
+                    <button class="btn  btn-secondary" type="submit" id="filter">Filtrar</button>
+                </div>
             </div>
         </div>
-        <div class="col-12">
-            <div class="input-group" style="margin-bottom: 5px">
-                <label class="input-group-text" for="inputGroupDate">Rango</label>
-                <label class="input-group-text" for="inputGroupDate">Fecha fin&nbsp;&nbsp;&nbsp;&nbsp;</label>
-                <input type="date" class="form-control" id="start_date_end" name="date_end_start" aria-describedby="inputGroupDate" min="{{ mindate|date:'Y-m-d' }}" value="{{ date_end_start|date:'Y-m-d' }}">
-                <input type="date" class="form-control" id="end_date_end" name="date_end_end" aria-describedby="inputGroupDate" max="{{ maxdate|date:'Y-m-d' }}" value="{{ date_end_end|date:'Y-m-d' }}">
-            </div>
-        </div>
-        <div class="input-group">
-            <button class="btn  btn-secondary" type="submit" id="filter">Filtrar</button>
-        </div>
+
     </form>
     <form action="{% url 'list_events' %}" method="POST">
     {% csrf_token %}
@@ -54,13 +47,13 @@
                         <td>{{evento.capacidad}}</td>
                         <td>
                             <div class="form-group">
-                                <a class="btn btn-primary btn-block text-black" href="{% url 'detail_event' evento.id %}">Detalle</a>
+                                <a class="btn btn-primary btn-block" href="{% url 'detail_event' evento.id %}">Detalle</a>
                             </div>
                         </td>
                         {% if user.is_cliente %}
                         <td>
                             <div class="form-group">
-                                <a class="btn btn-success btn-block text-black" href="{% url 'get_stand' evento.id %}">Unirme</a>
+                                <a class="btn btn-success btn-block" href="{% url 'get_stand' evento.id %}">Unirme</a>
                             </div>
                         </td>
                         {% endif %}

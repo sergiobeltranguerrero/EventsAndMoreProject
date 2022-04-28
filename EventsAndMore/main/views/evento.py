@@ -4,6 +4,8 @@ from datetime import datetime, date
 from dateutil.relativedelta import relativedelta
 from django.contrib.auth.decorators import login_required
 
+error_title = 'Esta pagina no existe o no tiene los permisos necessarios'
+error_description = 'Esta intentando acceder a una pagina inexistente o usted no tiene permisos para acceder'
 
 # Shows all events in current year
 def list_events(request):
@@ -12,8 +14,7 @@ def list_events(request):
         json = set_dates()
     elif request.method == 'POST':
         json = get_dates(request=request)
-        eventos = Evento.objects.filter(fecha_inicio__range=(json.get('date_start_start', json['mindate']),json.get('date_start_end', json['maxdate'])),
-                                        fecha_fin__range=(json.get('date_end_start', json['mindate']),json.get('date_end_end', json['maxdate'])))
+        eventos = Evento.objects.filter(fecha_inicio__range=(json.get('date_start', json['mindate']),json.get('date_end', json['maxdate'])))
     else:
         return render(request, '/')
     if not request.user.is_anonymous and request.user.is_cliente:
@@ -32,7 +33,7 @@ def detail_event(request, id):
         json = {'evento': evento}
         return render(request, 'evento/detail_event.html', json)
     if request.method == 'POST':
-        return null
+        return render(request, "error/error_generico.html", {'error': {'title': error_title,'message': error_description}})
 
 
 # Shows events that user have solicitated
@@ -50,7 +51,7 @@ def my_events(request):
         else:
             assignaciones = Assignacion.objects.filter(cliente=cliente)
     else:
-        return render(request, 'errorpageee.html')
+        return render(request, "error/error_generico.html", {'error': {'title': error_title,'message': error_description}})
     asss = create_Ass(assignaciones)
     json = {'customs': asss, 'states': states}
     if request.method == 'GET':
@@ -97,7 +98,7 @@ def set_dates(start_date=datetime.now(), end_date=datetime.now() + relativedelta
 
 
 def get_dates(request):
-    date_names = ['date_start_start', 'date_start_end', 'date_end_start', 'date_end_end']
+    date_names = ['date_start', 'date_end']
     mindate, maxdate = get_min_max_date()
     json = {'mindate': mindate, 'maxdate': maxdate}
     for date_name in date_names:

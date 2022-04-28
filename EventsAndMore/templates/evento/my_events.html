@@ -62,24 +62,20 @@
                                 <span class="badge badge-pill
                         {% if ass.state.id == 'PD' %}
                             bg-warning">{{ass.state.name}}
-                        {% elif ass.state.id == 'RC' %}
-                            bg-danger">{{ass.state.name}}
-                        {% elif ass.state.id == 'AP' %}
-                            bg-success">{{ass.state.name}}
                         {% else %}
-                            bg-danger">Error on state
+                            bg-success">Respuesta
                         {% endif%}
                                 </span>
                             </h4>
                         </td>
                         <td>
                             <div class="form-group">
-                                <a class="btn btn-primary btn-block text-black" href="{% url 'my_stand' ass.event_id %}">Detalle</a>
+                                <a class="btn btn-primary btn-block" href="{% url 'my_stand' ass.event_id %}">Detalle</a>
                             </div>
                         </td>
                         <td>
                             <div class="form-group">
-                                <a class="btn btn-success btn-block text-black
+                                <a class="btn btn-success btn-block
                                 {% if ass.state.id != 'AP' %}
                                     disabled" href=""
                                    {% else %}
