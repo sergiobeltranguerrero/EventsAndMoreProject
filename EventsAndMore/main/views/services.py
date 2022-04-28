@@ -74,8 +74,10 @@ def servicesAdd(request):
         description = request.POST['descripcion']
         if request.POST['generic'] == "False":
             generic = False
-        else:
+        elif request.POST['generic'] == "True":
             generic = True
+        else:
+            return render(request,'services/add_service.html',{'succes':False})
         #imagen = "insertarFoto"
         price = int(request.POST['price'])
         aviable = True

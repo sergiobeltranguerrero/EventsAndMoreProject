@@ -16,6 +16,10 @@
             <div class="alert alert-success" role="alert">
                 La incidencia se ha creado correctamente.
             </div>
+            {% else %}
+                <div class="alert alert-danger" role="alert">
+                    Seleccione un evento valido!
+                </div>
             {% endif %}
         <div class="form-group">
             <input type="text" id="nombre" name="nombre" class="form-control" placeholder="Titulo para la incidencia" minlength="2" maxlength="50" required/>
@@ -27,7 +31,7 @@
             <select id="Evento" name="Evento" required class="select form-control-sm">
                 <option>Elegir un Evento</option>
                 {% for event in eventos %}
-                    <option value="{{ event.id }}" {% if sector.id == form.data.sector %}
+                    <option value="{{ event.id }}" {% if event.id == form.data.event %}
                             selected {% endif %}>{{ event.nombre }}</option>
                 {% endfor %}
             </select>

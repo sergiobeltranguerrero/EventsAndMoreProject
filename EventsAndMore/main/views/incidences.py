@@ -1,9 +1,11 @@
 # this lets the user create an incidence
+from django.http import HttpResponseRedirect
 from django.shortcuts import render
 from django.contrib.auth.decorators import login_required
 from ..models import Incidencia, Cliente, Evento, Assignacion
 from .evento import State
 from main.decorators import servicios_adiciones_only, servicios_adiciones_and_cliente, cliente_only
+from django.urls import reverse
 
 
 @servicios_adiciones_and_cliente
@@ -67,9 +69,12 @@ def NuevaIncidencia(request):
     if request.method == 'POST':
         nombre = request.POST['nombre']
         descripcion = request.POST['descripcion']
-        event = Evento.objects.get(pk=request.POST['Evento'])
+        if str.isdigit(request.POST['Evento']):
+            event = Evento.objects.get(pk=request.POST['Evento'])
+        else:
+            return render(request, 'incidencia/nueva_incidencia.html', {'success': False, 'eventos': eventos_list})
         cliente = Cliente.objects.get(user=request.user)
-        Incidencia.objects.create(nombre=nombre, descripcion=descripcion,estadoIn='PD', cliente_id=cliente.id, gestion_id=1,evento=event)
+        Incidencia.objects.create(nombre=nombre, descripcion=descripcion,estadoIn='PD', cliente=cliente, gestion_id=1,evento=event)
         return render(request, 'incidencia/nueva_incidencia.html', {'success': True,'eventos': eventos_list})
     else:
         return render(request, 'incidencia/nueva_incidencia.html', {"eventos": eventos_list})

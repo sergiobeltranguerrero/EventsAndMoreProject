@@ -13,6 +13,11 @@
         {% csrf_token%}
         <table class="table table-striped table-hover col-2">
         <div class="form-group">
+            {% if succes == False %}
+                <div class="alert alert-danger" role="alert">
+                    Seleccione una opcion valida!
+                </div>
+            {% endif %}
             <div class="col col-lg-4 mb-4">
                 <input type="text" id="nombre" name="nombre" class="form-control" placeholder="Nombre del servicio" minlength="2" maxlength="50" required/>
             </div>
@@ -31,7 +36,7 @@
                  <select id="generic" name="generic" required class="select form-control-sm">
                     <option>Es servicio generico?</option>
                         <option value={{ True }}>Es generico</option>
-                        <option value={{ False   }}>No es generico</option>
+                        <option value={{ False }}>No es generico</option>
                 </select>
                 </div>
         <div class="form-group">
@@ -53,8 +58,4 @@
         </div>
 
 </div>
-
-
-
-
 {% endblock %}
