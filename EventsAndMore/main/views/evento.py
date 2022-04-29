@@ -1,4 +1,6 @@
 from django.shortcuts import render
+
+from main.decorators import rols_required
 from main.models import *
 from datetime import datetime, date
 from dateutil.relativedelta import relativedelta
@@ -7,6 +9,7 @@ from django.contrib.auth.decorators import login_required
 error_title = 'Esta pagina no existe o no tiene los permisos necessarios'
 error_description = 'Esta intentando acceder a una pagina inexistente o usted no tiene permisos para acceder'
 
+
 # Shows all events in current year
 def list_events(request):
     if request.method == 'GET':
@@ -14,7 +17,8 @@ def list_events(request):
         json = set_dates()
     elif request.method == 'POST':
         json = get_dates(request=request)
-        eventos = Evento.objects.filter(fecha_inicio__range=(json.get('date_start', json['mindate']),json.get('date_end', json['maxdate'])))
+        eventos = Evento.objects.filter(
+            fecha_inicio__range=(json.get('date_start', json['mindate']), json.get('date_end', json['maxdate'])))
     else:
         return render(request, '/')
     if not request.user.is_anonymous and request.user.is_cliente:
@@ -33,7 +37,8 @@ def detail_event(request, id):
         json = {'evento': evento}
         return render(request, 'evento/detail_event.html', json)
     if request.method == 'POST':
-        return render(request, "error/error_generico.html", {'error': {'title': error_title,'message': error_description}})
+        return render(request, "error/error_generico.html",
+                      {'error': {'title': error_title, 'message': error_description}})
 
 
 # Shows events that user have solicitated
@@ -51,7 +56,8 @@ def my_events(request):
         else:
             assignaciones = Assignacion.objects.filter(cliente=cliente)
     else:
-        return render(request, "error/error_generico.html", {'error': {'title': error_title,'message': error_description}})
+        return render(request, "error/error_generico.html",
+                      {'error': {'title': error_title, 'message': error_description}})
     asss = create_Ass(assignaciones)
     json = {'customs': asss, 'states': states}
     if request.method == 'GET':
