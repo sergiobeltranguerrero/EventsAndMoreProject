@@ -1,7 +1,7 @@
 from django.db.models import Model
 from django.db import models
 
-from main.models import Sector
+from main.models import Sector,Organizador_Eventos
 
 
 class Evento(Model):
@@ -11,6 +11,7 @@ class Evento(Model):
     fecha_fin = models.DateTimeField()
     capacidad = models.IntegerField()
     activo = models.BooleanField(default=True)
+    organizador = models.ForeignKey(Organizador_Eventos, on_delete=models.DO_NOTHING)
 
     def __str__(self):
         return self.nombre + ' (' + str(self.id) + ')'
