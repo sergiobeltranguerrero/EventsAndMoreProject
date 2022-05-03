@@ -108,10 +108,21 @@ def servicesDelete(request,**kwargs):
         return HttpResponseRedirect(reverse('all_servicios'))
 
 def servicesListAll(request):
-    if request.user.is_servicios_adicionales:
-        servicios_genericos = Servicio.objects.filter(is_generic=True,is_available=True)
-        servicios = Servicio.objects.filter(is_generic=False,is_available=True)
-        servicios_no_aviable = Servicio.objects.filter(is_available=False)
-        return render(request,'services/list_services.html',{'genericos':servicios_genericos, 'servicios': servicios,'not_aviable':servicios_no_aviable})
+    servicios_genericos = Servicio.objects.filter(is_generic=True,is_available=True)
+    servicios = Servicio.objects.filter(is_generic=False,is_available=True)
+    servicios_no_aviable = Servicio.objects.filter(is_available=False)
+    return render(request,'services/list_services.html',{'genericos':servicios_genericos, 'servicios': servicios,'not_aviable':servicios_no_aviable})
+
+def service_event_assign(request,**kwargs):
+    eventos = Evento.objects.all()
+    ass_event = list()
+    for event in eventos:
+        try:
+            Servicios_Especiales.objects.get(evento_id=event.id)
+        except:
+            ass_event.append(event)
+    if request.method == 'POST':
+        service = kwargs.get('servicio')
+        event = kwargs.get('event')
     else:
-        return render(request,'error/error_generico.html')
+        return render(request, 'services/assign_service_client.html', {'eventos':ass_event})

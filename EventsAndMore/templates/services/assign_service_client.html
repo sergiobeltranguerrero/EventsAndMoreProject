@@ -1,0 +1,45 @@
+{% extends 'home_base.html' %}
+{% block body %}
+    <section style="background-color: #fff">
+        <div class="text-center container py-5">
+            <div class="row mb-5"></div>
+            <h2 class="mt-4 mb-5"><strong>Assignación de Servicios</strong></h2>
+            <div class="row">
+                {% for evento in eventos %}
+                    <div class="col col-lg-4 mb-4">
+                        <div class="card">
+                            <form method="post">
+                                {% csrf_token %}
+                                <input type="hidden" name="id_evento" value="{{ evento.id }}">
+                                <div class="card-body">
+                                    <p class="text-reset">
+                                    <h5 class="card-title mb-3"><strong>{{ evento.nombre }}</strong></h5>
+                                    </p>
+                                    <div class="text-reset">
+                                        {% if evento.descripcion %}
+                                            <p class="card-text text-secondary">{{ evento.descripcion }}</p>
+                                        {% endif %}
+                                    </div>
+                                    </a>
+                                </div>
+                            </form>
+                        </div>
+                        <div class="m-lg-auto">
+                            <a href="#" class="btn btn-success">Assignar servicios</a>
+                        </div>
+                    </div>
+                {% endfor %}
+            </div>
+        </div>
+    </section>
+{% endblock %}
+
+{% block stylesheet %}
+    <style>
+        .card-img-top {
+            width: 100%;
+            height: 20vw;
+            object-fit: cover;
+        }
+    </style>
+{% endblock %}
