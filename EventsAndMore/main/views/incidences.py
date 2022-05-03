@@ -3,7 +3,7 @@ from django.shortcuts import render
 from django.contrib.auth.decorators import login_required
 from ..models import Incidencia, Cliente
 from .evento import State
-from main.decorators import servicios_adiciones_only, servicios_adiciones_and_cliente, cliente_only
+from main.decorators import servicios_adiciones_and_cliente
 
 
 @servicios_adiciones_and_cliente
@@ -27,7 +27,7 @@ def Incidencias(request):
 
 
 
-@cliente_only
+
 def detalles_incidencia(request,id_incidencia):
     states = []
     for estado in Incidencia.ESTADO:
@@ -58,7 +58,6 @@ def detalles_incidencia(request,id_incidencia):
 
 
 
-@cliente_only
 def NuevaIncidencia(request):
 
     if request.method == 'POST':

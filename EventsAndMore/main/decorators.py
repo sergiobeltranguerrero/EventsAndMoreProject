@@ -49,20 +49,6 @@ def rols_required(*rols):
     return decorator
 
 
-def cliente_only(func):
-    def wrap(request, *args, **kwargs):
-        user = request.user
-        if user.is_authenticated and user.is_cliente:
-            return func(request, *args, **kwargs)
-        else:
-            return render(request, 'error/error_generico.html', {'error': {
-                'title': 'Esta pagina no existe',
-                'message': 'O usted no tiene los permisos necesarios'
-            }})
-
-    return wrap
-
-
 def event_is_validated(func):
     def wrap(request, *args, **kwargs):
         try:
