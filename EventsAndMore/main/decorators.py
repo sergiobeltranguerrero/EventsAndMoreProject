@@ -1,68 +1,58 @@
 from django.shortcuts import render
 
-from main.models import Cliente, Assignacion, Evento, Stand, Orden_Servicios
+from main.models import Cliente, Assignacion, Evento, Stand, Orden_Servicios, User
+
+
+def rols_required(*rols):
+    """
+    Decorador que verifica que el usuario tenga los roles requeridos. Para usarlo, se debe pasar una lista de roles
+    como el siguiente ejemplo:
+    @rols_required('servicios_adicionales', ['personal_direccion', 'cliente']) -> servicios_adicionales AND (personal_direccion OR cliente)
+    @param rols: lista de roles requeridos ('visitante', 'cliente', 'gestor_solicitudes', 'servicios_adicionales', 'organizador_eventos', 'personal_direccion')
+    """
+
+    def decorator(func):
+        def inner(request, *args, **kwargs):
+            if request.user.is_authenticated:
+                is_valid = True
+                if len(rols) > 0:
+                    for rol in rols:
+                        if isinstance(rol, list):
+                            temporal_valid = False
+                            for r in rol:
+                                if request.user.has_perm(r):
+                                    temporal_valid = True
+                                    break
+                            is_valid = is_valid and temporal_valid
+                        elif not request.user.has_perm(rol):
+                            is_valid = False
+                            break
+
+                if is_valid:
+                    return func(request, *args, **kwargs)
+                else:
+                    return render(request, 'error/error_generico.html', {'error': {
+                        'title': 'Sin permisos',
+                        'message': 'No tienes permiso para acceder.',
+                    }})
+            else:
+                if any('visitante' in rol for rol in rols):
+                    return func(request, *args, **kwargs)
+                else:
+                    return render(request, 'error/error_generico.html', {'error': {
+                        'title': 'Sin permisos',
+                        'message': 'No tienes permiso para acceder.',
+                    }})
+
+        return inner
+
+    return decorator
 
 
 def cliente_only(func):
     def wrap(request, *args, **kwargs):
         user = request.user
         if user.is_authenticated and user.is_cliente:
-            return func(request, *args, **kwargs)
-        else:
-            return render(request, 'error/error_generico.html', {'error': {
-                'title': 'Esta pagina no existe',
-                'message': 'O usted no tiene los permisos necesarios'
-            }})
-
-    return wrap
-
-
-def gestor_solicitudes_only(func):
-    def wrap(request, *args, **kwargs):
-        user = request.user
-        if user.is_authenticated and user.is_gestor_solicitudes:
-            return func(request, *args, **kwargs)
-        else:
-            return render(request, 'error/error_generico.html', {'error': {
-                'title': 'Esta pagina no existe',
-                'message': 'O usted no tiene los permisos necesarios'
-            }})
-
-    return wrap
-
-
-def servicios_adiciones_only(func):
-    def wrap(request, *args, **kwargs):
-        user = request.user
-        if user.is_authenticated and user.is_servicios_adiciones:
-            return func(request, *args, **kwargs)
-        else:
-            return render(request, 'error/error_generico.html', {'error': {
-                'title': 'Esta pagina no existe',
-                'message': 'O usted no tiene los permisos necesarios'
-            }})
-
-    return wrap
-
-
-def organizador_eventos_only(func):
-    def wrap(request, *args, **kwargs):
-        user = request.user
-        if user.is_authenticated and user.is_organizador_eventos:
-            return func(request, *args, **kwargs)
-        else:
-            return render(request, 'error/error_generico.html', {'error': {
-                'title': 'Esta pagina no existe',
-                'message': 'O usted no tiene los permisos necesarios'
-            }})
-
-    return wrap
-
-
-def personal_direccion_only(func):
-    def wrap(request, *args, **kwargs):
-        user = request.user
-        if user.is_authenticated and user.is_personal_direccion:
             return func(request, *args, **kwargs)
         else:
             return render(request, 'error/error_generico.html', {'error': {
@@ -146,7 +136,9 @@ def reserva_realizada(func):
                 'title': 'Algo a ido mal :(',
                 'message': 'No tienes permiso para acceder a este evento.',
             }})
+
     return wrap
+
 
 def gestor_solicitudes_and_cliente(func):
     def wrap(request, *args, **kwargs):
@@ -160,6 +152,7 @@ def gestor_solicitudes_and_cliente(func):
             }})
 
     return wrap
+
 
 def servicios_adiciones_and_cliente(func):
     def wrap(request, *args, **kwargs):

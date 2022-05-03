@@ -135,7 +135,7 @@
                 const evento = {{ cart.evento }};
                 const stand = {{ cart.stand }};
                 $.ajax({
-                    url: '{% url 'reserve' %}',
+                    url: '{% url 'reservar' %}',
                     type: 'POST',
                     data: {
                         'id_evento': evento,
