@@ -142,3 +142,4 @@ GitHub.sublime-settings
 EventsAndMore/.DS_Store
 
 EventsAndMore/EventsAndMore.sqlite3
+EventsAndMore/main/migrations/__init__.py
