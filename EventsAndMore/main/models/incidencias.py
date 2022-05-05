@@ -5,10 +5,10 @@ from main.models.accounts import Cliente, Servicios_adicionales
 
 
 class Incidencia(Model):
-    nombre = models.CharField(max_length=100)
+    nombre = models.CharField(max_length=50)
     descripcion = models.CharField(max_length=500, null=True, blank=True)
     cliente = models.ForeignKey(Cliente, on_delete=models.DO_NOTHING)
-    gestion = models.ForeignKey(Servicios_adicionales, on_delete=models.DO_NOTHING)
+    gestion = models.ForeignKey(Servicios_adicionales, on_delete=models.DO_NOTHING, null=True, blank=True)
     ESTADO = [
         ('PD', 'Pendiente'),
         ('EP', 'En progreso'),
