@@ -4,7 +4,7 @@ from django.shortcuts import render
 from django.contrib.auth.decorators import login_required
 from ..models import Incidencia, Cliente, Evento, Assignacion
 from .evento import State
-from main.decorators import servicios_adiciones_only, servicios_adiciones_and_cliente, cliente_only
+from ..decorators import servicios_adiciones_and_cliente,cliente_only
 from django.urls import reverse
 
 

@@ -5,7 +5,7 @@ from django.contrib.auth.decorators import login_required
 from ..models import Assignacion, Cliente
 from .evento import State
 from django.core.mail import send_mail
-from main.decorators import gestor_solicitudes_and_cliente, gestor_solicitudes_only
+from main.decorators import gestor_solicitudes_and_cliente
 
 
 @gestor_solicitudes_and_cliente
@@ -35,7 +35,6 @@ def mostrar_assignaciones(request):
                 assignaciones = Assignacion.objects.filter(cliente_id=cliente.id)
         return render(request, "assignacion/assignaciones.html", {"assignaciones": assignaciones, 'states': states, 'user' : user})
 
-@gestor_solicitudes_only
 def detalles_assignacion(request,id_assignacion):
     states = []
     for estado in Assignacion.ESTADO:

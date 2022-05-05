@@ -5,7 +5,7 @@ from django.urls import reverse
 from ..models import Evento, Servicios_Especiales, Servicio, Cliente, Assignacion, Stand, Elementos_Carro
 from main.cart import Cart
 
-from main.decorators import cliente_only, event_is_validated, reserva_realizada
+from ..decorators import cliente_only, event_is_validated, reserva_realizada, servicios_adicionales
 
 
 @cliente_only
@@ -68,6 +68,7 @@ def services_view(request,**kwargs):
 
 # TODO: Añadir la cantidad maxima que se puede adquirir de un servicio
 
+@servicios_adicionales
 def servicesAdd(request):
     if request.method == 'POST':
         name = request.POST['nombre']
@@ -86,6 +87,7 @@ def servicesAdd(request):
     else:
         return render(request,'services/add_service.html')
 
+@servicios_adicionales
 def services_set_aviable(request,**kwargs):
     id_service = kwargs.get('servicio')
     try:
@@ -96,7 +98,7 @@ def services_set_aviable(request,**kwargs):
     except:
         return HttpResponseRedirect(reverse('all_servicios'))
 
-
+@servicios_adicionales
 def servicesDelete(request,**kwargs):
     id_service = kwargs.get('servicio')
     try:
@@ -107,12 +109,14 @@ def servicesDelete(request,**kwargs):
     except:
         return HttpResponseRedirect(reverse('all_servicios'))
 
+@servicios_adicionales
 def servicesListAll(request):
     servicios_genericos = Servicio.objects.filter(is_generic=True,is_available=True)
     servicios = Servicio.objects.filter(is_generic=False,is_available=True)
     servicios_no_aviable = Servicio.objects.filter(is_available=False)
     return render(request,'services/list_services.html',{'genericos':servicios_genericos, 'servicios': servicios,'not_aviable':servicios_no_aviable})
 
+@servicios_adicionales
 def service_event_assign(request,**kwargs):
     eventos = Evento.objects.all()
     ass_event = list()
