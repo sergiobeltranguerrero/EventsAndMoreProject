@@ -2,7 +2,7 @@
 '''
 from django.shortcuts import render
 from django.contrib.auth.decorators import login_required
-from ..models import Assignacion, Cliente
+from ..models import Assignacion, Cliente, Evento
 from .evento import State
 from django.core.mail import send_mail
 from main.decorators import gestor_solicitudes_and_cliente, gestor_solicitudes_only
@@ -90,3 +90,9 @@ def detalles_assignacion(request,id_assignacion):
                 'title': 'Esta pagina no existe',
                 'message': 'O usted no tiene los permisos necesarios'
             }})
+
+def solicitudes_eventos(request):
+    eventos = Evento.objects.filter(aceptado_gestor=False)
+    json = {'eventos': eventos}
+    #if request.method == 'POST':
+    return render(request,'evento/solicitud_evento.html',json)

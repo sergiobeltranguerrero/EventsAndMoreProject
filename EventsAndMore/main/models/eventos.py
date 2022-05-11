@@ -1,7 +1,7 @@
 from django.db.models import Model
 from django.db import models
 
-from main.models import Sector,Organizador_Eventos
+from main.models import Sector,Organizador_Eventos, Gestor_solicitudes
 
 
 class Evento(Model):
@@ -12,6 +12,8 @@ class Evento(Model):
     capacidad = models.IntegerField()
     activo = models.BooleanField(default=True)
     organizador = models.ForeignKey(Organizador_Eventos, on_delete=models.DO_NOTHING)
+    aceptado_gestor = models.BooleanField(default=False)
+    gestor = models.ForeignKey(Gestor_solicitudes,on_delete=models.DO_NOTHING,null=True) #gestor que acepta la solicitud
 
     def __str__(self):
         return self.nombre + ' (' + str(self.id) + ')'
