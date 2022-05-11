@@ -46,6 +46,26 @@
                                 <li><a class="dropdown-item" href="portfolio-item.html">Portfolio Item</a></li>
                             </ul>
                         </li>
+                        {% if user.is_organizador_eventos %}
+                            <li class="nav-item"><a
+                            {% url 'new_event' as new_event %}
+                            {% if request.path == new_event %}
+                                class="nav-link active" href=""
+                            {% else %}
+                                class="nav-link" href="{% url 'new_event' %}"
+                            {% endif %}
+                            >Nuevo evento</a></li>
+                        {% endif %}
+                        {% if user.is_gestor_solicitudes %}
+                            <li class="nav-item"><a
+                            {% url 'solicitudes_eventos' as solicitudes_eventos %}
+                            {% if request.path == solicitudes_eventos %}
+                                class="nav-link active" href=""
+                            {% else %}
+                                class="nav-link" href="{% url 'solicitudes_eventos' %}"
+                            {% endif %}
+                            >Solicitudes evento</a></li>
+                        {% endif %}
                         {% if user.is_cliente %}
                             <li class="nav-item"><a
                             {% url 'my_events' as my_events_url %}
