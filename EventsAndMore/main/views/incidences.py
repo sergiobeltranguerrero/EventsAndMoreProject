@@ -1,4 +1,5 @@
 # this lets the user create an incidence
+from django.core.mail import send_mail
 from django.shortcuts import render
 from django.contrib.auth.decorators import login_required
 from ..models import Incidencia, Cliente, User, Servicios_adicionales
@@ -103,13 +104,43 @@ def valorar_incidencia(request, id_incidencia):
             }})
 
     if request.method == 'POST':
-        if request.POST['Valor'] =='asignar':
+        if request.POST['Valor'] == 'asignar':
             incidencia = Incidencia.objects.get(id=id_incidencia)
             incidencia.estadoIn = 'EP'
-            adicionales = Servicios_adicionales.objects.get(user_id= request.user.id)
+            adicionales = Servicios_adicionales.objects.get(user_id=request.user.id)
             incidencia.gestion = adicionales
             incidencia.save()
             incidencia = Incidencia.objects.filter(id=id_incidencia)
             return render(request, "incidencia/valorar_incidencia.html",
                           {"incidencias": incidencia, 'cliente': incidencia[0].cliente, 'comentario': incidencia[0].id,
                            'states': states})
+
+        elif request.POST['Valor'] == 'solucionada' and len(request.POST['comentario']) >= 10:
+            incidencia = Incidencia.objects.get(id=id_incidencia)
+            incidencia.estadoIn = 'SC'
+            incidencia.descripcion = str(request.POST['comentario'])
+            incidencia.save()
+            recipientes = []
+            recipientes.append(incidencia.cliente.user.email)
+            recipientes.append(request.user.email)
+            send_mail('Incidencia solucionada!', 'Titulo de la incidencia: ' + incidencia.nombre + '\nDescripción de '
+                                                                                                   'la incidencia: '
+                      + incidencia.descripcion + '\nEsta incidencia ha sido solucionada, esperemos que haya visto '
+                                                 'adecuada la respuesta a su incidencia.' + '\nMuchas gracias'
+                      + '\n\n' + request.user.first_name + ' ' + request.user.last_name, 'eventsandmore@correo.com',
+                      recipientes, fail_silently=False)
+
+            incidencia = Incidencia.objects.filter(id=id_incidencia)
+            return render(request, "incidencia/valorar_incidencia.html",
+                          {"incidencias": incidencia, 'cliente': incidencia[0].cliente, 'comentario': incidencia[0].id,
+                           'states': states})
+        elif request.POST['Valor'] == 'desasignar':
+            incidencia = Incidencia.objects.get(id=id_incidencia)
+            incidencia.estadoIn = 'PD'
+            incidencia.save()
+            incidencia = Incidencia.objects.filter(id=id_incidencia)
+            return render(request, "incidencia/valorar_incidencia.html",
+                          {"incidencias": incidencia, 'cliente': incidencia[0].cliente, 'comentario': incidencia[0].id,
+                           'states': states})
+
+

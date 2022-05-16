@@ -10,7 +10,7 @@
     <div class="row">
         <div class="col-12">
             <h1><b>Cliente:</b> {{ cliente.user.first_name }} {{ cliente.user.last_name}}</h1>
-            <h4><b>Empresa:</b> {{ cliente.user.first_name}}<b> Correo:</b>{{cliente.user.email }}<b>Telefono:</b>{{ cliente.telefono }}</h4>
+            <h4><b>Empresa:</b> {{ cliente.user.first_name}}<b> Correo:</b>{{cliente.user.email }}<b> Telefono:</b>{{ cliente.telefono }}</h4>
         </div>
     </div>
     <br/>
@@ -97,13 +97,7 @@
             <input type="text" id="comentario" name="comentario" class="form-control" placeholder="Escriba aquí el comentario de la incidencia" minlength="5" maxlength="500"/>
         </div>
             <th><button class="btn hidden "></button></th>
-            <div class="form-group">
-                <thead>
-                <tr>
-                    <th><button class="btn btn-secondary btn-block" type="submit" href="{% url 'valorar_incidencia' comentario %}" id="Valor" value="Comentario" name="Valor"  >Enviar</button>
-                </tr>
-                </thead>
-            </div>
+
         </div>
     </form>
     <div>
