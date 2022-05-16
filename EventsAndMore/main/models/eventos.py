@@ -1,7 +1,7 @@
 from django.db.models import Model
 from django.db import models
 
-from main.models import Sector
+from main.models.accounts import Sector
 
 
 class Evento(Model):

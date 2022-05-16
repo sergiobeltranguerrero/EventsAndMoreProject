@@ -5,7 +5,8 @@
 *.idea
 __pycache__
 db.sqlite3
-media
+.DS_Store
+
 
 # Backup files #
 *.bak
@@ -141,3 +142,4 @@ GitHub.sublime-settings
 EventsAndMore/.DS_Store
 
 EventsAndMore/EventsAndMore.sqlite3
+EventsAndMore/main/migrations/__init__.py

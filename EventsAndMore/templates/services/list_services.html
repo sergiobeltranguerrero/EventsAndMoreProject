@@ -1,0 +1,127 @@
+{% extends 'home_base.html' %}
+{% block body %}
+    <section style="background-color: #fff">
+        <div class="text-center container py-5">
+            <div class="row mb-5">
+                <div class="m-lg-auto">
+                    <a href="{% url 'add_service' %}" class="btn btn-success">Añadir servicio</a>
+                </div>
+            </div>
+            <h2 class="mt-4 mb-5"><strong>Servicios Genericos</strong></h2>
+            <div class="row">
+                {% for servicio in genericos %}
+                    <div class="col col-lg-4 mb-4">
+                        <div class="card">
+                            <div
+                                    class="bg-image hover-zoom ripple ripple-surface ripple-surface-light"
+                                    data-mdb-ripple-color="light"
+                            >
+                                <img
+                                        src="{{ MEDIA_URL }}{{ servicio.imagen }}"
+                                        class="w-75" alt="{{ servicio.nombre }}" width="100"/>
+                            </div>
+                            <form method="post">
+                                {% csrf_token %}
+                                <input type="hidden" name="id_servicio" value="{{ servicio.id }}">
+                                <div class="card-body">
+                                    <p class="text-reset">
+                                    <h5 class="card-title mb-3" style="color: #0283b4">{{ servicio.nombre }}</h5>
+                                    </p>
+                                    <div class="text-reset">
+                                        {% if servicio.descripcion %}
+                                            <p class="card-text text-secondary">{{ servicio.descripcion }}</p>
+                                        {% endif %}
+                                    </div>
+                                    <h6 class="mb-3">{{ servicio.precio }} €</h6>
+                                    <a class="btn btn-primary" href="{% url 'delete' servicio.id%}">Eliminar</i>
+                                    </a>
+                                </div>
+                            </form>
+
+                        </div>
+                    </div>
+                {% endfor %}
+            </div>
+        <h2 class="mt-4 mb-5"><strong>Servicios Adicionales</strong></h2>
+            <div class="row">
+                {% for servicio in servicios %}
+                    <div class="col col-lg-4 mb-4">
+                        <div class="card">
+                            <div
+                                    class="bg-image hover-zoom ripple ripple-surface ripple-surface-light"
+                                    data-mdb-ripple-color="light"
+                            >
+                                <img
+                                        src="{{ MEDIA_URL }}{{ servicio.imagen }}"
+                                        class="w-75" alt="{{ servicio.nombre }}" width="100"/>
+                            </div>
+                            <form method="post">
+                                {% csrf_token %}
+                                <input type="hidden" name="id_servicio" value="{{ servicio.id }}">
+                                <div class="card-body">
+                                    <p class="text-reset">
+                                    <h5 class="card-title mb-3" style="color: #0283b4">{{ servicio.nombre }}</h5>
+                                    </p>
+                                    <div class="text-reset">
+                                        {% if servicio.descripcion %}
+                                            <p class="card-text text-secondary">{{ servicio.descripcion }}</p>
+                                        {% endif %}
+                                    </div>
+                                    <h6 class="mb-3">{{ servicio.precio }} €</h6>
+                                    <a class="btn btn-primary" href="{% url 'delete' servicio.id%}">     Eliminar</i>
+                                    </a>
+                                </div>
+                            </form>
+
+                        </div>
+                    </div>
+                {% endfor %}
+            </div>
+        <h2 class="mt-4 mb-5"><strong>Servicios No Disponibles</strong></h2>
+            <div class="row">
+                {% for servicio in not_aviable %}
+                    <div class="col col-lg-4 mb-4">
+                        <div class="card">
+                            <div
+                                    class="bg-image hover-zoom ripple ripple-surface ripple-surface-light"
+                                    data-mdb-ripple-color="light"
+                            >
+                                <img
+                                        src="{{ MEDIA_URL }}{{ servicio.imagen }}"
+                                        class="w-75" alt="{{ servicio.nombre }}" width="100"/>
+                            </div>
+                            <form method="post">
+                                {% csrf_token %}
+                                <input type="hidden" name="id_servicio" value="{{ servicio.id }}">
+                                <div class="card-body">
+                                    <p class="text-reset">
+                                    <h5 class="card-title mb-3" style="color: #0283b4">{{ servicio.nombre }}</h5>
+                                    </p>
+                                    <div class="text-reset">
+                                        {% if servicio.descripcion %}
+                                            <p class="card-text text-secondary">{{ servicio.descripcion }}</p>
+                                        {% endif %}
+                                    </div>
+                                    <h6 class="mb-3">{{ servicio.precio }} €</h6>
+                                    <a class="btn btn-primary" href="{% url 'aviable' servicio.id%}">Añadir</i>
+                                    </a>
+                                </div>
+                            </form>
+
+                        </div>
+                    </div>
+                {% endfor %}
+            </div>
+        </div>
+    </section>
+{% endblock %}
+
+{% block stylesheet %}
+    <style>
+        .card-img-top {
+            width: 100%;
+            height: 20vw;
+            object-fit: cover;
+        }
+    </style>
+{% endblock %}

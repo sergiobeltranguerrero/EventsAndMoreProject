@@ -12,10 +12,14 @@
     <form action="{% url 'nueva_incidencia' %}" method="POST">
         {% csrf_token%}
         <table class="table table-striped table-hover col-2">
-            {% if success %}
+            {% if success == True %}
             <div class="alert alert-success" role="alert">
                 La incidencia se ha creado correctamente.
             </div>
+            {% elif success == False%}
+                <div class="alert alert-danger" role="alert">
+                    Seleccione un evento valido!
+                </div>
             {% endif %}
         <div class="form-group">
             <input type="text" id="nombre" name="nombre" class="form-control" placeholder="Titulo para la incidencia" minlength="2" maxlength="50" required/>
@@ -23,6 +27,14 @@
         <div class="form-group">
             <input type="text" id="descripcion" name="descripcion" class="form-control" placeholder="Describa brevemente su incidencia" minlength="10" maxlength="500" required/>
         </div>
+            <label for="Evento" class="form-label select-label">Elegir un evento</label>
+            <select id="Evento" name="Evento" required class="select form-control-sm">
+                <option>Elegir un Evento</option>
+                {% for event in eventos %}
+                    <option value="{{ event.id }}" {% if event.id == form.data.event %}
+                            selected {% endif %}>{{ event.nombre }}</option>
+                {% endfor %}
+            </select>
 
         <div class="form-group">
             <button type="submit" class="btn btn-success btn-block">Save</button>
@@ -34,7 +46,7 @@
 </div>
     </div>
     <div>
-            <a class="btn btn-success" href="{% url 'incidencias' %}">Volver a mis incidencias</a>
+            <a class="btn btn-danger" href="{% url 'incidencias' %}">Volver a mis incidencias</a>
         </div>
 
 </div>

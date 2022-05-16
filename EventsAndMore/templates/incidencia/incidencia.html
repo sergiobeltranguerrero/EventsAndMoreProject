@@ -39,6 +39,7 @@
                     {% endif %}
                     <th>Titulo incidencia</th>
                     <th>Descripcion</th>
+                    <th>Evento</th>
                     <th>Estado de la solicitud</th>
                     <th>Acciones</th>
                 </tr>
@@ -65,6 +66,8 @@
                     {% endif %}
                     <td>{{inciden.nombre}}</td>
                     <td>{{inciden.descripcion}}</td>
+                    <td>{{inciden.evento.nombre}}</td>
+
                     <td>
                             <h4>
                                 <span class="badge badge-pill

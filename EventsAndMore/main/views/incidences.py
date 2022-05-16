@@ -1,10 +1,13 @@
 # this lets the user create an incidence
 from django.core.mail import send_mail
+from django.http import HttpResponseRedirect
 from django.shortcuts import render
 from django.contrib.auth.decorators import login_required
 from ..models import Incidencia, Cliente, User, Servicios_adicionales
+from ..models import Incidencia, Cliente, Evento, Assignacion
 from .evento import State
-from main.decorators import servicios_adiciones_only, servicios_adiciones_and_cliente, cliente_only
+from ..decorators import servicios_adiciones_and_cliente,cliente_only
+from django.urls import reverse
 
 
 @servicios_adiciones_and_cliente
@@ -74,16 +77,25 @@ def detalles_incidencia(request, id_incidencia):
             }})
 
 
+
 @cliente_only
 def NuevaIncidencia(request):
+    eventos_list = list()
+    for assignaciones in Assignacion.objects.filter(cliente_id=request.user.id):
+        eventos_list.append(assignaciones.evento)
+
     if request.method == 'POST':
         nombre = request.POST['nombre']
         descripcion = request.POST['descripcion']
+        if str.isdigit(request.POST['Evento']):
+            event = Evento.objects.get(pk=request.POST['Evento'])
+        else:
+            return render(request, 'incidencia/nueva_incidencia.html', {'success': False, 'eventos': eventos_list})
         cliente = Cliente.objects.get(user=request.user)
-        Incidencia.objects.create(nombre=nombre, descripcion=descripcion, estadoIn='PD', cliente=cliente, gestion_id=1)
-        return render(request, 'incidencia/nueva_incidencia.html', {'success': True})
+        Incidencia.objects.create(nombre=nombre, descripcion=descripcion, estadoIn='PD', cliente=cliente, gestion_id=1,evento=event)
+        return render(request, 'incidencia/nueva_incidencia.html', {'success': True,'eventos': eventos_list})
     else:
-        return render(request, 'incidencia/nueva_incidencia.html')
+        return render(request, 'incidencia/nueva_incidencia.html', {"eventos": eventos_list})
 
 
 @servicios_adiciones_only
