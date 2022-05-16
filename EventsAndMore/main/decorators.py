@@ -136,9 +136,7 @@ def reserva_realizada(func):
                 'title': 'Algo a ido mal :(',
                 'message': 'No tienes permiso para acceder a este evento.',
             }})
-
     return wrap
-
 
 def gestor_solicitudes_and_cliente(func):
     def wrap(request, *args, **kwargs):
@@ -152,7 +150,6 @@ def gestor_solicitudes_and_cliente(func):
             }})
 
     return wrap
-
 
 def servicios_adiciones_and_cliente(func):
     def wrap(request, *args, **kwargs):
