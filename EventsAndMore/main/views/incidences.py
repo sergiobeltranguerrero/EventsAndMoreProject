@@ -2,7 +2,7 @@
 from django.http import HttpResponseRedirect
 from django.shortcuts import render
 from django.contrib.auth.decorators import login_required
-from ..models import Incidencia, Cliente, Evento, Assignacion
+from ..models import Incidencia, Cliente, Evento, Assignacion, Servicios_adicionales
 from .evento import State
 from ..decorators import servicios_adiciones_and_cliente,cliente_only
 from django.urls import reverse
@@ -64,7 +64,13 @@ def detalles_incidencia(request,id_incidencia):
 def NuevaIncidencia(request):
     eventos_list = list()
     for assignaciones in Assignacion.objects.filter(cliente_id=request.user.id):
-        eventos_list.append(assignaciones.evento)
+        try:
+            eventos_list.append(assignaciones.evento)
+        except:
+            return render(request, "error/error_generico.html", {'error': {
+                'title': 'Esta pagina no existe',
+                'message': 'O no esta assignado a ningun evento'
+            }})
 
     if request.method == 'POST':
         nombre = request.POST['nombre']
@@ -74,7 +80,14 @@ def NuevaIncidencia(request):
         else:
             return render(request, 'incidencia/nueva_incidencia.html', {'success': False, 'eventos': eventos_list})
         cliente = Cliente.objects.get(user=request.user)
-        Incidencia.objects.create(nombre=nombre, descripcion=descripcion,estadoIn='PD', cliente=cliente, gestion_id=1,evento=event)
+        try:
+            gestor = Servicios_adicionales.objects.get(pk=1)
+        except:
+            return render(request, "error/error_generico.html", {'error': {
+                'title': 'No se pudo crear la incidencia',
+                'message': 'no existe gestor para atender la incidencia'
+            }})
+        Incidencia.objects.create(nombre=nombre, descripcion=descripcion,estadoIn='PD', cliente=cliente, gestion=gestor,evento=event)
         return render(request, 'incidencia/nueva_incidencia.html', {'success': True,'eventos': eventos_list})
     else:
         return render(request, 'incidencia/nueva_incidencia.html', {"eventos": eventos_list})

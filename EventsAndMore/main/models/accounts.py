@@ -26,7 +26,7 @@ class User(AbstractUser):
         elif perm == 'personal_direccion':
             return self.is_personal_direccion
         else:
-            return False
+            return super().has_perm(perm,obj)
 
 
 class Sector(Model):
