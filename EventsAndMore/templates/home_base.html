@@ -33,7 +33,6 @@
                         </li>
                         {% if user.is_servicios_adicionales %}
                         <li class="nav-item"><a class="nav-link" href={% url 'incidencias' %}>My Incidences</a></li>
-                        <li class="nav-item"><a class="nav-link" href={% url 'incidencias' %}>Assignations</a></li>
                         {% endif %}
                         {% if user.is_cliente %}
                             <li class="nav-item"><a class="nav-link" href={% url 'my_events' %}>My Events</a></li>
