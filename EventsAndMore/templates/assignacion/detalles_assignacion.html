@@ -4,7 +4,7 @@
 <div class="container">
     <div class="row">
         <div class="col-12">
-            <h1><b>Cliente:</b> {{ cliente.user.first_name }}</h1>
+            <h1><b>Cliente:</b> {{ cliente.user.first_name }} {{ cliente.user.last_name}}</h1>
         </div>
     </div>
     <br/>
@@ -86,8 +86,6 @@
             <div class="form-group">
                 <thead>
                 <tr>
-                    <th><button class="btn btn-danger  btn-block" type="submit" href="{% url 'mostrar_assignaciones' %}" id="Valor" value="Return" name="Valor">Atras</button>
-                    <th><button class="btn hidden "></button></th>
                     <th><button class="btn btn-secondary btn-block" type="submit" href="{% url 'detalles_assignacion' comentario %}" id="Valor" value="Comentario" name="Valor"  >Enviar</button>
                 </tr>
                 </thead>
