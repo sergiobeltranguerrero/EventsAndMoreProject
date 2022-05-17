@@ -37,7 +37,11 @@ def Incidencias(request):
 
     if request.method == 'GET':
         if request.user.is_servicios_adicionales:
-            incidencia = Incidencia.objects.all()
+            adicionales = Servicios_adicionales.objects.get(user_id=request.user.id)
+            incidencia = [incidencia for incidencia in Incidencia.objects.filter(estadoIn='PD')]
+            incidencia += [incidencia for incidencia in Incidencia.objects.filter(estadoIn='EP',gestion=adicionales)]
+            incidencia += [incidencia for incidencia in Incidencia.objects.filter(estadoIn='SC',gestion=adicionales)]
+
 
         elif request.user.is_cliente:
             cliente = Cliente.objects.get(user=request.user)
