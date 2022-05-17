@@ -79,10 +79,10 @@ def servicesAdd(request):
             generic = True
         else:
             return render(request,'services/add_service.html',{'succes':False})
-        #imagen = "insertarFoto"
+        image = request.FILES['image']
         price = int(request.POST['price'])
         aviable = True
-        Servicio.objects.create(nombre=name,descripcion=description,precio=price,is_generic=generic,is_available=aviable)
+        Servicio.objects.create(nombre=name,descripcion=description,precio=price,is_generic=generic,is_available=aviable,imagen=image)
         return HttpResponseRedirect(reverse('all_servicios'))
     else:
         return render(request,'services/add_service.html')

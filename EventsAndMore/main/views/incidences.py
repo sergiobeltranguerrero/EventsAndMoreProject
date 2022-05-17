@@ -2,9 +2,9 @@
 from django.http import HttpResponseRedirect
 from django.shortcuts import render
 from django.contrib.auth.decorators import login_required
-from ..models import Incidencia, Cliente, Evento, Assignacion
+from ..models import Incidencia, Cliente, Evento, Assignacion, Servicios_adicionales
 from .evento import State
-from ..decorators import servicios_adiciones_and_cliente,cliente_only
+from ..decorators import servicios_adiciones_and_cliente,cliente_only, servicios_adicionales
 from django.urls import reverse
 
 
@@ -35,8 +35,9 @@ def Incidencias(request):
 
     if request.method == 'GET':
         if request.user.is_servicios_adicionales:
-            incidencia = Incidencia.objects.all()
-
+            incidencia = [incidencia for incidencia in Incidencia.objects.filter(estadoIn="PD")]
+            incidencia += [incidencia for incidencia in Incidencia.objects.filter(estadoIn="EP")]
+            incidencia += [incidencia for incidencia in Incidencia.objects.filter(estadoIn="SC")]
         elif request.user.is_cliente:
             cliente = Cliente.objects.get(user=request.user)
             incidencia = Incidencia.objects.filter(cliente_id=cliente.id)
