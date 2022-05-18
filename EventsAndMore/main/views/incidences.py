@@ -45,7 +45,9 @@ def Incidencias(request):
 
         elif request.user.is_cliente:
             cliente = Cliente.objects.get(user=request.user)
-            incidencia = Incidencia.objects.filter(cliente_id=cliente.id)
+            incidencia = [incidencia for incidencia in Incidencia.objects.filter(estadoIn='PD',cliente_id=cliente.id)]
+            incidencia += [incidencia for incidencia in Incidencia.objects.filter(estadoIn='EP',cliente_id=cliente.id)]
+            incidencia += [incidencia for incidencia in Incidencia.objects.filter(estadoIn='SC',cliente_id=cliente.id)]
         return render(request, "incidencia/incidencia.html", {"incidencia": incidencia, 'states': states, 'user': user})
 
 
