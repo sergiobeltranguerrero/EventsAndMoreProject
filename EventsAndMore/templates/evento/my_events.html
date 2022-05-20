@@ -79,7 +79,7 @@
                                 {% if ass.state.id != 'AP' %}
                                     disabled" href=""
                                    {% else %}
-                                   " href=""
+                                   " href="{% url 'servicios' ass.event_id ass.lst_ass_stand %}"
                                 {% endif%}
                             >Solicitar servicios</a>
                             </div>

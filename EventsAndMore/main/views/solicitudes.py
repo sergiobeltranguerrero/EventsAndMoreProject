@@ -5,7 +5,7 @@ from django.contrib.auth.decorators import login_required
 from ..models import Assignacion, Cliente, Evento
 from .evento import State
 from django.core.mail import send_mail
-from main.decorators import gestor_solicitudes_and_cliente, gestor_solicitudes_only
+from main.decorators import gestor_solicitudes_and_cliente
 
 
 @gestor_solicitudes_and_cliente
@@ -15,12 +15,17 @@ def mostrar_assignaciones(request):
         states.append(State(estado[0], estado[1]))
     if request.user.is_gestor_solicitudes:
         user = request.user
-        assignaciones = Assignacion.objects.all()
+        assignaciones = [assignaciones for assignaciones in Assignacion.objects.filter(estado='PD')]
+        assignaciones += [assignaciones for assignaciones in Assignacion.objects.filter(estado='AP')]
+        assignaciones += [assignaciones for assignaciones in Assignacion.objects.filter(estado='RC')]
         if request.method == 'POST':
             if not request.POST['state'] == '%':
                 assignaciones = Assignacion.objects.filter(estado=request.POST['state'])
             else:
-                assignaciones = Assignacion.objects.all()
+                assignaciones = [assignaciones for assignaciones in Assignacion.objects.filter(estado='PD')]
+                assignaciones += [assignaciones for assignaciones in Assignacion.objects.filter(estado='AP')]
+                assignaciones += [assignaciones for assignaciones in Assignacion.objects.filter(estado='RC')]
+
         return render(request, "assignacion/assignaciones.html", {"assignaciones": assignaciones, 'states': states, 'user' : user})
 
     elif request.user.is_cliente:
@@ -35,7 +40,6 @@ def mostrar_assignaciones(request):
                 assignaciones = Assignacion.objects.filter(cliente_id=cliente.id)
         return render(request, "assignacion/assignaciones.html", {"assignaciones": assignaciones, 'states': states, 'user' : user})
 
-@gestor_solicitudes_only
 def detalles_assignacion(request,id_assignacion):
     states = []
     for estado in Assignacion.ESTADO:

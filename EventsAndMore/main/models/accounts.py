@@ -14,6 +14,20 @@ class User(AbstractUser):
     def __str__(self):
         return self.username + ' (' + str(self.id) + ')'
 
+    def has_perm(self, perm, obj=None):
+        if perm == 'cliente':
+            return self.is_cliente
+        elif perm == 'gestor_solicitudes':
+            return self.is_gestor_solicitudes
+        elif perm == 'servicios_adicionales':
+            return self.is_servicios_adicionales
+        elif perm == 'organizador_eventos':
+            return self.is_organizador_eventos
+        elif perm == 'personal_direccion':
+            return self.is_personal_direccion
+        else:
+            return False
+
 
 class Sector(Model):
     nombre = models.CharField(max_length=50, unique=True)
@@ -82,5 +96,3 @@ class Servicios_adicionales(Model):
 
     def __str__(self):
         return self.NIF
-
-

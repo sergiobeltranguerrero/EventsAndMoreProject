@@ -29,12 +29,17 @@
     </form>
 
     <div class="col-sm-12 col-md-12 col-lg-12 col-xl-12">
-        <div clas="table-responsive py-2">
-            <table class="table table-striped">
+        <div clas="table-responsive py-2 ">
+            <table class="table table-striped text-truncate">
                 <thead>
                 <tr>
+
+                    {% if user.is_servicios_adicionales %}
+                        <th colspan="2">Cliente</th>
+                    {% endif %}
                     <th>Titulo incidencia</th>
                     <th>Descripcion</th>
+                    <th>Evento</th>
                     <th>Estado de la solicitud</th>
                     <th>Acciones</th>
                 </tr>
@@ -55,8 +60,14 @@
                     ">
 
                     <th scope="row" hidden><input type="number" id="id_incidencia{{inciden.id}}" name="id_assignacion{{inciden.id}}" value="{{inciden.id}}" readonly required/></th>
+                    {% if user.is_servicios_adicionales %}
+                        <td>{{inciden.cliente.user.first_name}}</td>
+                        <td>{{inciden.cliente.user.last_name}}</td>
+                    {% endif %}
                     <td>{{inciden.nombre}}</td>
                     <td>{{inciden.descripcion}}</td>
+                    <td>{{inciden.evento.nombre}}</td>
+
                     <td>
                             <h4>
                                 <span class="badge badge-pill
@@ -74,10 +85,14 @@
                         </td>
                         <td>
                             <div class="form-group">
-                                {% if not inciden.estadoIn == 'SC' %}
-                                    <a class="btn btn-primary btn-block" href="{% url 'detalles_incidencia' inciden.id %}" >Detalles</a>
-                                {% else %}
-                                    <a class="btn btn-danger btn-block text-white" href=# >Cerrada</a>
+                                {% if  user.is_cliente %}
+                                    {% if not inciden.estadoIn == 'PD'  %}
+                                        <a class="btn btn-primary btn-block" href="{% url 'detalles_incidencia' inciden.id %}" >Detalles</a>
+                                    {% else %}
+                                        <a class="btn btn-danger btn-block text-white disabled " href=# >Cerrada</a>
+                                    {% endif %}
+                                {% elif user.is_servicios_adicionales %}
+                                    <a class="btn btn-primary btn-block text-white text-truncate" href="{% url 'valorar_incidencia' inciden.id %}" >Valorar incidencia</a>
                                 {% endif %}
                             </div>
                         </td>

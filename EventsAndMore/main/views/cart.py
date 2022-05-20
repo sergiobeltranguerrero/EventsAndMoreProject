@@ -3,11 +3,11 @@ from django.shortcuts import render
 from django.urls import reverse
 
 from main.utils.cart import Cart
-from main.decorators import event_is_validated, cliente_only, reserva_realizada
+from main.decorators import event_is_validated, cliente_only, reserva_realizada, rols_required
 from main.models import Cliente, Orden_Servicios, Servicios_Orden, Evento, Stand
 
 
-@cliente_only
+@rols_required(['cliente', 'administrador'], ['servicios', 'direccion'])
 @event_is_validated
 @reserva_realizada
 def show_cart_view(request, **kwargs):
@@ -102,7 +102,7 @@ def reservation(request):
             servicios_orden = Servicios_Orden.objects.filter(orden=orden)
 
             return render(request, 'services/success_reservation.html',
-                          {'servicios_orden': servicios_orden, 'orden':orden, 'total': total})
+                          {'servicios_orden': servicios_orden, 'orden': orden, 'total': total})
 
         return render(request, 'error/error_generico.html', {'error': {
             'title': 'Algo ha ido mal...',
