@@ -2,6 +2,7 @@ from django.shortcuts import render
 from main.models import *
 from django.contrib.auth.decorators import login_required
 from .evento import my_events
+from main.decorators import organizador_eventos_only, cliente_only
 
 error_title = 'Esta pagina no existe o no tiene los permisos necessarios'
 error_description = 'Esta intentando acceder a una pagina inexistente o usted no tiene permisos para acceder'
@@ -9,6 +10,7 @@ error_description = 'Esta intentando acceder a una pagina inexistente o usted no
 #GET: Gets stands for the client sector and one event
 #POST: Creates new assignations for a event and client sector by selected by the user
 @login_required
+@cliente_only
 def get_stands_by_sector_event(request, id_event):
     evento = Evento.objects.get(id=id_event)
     cliente = Cliente.objects.get(user=request.user)
@@ -40,6 +42,9 @@ def get_stands_by_sector_event(request, id_event):
         return render(request, "error/error_generico.html",
                       {'error': {'title': error_title, 'message': error_description}})
 
+
+@login_required
+@organizador_eventos_only
 def stand_planning_edit(request,id_event):
     evento = Evento.objects.get(id=id_event)
     if request.method == 'GET':
@@ -61,6 +66,9 @@ def stand_planning_edit(request,id_event):
         return render(request, "error/error_generico.html",
                       {'error': {'title': error_title, 'message': error_description}})
 
+
+@login_required
+@organizador_eventos_only
 def stand_planning(request, id_event):
     evento = Evento.objects.get(id=id_event)
     if request.method == 'GET':
@@ -81,30 +89,12 @@ def stand_planning(request, id_event):
             return render(request, "error/error_generico.html",
                           {'error': {'title': error_title, 'message': error_description}})
     else:
-        return render(request, '/')
-#TODO: Revisar retorns de funcio
+        return render(request, "error/error_generico.html",
+                          {'error': {'title': error_title, 'message': error_description}})
 
-def update_delete_ess(request,id_event):
-    evento = Evento.objects.get(id=id_event)
-    lstValues = []
-    lstDeletes = []
-    ess = Evento_Stand_Sector.objects.filter(evento=evento)
-    ess_ids = get_lst_from_query_set(ess.model.objects.filter(evento=evento).values('id'),'id')
-    lst_obj = get_elements_by_request_post(ess_ids, ['id', 'size', 'sector'], "delete", request)
-    for obj in lst_obj:
-        ess = Evento_Stand_Sector.objects.get(id=obj.__getattribute__('id'))
-        try:
-            lstDeletes.append(obj.__getattribute__('delete'))
-        except:
-            print('No delete on id: ' + str(obj.__getattribute__('id')))
-        if not obj.__getattribute__('sector') == 'none':
-            ess.sector = Sector.objects.get(id=obj.__getattribute__('sector'))
-            ess.stand_size = obj.__getattribute__('size')
-            lstValues.append(ess)
-    Evento_Stand_Sector.objects.bulk_update(lstValues, ['stand_size', 'sector'])
-    essd = Evento_Stand_Sector.objects.filter(pk__in=lstDeletes)
-    essd.delete()
 
+@login_required
+@cliente_only
 def my_stand(request,id_event):
     states = []
     for estado in Assignacion.ESTADO:
@@ -132,10 +122,6 @@ def my_stand(request,id_event):
         return render(request, 'home.html')
 
 
-
-
-
-
 def create_ess(request,id_event):
     evento = Evento.objects.get(id=id_event)
     sids = get_lst_from_query_set(Evento_Stand_Sector.objects.filter(evento=evento).values('stand_id'),'stand_id')
@@ -153,6 +139,29 @@ def create_ess(request,id_event):
                                                   stand_size=element.__getattribute__('size')))
     Evento_Stand_Sector.objects.bulk_create(lst_values)
 
+
+def update_delete_ess(request,id_event):
+    evento = Evento.objects.get(id=id_event)
+    lstValues = []
+    lstDeletes = []
+    ess = Evento_Stand_Sector.objects.filter(evento=evento)
+    ess_ids = get_lst_from_query_set(ess.model.objects.filter(evento=evento).values('id'),'id')
+    lst_obj = get_elements_by_request_post(ess_ids, ['id', 'size', 'sector'], "delete", request)
+    for obj in lst_obj:
+        ess = Evento_Stand_Sector.objects.get(id=obj.__getattribute__('id'))
+        try:
+            lstDeletes.append(obj.__getattribute__('delete'))
+        except:
+            print('No delete on id: ' + str(obj.__getattribute__('id')))
+        if not obj.__getattribute__('sector') == 'none':
+            ess.sector = Sector.objects.get(id=obj.__getattribute__('sector'))
+            ess.stand_size = obj.__getattribute__('size')
+            lstValues.append(ess)
+    Evento_Stand_Sector.objects.bulk_update(lstValues, ['stand_size', 'sector'])
+    essd = Evento_Stand_Sector.objects.filter(pk__in=lstDeletes)
+    essd.delete()
+
+
 def get_elements_by_request_post(lst_id,str_post_lst,try_post_elem,request):
     lst_obj = []
     for id in lst_id:
@@ -163,6 +172,7 @@ def get_elements_by_request_post(lst_id,str_post_lst,try_post_elem,request):
         except:
             print('No exists id:'+str(id))
     return lst_obj
+
 
 def get_from_request_post(id,str_post_lst,try_post_elem,request):
     class Dynamic:
@@ -181,11 +191,13 @@ def get_from_request_post(id,str_post_lst,try_post_elem,request):
         print('For try attribute: '+try_post_elem+' and id: '+str(id)+' element not found')
     return dynamic
 
+
 def get_lst_from_query_set(query_set,name):
     elements = []
     for element in query_set:
         elements.append(element[name])
     return elements
+
 
 class State:
     id = ''

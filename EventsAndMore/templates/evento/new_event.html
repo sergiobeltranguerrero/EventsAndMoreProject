@@ -18,6 +18,12 @@
 {% endblock %}
 <div class="container">
     <h1>Nuevo envento</h1>
+    <hr/>
+    {% if error %}
+        <div class="alert alert-danger" role="alert">
+            {{ error }}
+        </div>
+    {% endif %}
     <form action="" method="POST">
         {% csrf_token %}
         <div class="input-group bottom-spacer">
@@ -42,7 +48,7 @@
                 </div>
             </div>
         </div>
-        <button type="submit" class="btn btn-success">Guardar</button>
+        <button type="submit" class="btn btn-success">Guardar</button> 
     </form>
 </div>
 <script>
