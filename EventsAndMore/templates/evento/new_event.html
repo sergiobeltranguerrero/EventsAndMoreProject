@@ -1,0 +1,84 @@
+{% extends "home_base.html" %}
+{% block title %}Nuevo envento{% endblock %}
+{% block stylesheet %}
+<link rel="stylesheet" href="https://code.jquery.com/ui/1.12.1/themes/base/jquery-ui.css">
+<link rel="stylesheet" type="text/css" href="https://cdn.jsdelivr.net/npm/daterangepicker/daterangepicker.css" />
+{% endblock %}
+{% block css %}
+ <style>
+.bottom-spacer{
+            margin-bottom: 15px;
+        }
+</style>{% endblock %}
+{% block body %}
+{% block javascript %}
+<script src="https://code.jquery.com/ui/1.13.1/jquery-ui.js"></script>
+<script type="text/javascript" src="https://cdn.jsdelivr.net/momentjs/latest/moment.min.js"></script>
+<script type="text/javascript" src="https://cdn.jsdelivr.net/npm/daterangepicker/daterangepicker.min.js"></script>
+{% endblock %}
+<div class="container">
+    <h1>Nuevo envento</h1>
+    <form action="" method="POST">
+        {% csrf_token %}
+        <div class="input-group bottom-spacer">
+            <label class="input-group-text" for="inputGroupNombre">Nombre del evento</label>
+            <input type="text" class="form-control" id="nombre" name="nombre" aria-describedby="inputGroupNombre" maxlength="50">
+        </div>
+        <div class="input-group bottom-spacer">
+            <label class="input-group-text" for="inputGroupDescripcion">Descripcion del evento</label>
+            <textarea type="text" class="form-control" id="descripcion" name="descripcion" aria-describedby="inputGroupDescripcion" maxlength="2000"></textarea>
+        </div>
+        <div class="col-12 col-sm-10 col-md-7 col-lg-5 col-xl-4 bottom-spacer">
+                <div class="input-group">
+                    <label class="input-group-text" for="inputGroupDateRange">Fechas del evento</label>
+                    <input type="text" name="datetimes" class="form-control" id="rango" aria-describedby="inputGroupDateRange"/>
+                </div>
+        </div>
+        <div class="row">
+            <div class="col-6 col-sm-6 col-md-4 col-lg-3 col-xl-3 bottom-spacer">
+                <div class="input-group">
+                    <label class="input-group-text" for="inputGroupCapacity">Capacidad</label>
+                    <input type="number" class="form-control" id="capacity" name="capacity" aria-describedby="inputGroupCapacity" value="">
+                </div>
+            </div>
+        </div>
+        <button type="submit" class="btn btn-success">Guardar</button>
+    </form>
+</div>
+<script>
+var meses=["Enero","Febrero","Marzo","Abril","Mayo","Junio","Julio","Agosto","Septiembre","Octubre","Noviembre","Diciembre"];
+var dias_setmana = ["Do","Lu","Mar","Mie","Jue","Vie","Sa"];
+
+var fechas = [
+    {% for fecha in fechas %}
+        "{{ fecha|date:"d/m/Y" }}",
+    {% endfor %}
+];
+
+function invalidDays(date){
+  for(var i = 0; i < fechas.length; i++){
+    if (date.format('DD/MM/YYYY') == fechas[i]){
+      return true;
+    }
+  }
+}
+
+
+$(function() {
+  $('input[name="datetimes"]').daterangepicker({
+    timePicker: true,
+    timePicker24Hour: true,
+    startDate: moment().startOf('hour'),
+    isInvalidDate: invalidDays,
+    endDate: moment().startOf('hour').add(32, 'hour'),
+    locale: {
+      format: 'DD/MM/YY HH:mm',
+      "daysOfWeek": dias_setmana,
+      "monthNames": meses,
+      "firstDay": 1
+    }
+  });
+});
+</script>
+
+{% endblock %}

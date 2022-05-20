@@ -47,34 +47,34 @@
                             </ul>
                         </li>
                         {% if user.is_organizador_eventos %}
-                            <li class="nav-item"><a
+                            <li class="nav-item">
                             {% url 'new_event' as new_event %}
                             {% if request.path == new_event %}
-                                class="nav-link active" href=""
+                            <p class="nav-link x-nav-item active">Nuevo evento</p>
                             {% else %}
-                                class="nav-link" href="{% url 'new_event' %}"
+                            <a class="nav-link" href="{% url 'new_event' %}" >Nuevo evento</a>
                             {% endif %}
-                            >Nuevo evento</a></li>
+                            </li>
                         {% endif %}
                         {% if user.is_gestor_solicitudes %}
-                            <li class="nav-item"><a
+                            <li class="nav-item">
                             {% url 'solicitudes_eventos' as solicitudes_eventos %}
                             {% if request.path == solicitudes_eventos %}
-                                class="nav-link active" href=""
+                                <p class="nav-link x-nav-item active">Solicitudes evento</p>
                             {% else %}
-                                class="nav-link" href="{% url 'solicitudes_eventos' %}"
+                                <a class="nav-link" href="{% url 'solicitudes_eventos' %}" >Solicitudes evento</a>
                             {% endif %}
-                            >Solicitudes evento</a></li>
+                            </li>
                         {% endif %}
                         {% if user.is_cliente %}
-                            <li class="nav-item"><a
+                            <li class="nav-item">
                             {% url 'my_events' as my_events_url %}
                             {% if request.path == my_events_url %}
-                                class="nav-link active" href=""
+                                <p class="nav-link x-nav-item active">Mis eventos</p>
                             {% else %}
-                                class="nav-link" href="{% url 'my_events' %}"
+                                <a class="nav-link" href="{% url 'my_events' %}" >Mis eventos</a>
                             {% endif %}
-                            >Mis eventos</a></li>
+                            </li>
                         {% endif %}
                         {% if user.is_cliente %}
                         <li class="nav-item"><a class="nav-link" href={% url 'incidencias' %}>My Incidences</a></li>

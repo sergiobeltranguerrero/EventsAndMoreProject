@@ -1,6 +1,6 @@
 from django.shortcuts import render
 from main.models import *
-from datetime import datetime, date
+from datetime import datetime, date, timedelta
 from dateutil.relativedelta import relativedelta
 from django.contrib.auth.decorators import login_required
 
@@ -10,13 +10,13 @@ error_description = 'Esta intentando acceder a una pagina inexistente o usted no
 # Shows all events in current year
 def list_events(request):
     if request.method == 'GET':
-        eventos = Evento.objects.filter(fecha_inicio__gt=datetime.now())
+        eventos = Evento.objects.filter(fecha_inicio__gt=datetime.now(),Validado_gestor=True)
         json = set_dates()
     elif request.method == 'POST':
         json = get_dates(request=request)
-        eventos = Evento.objects.filter(fecha_inicio__range=(json.get('date_start', json['mindate']),json.get('date_end', json['maxdate'])))
+        eventos = Evento.objects.filter(fecha_inicio__range=(json.get('date_start', json['mindate']),json.get('date_end', json['maxdate'])),Validado_gestor=True)
     else:
-        return render(request, '/')
+        return render(request, "error/error_generico.html", {'error': {'title': error_title,'message': error_description}})
     if not request.user.is_anonymous and request.user.is_cliente:
         ids2 = Evento_Stand_Sector.objects.filter(sector=request.user.cliente.sector).values('evento_id').order_by(
             'evento_id')
@@ -60,6 +60,39 @@ def my_events(request):
         json['selection'] = request.POST['state']
     return render(request, 'evento/my_events.html', json)
 
+
+def new_event(request):
+    fechas = Evento.objects.all().values('fecha_inicio', 'fecha_fin')
+    fechas = get_dates_between(fechas)
+    json = {'fechas': tuple(fechas)}
+    if request.method == 'GET':
+        return render(request, 'evento/new_event.html', json)
+    elif request.method == 'POST':
+        inicio,fin = get_request_dates(request)
+        if valid_dates(inicio,fin):
+            create_Event(request)
+            return render(request, 'evento/my_events.html')
+        else:
+            json['error'] = 'Las fechas no se deven solapar con otras'
+            return render(request, 'evento/new_event.html', json)
+
+
+def create_Event(request):
+    nombre = request.POST['nombre']
+    descripcion = request.POST['descripcion']
+    sDatetimes = request.POST['datetimes']
+    capacity = int(request.POST['capacity'])
+    sDates = sDatetimes.split(" - ")
+    format = '%d/%m/%y %H:%M'
+    start_date = datetime.strptime(sDates[0], format)
+    end_date = datetime.strptime(sDates[1], format)
+    start_date, end_date = get_request_dates(request)
+    if valid_dates(start_date,end_date):
+        evento = Evento(nombre=nombre, descripcion=descripcion, fecha_inicio=start_date,
+                        fecha_fin=end_date, capacidad=capacity, fecha_solicitud=datetime.now(),
+                        organizador_id=request.user.organizador_eventos.id)
+    evento.save()
+    return evento
 
 def create_Ass(assiganciones):
     ass = []
@@ -114,6 +147,19 @@ def get_dates(request):
     return json
 
 
+def get_request_dates(request):
+    sDatetimes = request.POST['datetimes']
+    sDates = sDatetimes.split(" - ")
+    format = '%d/%m/%y %H:%M'
+    start_date = datetime.strptime(sDates[0], format)
+    end_date = datetime.strptime(sDates[1], format)
+    return start_date,end_date
+
+
+def valid_dates(start,end):
+    return Evento.objects.filter(fecha_inicio__range=(start,end)).count() == 0
+
+
 def get_str_to_date(request, str_date, format):
     return datetime.strptime(request.POST[str_date], format).date()
 
@@ -122,6 +168,15 @@ def get_min_max_date():
     mindate = datetime.now() + relativedelta(months=-2)
     maxdate = datetime.now() + relativedelta(years=1)
     return mindate, maxdate
+
+
+def get_dates_between(fechas):
+    days = []
+    for pair in fechas:
+        delta = pair['fecha_fin'] - pair['fecha_inicio']  # as timedelta
+        for i in range(delta.days + 1):
+            days.append(pair['fecha_inicio'] + timedelta(days=i))
+    return days
 
 
 class Ass:
