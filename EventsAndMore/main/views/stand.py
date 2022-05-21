@@ -1,4 +1,4 @@
-from django.shortcuts import render
+from django.shortcuts import render, redirect
 from main.models import *
 from django.contrib.auth.decorators import login_required
 from .evento import my_events
@@ -61,7 +61,7 @@ def stand_planning_edit(request,id_event):
     elif request.method == 'POST':
         update_delete_ess(request,id_event)
         create_ess(request,id_event)
-        return render(request, 'home.html')
+        return redirect('service_event_assign', permanent=True)
     else:
         return render(request, "error/error_generico.html",
                       {'error': {'title': error_title, 'message': error_description}})
