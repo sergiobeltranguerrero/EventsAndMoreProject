@@ -37,7 +37,7 @@ def get_stands_by_sector_event(request, id_event):
         if len(assignaciones) > 0:
             Assignacion.objects.bulk_create(assignaciones)
         request.method = 'GET'
-        return my_events(request)
+        return redirect('my_events', permanent=True)
     else:
         return render(request, "error/error_generico.html",
                       {'error': {'title': error_title, 'message': error_description}})
@@ -61,7 +61,7 @@ def stand_planning_edit(request,id_event):
     elif request.method == 'POST':
         update_delete_ess(request,id_event)
         create_ess(request,id_event)
-        return redirect('service_event_assign', permanent=True)
+        return redirect('home', permanent=True)
     else:
         return render(request, "error/error_generico.html",
                       {'error': {'title': error_title, 'message': error_description}})
