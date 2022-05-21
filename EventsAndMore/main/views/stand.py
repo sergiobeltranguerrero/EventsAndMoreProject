@@ -2,7 +2,7 @@ from django.shortcuts import render
 from main.models import *
 from django.contrib.auth.decorators import login_required
 from .evento import my_events
-from main.decorators import organizador_eventos_only, cliente_only
+from main.decorators import rols_required, cliente_only
 
 error_title = 'Esta pagina no existe o no tiene los permisos necessarios'
 error_description = 'Esta intentando acceder a una pagina inexistente o usted no tiene permisos para acceder'
@@ -44,7 +44,7 @@ def get_stands_by_sector_event(request, id_event):
 
 
 @login_required
-@organizador_eventos_only
+@rols_required(['organizador_eventos'])
 def stand_planning_edit(request,id_event):
     evento = Evento.objects.get(id=id_event)
     if request.method == 'GET':
@@ -68,7 +68,7 @@ def stand_planning_edit(request,id_event):
 
 
 @login_required
-@organizador_eventos_only
+@rols_required(['organizador_eventos'])
 def stand_planning(request, id_event):
     evento = Evento.objects.get(id=id_event)
     if request.method == 'GET':

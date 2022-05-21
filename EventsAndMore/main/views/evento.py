@@ -1,11 +1,10 @@
 import main.urls
-from django.shortcuts import render
+from django.shortcuts import render, redirect
 from main.models import *
 from datetime import datetime, date, timedelta
 from dateutil.relativedelta import relativedelta
 from django.contrib.auth.decorators import login_required
-from django.shortcuts import redirect
-from main.decorators import organizador_eventos_only, cliente_only
+from main.decorators import cliente_only, rols_required
 
 error_title = 'Esta pagina no existe o no tiene los permisos necessarios'
 error_description = 'Esta intentando acceder a una pagina inexistente o usted no tiene permisos para acceder'
@@ -73,7 +72,7 @@ def my_events(request):
 
 # creates new event from input on template
 @login_required
-@organizador_eventos_only
+@rols_required(['organizador_eventos'])
 def new_event(request):
     fechas = Evento.objects.all().values('fecha_inicio', 'fecha_fin')
     fechas = get_dates_between(fechas)
