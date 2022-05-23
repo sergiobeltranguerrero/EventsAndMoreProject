@@ -1,0 +1,67 @@
+{% extends "home_base.html" %}
+{% block title %}Solicitud Realizada{% endblock %}
+
+{% block body %}
+
+    <div class="alert alert-success alert-dismissible fade show text-center">
+        La solicitud <strong>{{ solicitud.localizador }}</strong> se ha realizado con exito.
+    </div>
+
+    <div class="container h-100 py-5">
+        <div class="row d-flex justify-content-center align-items-center h-100">
+            <div class="col-10">
+
+
+                <div class="d-flex justify-content-between align-items-center mb-4">
+                    <h2 class="fw-normal mb-0 text-black" style="color: green">Solicitud Completada</h2>
+                </div>
+                <hr class="bg-danger border-2 border-top">
+
+                <div class="card rounded-3 mb-4" style="background-color: #fff;">
+                    <div class="card-body p-4">
+                        <div class="row d-flex justify-content-between align-items-center">
+                            <div class="col-md-2 col-lg-2 col-xl-2">
+                                <p class="lead fw-normal mb-2"></p>
+                                <p><span class="text-muted">Evento: </span><span>{{ solicitud.evento.nombre }}</span>
+                                </p>
+                            </div>
+                            <div class="col-md-4 col-lg-4 col-xl-4">
+                                <p class="lead fw-normal mb-2"></p>
+                                <p><span
+                                        class="text-muted">Fecha: </span><span>{{ solicitud.evento.fecha_inicio }}</span>
+                                </p>
+                            </div>
+                            <div class="col-md-3 col-lg-3 col-xl-3">
+                                <p class="lead fw-normal mb-2"></p>
+                                <p><span
+                                        class="text-muted">Capacidad: </span><span>{{ solicitud.evento.capacidad }}</span>
+                                </p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="card rounded-3 mb-4" style="background-color: #fff;">
+                    <div class="card-body p-4">
+                        <div class="row d-flex justify-content-between align-items-center">
+                            <div class="col-md-4 col-lg-4 col-xl-4">
+                                <p class="lead fw-normal mb-2"></p>
+                                <p><span class="text-muted">Servicios seleccionados: </span></p>
+                                <ul>
+                                    {% for servicio in servicios_necesarios %}
+                                        <li>{{ servicio.servicio.nombre }}</li>
+                                    {% endfor %}
+                                </ul>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="mt-3 text-center">
+                    <a class="btn btn-primary btn-lg" href='{% url 'home' %}'>Volver al inicio</a>
+                </div>
+            </div>
+        </div>
+    </div>
+
+{% endblock %}
