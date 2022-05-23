@@ -86,7 +86,9 @@
             <div class="form-group">
                 <thead>
                 <tr>
+                    <a class="btn btn-danger " href="{% url 'mostrar_assignaciones' %}">Atras</a>
                     <th><button class="btn btn-secondary btn-block" type="submit" href="{% url 'detalles_assignacion' comentario %}" id="Valor" value="Comentario" name="Valor"  >Enviar</button>
+
                 </tr>
                 </thead>
             </div>
@@ -96,7 +98,7 @@
             <a class="btn " href="{% url 'mostrar_assignaciones' %}"></a>
         </div>
     <div>
-            <a class="btn btn-danger " href="{% url 'mostrar_assignaciones' %}">Atras</a>
+
         </div>
 </div>
 {% endblock %}
