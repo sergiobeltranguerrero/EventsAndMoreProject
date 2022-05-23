@@ -3,11 +3,11 @@ from django.shortcuts import render
 from django.urls import reverse
 
 from main.utils.cart import Cart
-from main.decorators import event_is_validated, cliente_only, reserva_realizada, rols_required
+from main.decorators import event_is_validated, reserva_realizada, rols_required
 from main.models import Cliente, Orden_Servicios, Servicios_Orden, Evento, Stand
 
 
-@rols_required(['cliente', 'administrador'], ['servicios', 'direccion'])
+@rols_required('cliente')
 @event_is_validated
 @reserva_realizada
 def show_cart_view(request, **kwargs):
@@ -31,7 +31,6 @@ def show_cart_view(request, **kwargs):
         }})
 
 
-@cliente_only
 @event_is_validated
 @reserva_realizada
 def remove_cart_element(request):
@@ -51,7 +50,6 @@ def remove_cart_element(request):
     return HttpResponseRedirect(reverse('cart'))
 
 
-@cliente_only
 @event_is_validated
 @reserva_realizada
 def update_producto_view(request):
@@ -74,7 +72,6 @@ def update_producto_view(request):
     return HttpResponseRedirect(reverse('cart'))
 
 
-@cliente_only
 @event_is_validated
 @reserva_realizada
 def reservation(request):

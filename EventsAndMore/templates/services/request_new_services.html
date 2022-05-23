@@ -1,0 +1,192 @@
+{% extends "home_base.html" %}
+{% block title %}Servicios Necesarios{% endblock %}
+
+{% block body %}
+    <section style="background-color: #fff">
+        <div class="container">
+            <div class="modal fade" tabindex="-1" role="dialog" id="modal">
+                <div class="modal-dialog" role="document">
+                    <div class="modal-content"></div>
+                </div>
+            </div>
+            <div class="row">
+                <div class="col-md-12">
+                    <div class="text-center pt-5 pb-3">
+                        <h2 class="mt-4"><strong>Solicitar servicios</strong></h2>
+                    </div>
+                    <div class="mb-2">
+                        <a class="open-new-service btn btn-primary" data-toggle="modal"
+                           data-target="#exampleModalCenter">Nuevo Servicio</a>
+                    </div>
+                    <table class="table table-striped" id="service-table">
+                        <thead>
+                        <tr>
+                            <th scope="col">Servicio</th>
+                            <th scope="col">Descripción</th>
+                            <th scope="col">Precio</th>
+                            <th scope="col"></th>
+                        </tr>
+                        </thead>
+                        <tbody>
+                        {% for servicio in servicios %}
+                            {% if servicio.id in servicios_selecionados %}
+                                <tr>
+                                    <td>{{ servicio.nombre }}</td>
+                                    <td>{{ servicio.descripcion }}</td>
+                                    <td>{{ servicio.precio }} €</td>
+                                    <td>
+                                        <button class="btn btn-danger solicitar">Cancelar</button>
+                                    </td>
+                                </tr>
+                            {% else %}
+                                <tr>
+                                    <td>{{ servicio.nombre }}</td>
+                                    <td>{{ servicio.descripcion }}</td>
+                                    <td>{{ servicio.precio }} €</td>
+                                    <td>
+                                        <button class="btn btn-primary solicitar">Solicitar</button>
+                                    </td>
+                                </tr>
+                            {% endif %}
+                        {% endfor %}
+                        {% for servicio_necesario in servicios_necesarios %}
+                            <tr>
+                                <td>{{ servicio_necesario.servicio.nombre }}</td>
+                                <td>{{ servicio_necesario.servicio.descripcion }}</td>
+                                <td></td>
+                                <td>
+                                    <button class="btn btn-danger eliminar_servicio">Eliminar</button>
+                                </td>
+                            </tr>
+                        {% endfor %}
+                        </tbody>
+                    </table>
+                    <div class="text-lg-end">
+                        <a class="btn btn-info" href="{% url 'solicitud_realizada' evento.id %}">Solicitar evento y servicios</a>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    {#MODEL SOLICITAR NUEVO SERVICIO#}
+    <div class="modal fade" id="exampleModalCenter" tabindex="-1" role="dialog"
+         aria-labelledby="exampleModalCenterTitle" aria-hidden="true">
+        <div class="modal-dialog modal-dialog-centered" role="document">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h4 class="modal-title">Solicitar un nuevo servicio</h4>
+                </div>
+                <div class="modal-body">
+                    <form method="POST">
+                        <div class="form-group">
+                            <label for="service_name">Nombre del servicio</label>
+                            <input type="text" class="form-control" id="service_name" name="service_name" required>
+                        </div>
+                        <div class="form-group">
+                            <label for="service_description">Descripción del servicio (Opcional)</label>
+                            <input type="text" class="form-control" id="service_description" name="service_description"
+                                   required>
+                        </div>
+                        <div class="modal-footer">
+                            <button type="button" id="close_modal" class="btn btn-secondary" data-dismiss="modal">
+                                Cerrar
+                            </button>
+                            <button type="submit" id="save_modal" class="btn btn-primary">Guardar cambios</button>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+
+{% endblock %}
+
+{% block javascript %}
+    <script>
+        $(document).ready(function () {
+            $('.solicitar').click(function () {
+                const servicio = $(this).parent().parent().find('td:first-child').text();
+                const button_value = $(this).text();
+                const data = {
+                    'servicio': servicio,
+                    'type': button_value,
+                    'csrfmiddlewaretoken': '{{ csrf_token }}'
+                };
+                $.ajax({
+                    url: '{% url 'solicitar_servicios' evento.id %}',
+                    type: 'POST',
+                    data: data,
+                    success: function (data) {
+                        if (data.status === 'ok') {
+                            const service = $('tr td:first-child:contains(' + servicio + ')').parent();
+                            const button = service.find('button');
+                            if (button_value === 'Solicitar') {
+                                button.removeClass('btn-primary').addClass('btn-danger').text('Cancelar');
+                            } else {
+                                button.removeClass('btn-danger').addClass('btn-primary').text('Solicitar');
+                            }
+
+                        }
+                    }
+                });
+            });
+
+            $('.eliminar_servicio').click(function () {
+                const evento = $(this).parent().parent().find('td:first-child').text();
+                const data = {
+                    "type": "Eliminar_Nuevo_Servicio",
+                    "service_name": evento,
+                    'csrfmiddlewaretoken': '{{ csrf_token }}'
+                };
+                $.ajax({
+                    url: '{% url 'solicitar_servicios' evento.id %}',
+                    type: 'POST',
+                    data: data,
+                    success: function (data) {
+                        if (data.status === 'ok') {
+                            document.location.reload();
+                        }
+                    }
+                });
+            });
+
+        });
+    </script>
+
+    <script>
+        $(document).ready(function () {
+            $('.open-new-service').click(function () {
+                $('#exampleModalCenter').modal('show');
+            });
+
+            $('#close_modal').click(function () {
+                $('#exampleModalCenter').modal('hide');
+            });
+
+            $('#save_modal').click(function (event) {
+                event.preventDefault();
+                const data = {
+                    'service_name': $('#service_name').val(),
+                    'service_description': $('#service_description').val(),
+                    'type': 'Nuevo_Servicio',
+                    'csrfmiddlewaretoken': '{{ csrf_token }}'
+                };
+                $.ajax({
+                    url: '{% url 'solicitar_servicios' evento.id %}',
+                    type: 'POST',
+                    data: data,
+                    success: function (data) {
+                        if (data.status === 'ok') {
+                            document.location.reload();
+                        }
+                        if (data.status === 'error') {
+                            alert(data.message);
+                        }
+                    }
+                });
+            });
+        });
+    </script>
+
+{% endblock %}

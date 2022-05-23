@@ -26,7 +26,7 @@ class User(AbstractUser):
         elif perm == 'personal_direccion':
             return self.is_personal_direccion
         else:
-            return super().has_perm(perm,obj)
+            return super().has_perm(perm, obj)
 
 
 class Sector(Model):
@@ -65,7 +65,7 @@ class Empleado(Model):
         return self.DNI
 
 
-class Organizador_Evantos(Model):
+class Organizador_Eventos(Model):
     user = models.OneToOneField(User, on_delete=models.DO_NOTHING)
     telefono = models.CharField(max_length=14, validators=[PhoneValidator])
     NIF = models.CharField(unique=True, max_length=9, validators=[NIFValidator])
