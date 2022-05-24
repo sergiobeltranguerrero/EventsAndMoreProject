@@ -117,13 +117,13 @@ def solicitudes_eventos(request):
             id = int(request.POST['id'])
             gestor = Gestor_solicitudes.objects.get(user=request.user)
             evento = Evento.objects.get(pk=id)
-            evento.Validado_gestor = True
+            evento.Validado_gestor = request.POST['action'] == 'accept'
             evento.gestor_validador = gestor
             evento.save()
         except:
             return render(request, "error/error_generico.html",
                           {'error': {'title': error_title, 'message': error_description}})
-    eventos = Evento.objects.filter(Validado_gestor=False, fecha_fin__gt=datetime.datetime.now())
+    eventos = Evento.objects.filter(Validado_gestor=False, fecha_fin__gt=datetime.datetime.now(), gestor_validador=None)
     json = {'eventos': eventos}
     return render(request, 'evento/solicitud_evento.html', json)
 
