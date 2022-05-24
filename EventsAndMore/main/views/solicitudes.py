@@ -4,13 +4,14 @@ import datetime
 
 from django.shortcuts import render
 from django.contrib.auth.decorators import login_required
-from ..models import Assignacion, Cliente, Evento, Gestor_solicitudes
+from ..models import Assignacion, Cliente, Evento, Gestor_solicitudes, Organizador_Eventos
 from .evento import State
 from django.core.mail import send_mail
-from main.decorators import gestor_solicitudes_and_cliente,rols_required
+from main.decorators import gestor_solicitudes_and_cliente, rols_required
 
 error_title = 'Esta pagina no existe o no tiene los permisos necessarios'
 error_description = 'Esta intentando acceder a una pagina inexistente o usted no tiene permisos para acceder'
+
 
 @gestor_solicitudes_and_cliente
 def mostrar_assignaciones(request):
@@ -30,10 +31,11 @@ def mostrar_assignaciones(request):
                 assignaciones += [assignaciones for assignaciones in Assignacion.objects.filter(estado='AP')]
                 assignaciones += [assignaciones for assignaciones in Assignacion.objects.filter(estado='RC')]
 
-        return render(request, "assignacion/assignaciones.html", {"assignaciones": assignaciones, 'states': states, 'user' : user})
+        return render(request, "assignacion/assignaciones.html",
+                      {"assignaciones": assignaciones, 'states': states, 'user': user})
 
     elif request.user.is_cliente:
-        cliente = Cliente.objects.get(user = request.user)
+        cliente = Cliente.objects.get(user=request.user)
         user = request.user
         assignaciones = Assignacion.objects.filter(cliente_id=cliente.id)
 
@@ -42,9 +44,11 @@ def mostrar_assignaciones(request):
                 assignaciones = Assignacion.objects.filter(estado=request.POST['state'], cliente_id=cliente.id)
             else:
                 assignaciones = Assignacion.objects.filter(cliente_id=cliente.id)
-        return render(request, "assignacion/assignaciones.html", {"assignaciones": assignaciones, 'states': states, 'user' : user})
+        return render(request, "assignacion/assignaciones.html",
+                      {"assignaciones": assignaciones, 'states': states, 'user': user})
 
-def detalles_assignacion(request,id_assignacion):
+
+def detalles_assignacion(request, id_assignacion):
     states = []
     for estado in Assignacion.ESTADO:
         states.append(State(estado[0], estado[1]))
@@ -55,7 +59,9 @@ def detalles_assignacion(request,id_assignacion):
             assignaciones.es_valido_por_gestor = False
             assignaciones.save()
             assignaciones2 = Assignacion.objects.filter(id=id_assignacion)
-            return render(request, "assignacion/detalles_assignacion.html",{"assignaciones": assignaciones2, 'cliente': assignaciones2[0].cliente,'comentario': assignaciones2[0].id, 'states': states})
+            return render(request, "assignacion/detalles_assignacion.html",
+                          {"assignaciones": assignaciones2, 'cliente': assignaciones2[0].cliente,
+                           'comentario': assignaciones2[0].id, 'states': states})
         if request.POST['Valor'] == 'AP':
             assignaciones = Assignacion.objects.get(id=id_assignacion)
             assignaciones.estado = 'AP'
@@ -69,7 +75,7 @@ def detalles_assignacion(request,id_assignacion):
         if request.POST['Valor'] == 'Comentario':
 
             assignaciones = Assignacion.objects.get(id=id_assignacion)
-            if len(request.POST['comentario'])>=10:
+            if len(request.POST['comentario']) >= 10:
                 assignaciones.comentario = str(request.POST['comentario'])
                 assignaciones.save()
             if not assignaciones.estado == 'PD':
@@ -86,18 +92,23 @@ def detalles_assignacion(request,id_assignacion):
                               assignaciones.stand.numero_stand) + '\nComentario de la assignación: ' + assignaciones.comentario + '\nEstado final de la assignación: ' + estado,
                           'eventsandmore@correo.com', recipientes, fail_silently=False)
             assignaciones2 = Assignacion.objects.filter(id=id_assignacion)
-            return render(request, "assignacion/detalles_assignacion.html", {"assignaciones": assignaciones2, 'cliente' : assignaciones2[0].cliente,'comentario' : assignaciones2[0].id,'states': states})
+            return render(request, "assignacion/detalles_assignacion.html",
+                          {"assignaciones": assignaciones2, 'cliente': assignaciones2[0].cliente,
+                           'comentario': assignaciones2[0].id, 'states': states})
 
 
     else:
         assignaciones = Assignacion.objects.filter(id=id_assignacion)
         try:
-            return render(request, "assignacion/detalles_assignacion.html", {"assignaciones": assignaciones, 'cliente' : assignaciones[0].cliente,'comentario' : assignaciones[0].id,'states': states})
+            return render(request, "assignacion/detalles_assignacion.html",
+                          {"assignaciones": assignaciones, 'cliente': assignaciones[0].cliente,
+                           'comentario': assignaciones[0].id, 'states': states})
         except:
             return render(request, "error/error_generico.html", {'error': {
                 'title': 'Esta pagina no existe',
                 'message': 'O usted no tiene los permisos necesarios'
             }})
+
 
 @rols_required(['gestor_solicitudes'])
 def solicitudes_eventos(request):
@@ -114,4 +125,13 @@ def solicitudes_eventos(request):
                           {'error': {'title': error_title, 'message': error_description}})
     eventos = Evento.objects.filter(Validado_gestor=False, fecha_fin__gt=datetime.datetime.now())
     json = {'eventos': eventos}
-    return render(request,'evento/solicitud_evento.html',json)
+    return render(request, 'evento/solicitud_evento.html', json)
+
+
+# Solicitudes realizadas por el organizador de eventos
+@rols_required('organizador_eventos')
+def solicitudes_realizadas(request):
+    organizador = Organizador_Eventos.objects.get(user=request.user)
+    solicitudes_organizador = Evento.objects.filter(organizador=organizador)
+    return render(request, 'solicitudes/solicitudes_realizadas.html',
+                  {'solicitudes_realizadas': solicitudes_organizador})

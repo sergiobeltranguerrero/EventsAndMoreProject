@@ -122,6 +122,7 @@ def request_new_services(request, **kwargs):
             return JsonResponse({'status': 'error'})
 
 
+@rols_required('organizador_eventos')
 def solicitud_realizada(request, **kwargs):
     id_evento = kwargs.get('evento')
     organizador = Organizador_Eventos.objects.get(user=request.user)
