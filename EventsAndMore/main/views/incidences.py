@@ -1,10 +1,11 @@
 # this lets the user create an incidence
 from django.core.mail import send_mail
+from django.http import HttpResponseRedirect
 from django.shortcuts import render
-from ..models import Incidencia, Cliente, User, Servicios_adicionales
-from ..models import Incidencia, Cliente, Evento, Assignacion
+from ..models import Incidencia, Cliente, Evento, Assignacion, Servicios_adicionales, Comentario
 from .evento import State
 from ..decorators import servicios_adiciones_and_cliente, servicios_adicionales, rols_required
+from django.urls import reverse
 
 
 @servicios_adiciones_and_cliente
@@ -16,10 +17,13 @@ def Incidencias(request):
 
     if request.method == 'POST':
         if request.user.is_servicios_adicionales:
+            adicionales = Servicios_adicionales.objects.get(user_id=request.user.id)
             if not request.POST['state'] == '%':
-                incidencia = Incidencia.objects.filter(estadoIn=request.POST['state'])
+                incidencia = Incidencia.objects.filter(estadoIn=request.POST['state'], gestion=adicionales)
             else:
-                incidencia = Incidencia.objects.all()
+                incidencia = [incidencia for incidencia in Incidencia.objects.filter(estadoIn='PD')]
+                incidencia += [incidencia for incidencia in Incidencia.objects.filter(estadoIn='EP', gestion=adicionales)]
+                incidencia += [incidencia for incidencia in Incidencia.objects.filter(estadoIn='SC', gestion=adicionales)]
 
 
         elif request.user.is_cliente:
@@ -42,7 +46,9 @@ def Incidencias(request):
 
         elif request.user.is_cliente:
             cliente = Cliente.objects.get(user=request.user)
-            incidencia = Incidencia.objects.filter(cliente_id=cliente.id)
+            incidencia = [incidencia for incidencia in Incidencia.objects.filter(estadoIn='PD', cliente_id=cliente.id)]
+            incidencia += [incidencia for incidencia in Incidencia.objects.filter(estadoIn='EP', cliente_id=cliente.id)]
+            incidencia += [incidencia for incidencia in Incidencia.objects.filter(estadoIn='SC', cliente_id=cliente.id)]
         return render(request, "incidencia/incidencia.html", {"incidencia": incidencia, 'states': states, 'user': user})
 
 
@@ -67,10 +73,10 @@ def detalles_incidencia(request, id_incidencia):
                               {"indicencia": incidencia, 'id': incidencia[0].id, "cliente": cliente, 'states': states,
                                "descripcion": incidencia[0].descripcion})
             else:
-                return render(request, "error/error_generico.html", {'error': {
-                    'title': 'Esta pagina no existe',
-                    'message': 'O usted no tiene los permisos necesarios'
-                }})
+               comentario = Comentario.objects.get(incidencia_id=id_incidencia)
+               return render(request, "incidencia/detalles_incidencia.html",
+                             {"indicencia": incidencia,'inci': incidencia[0], 'id': incidencia[0].id, "cliente": cliente, 'states': states,
+                              "descripcion": incidencia[0].descripcion, 'comentario': comentario})
         else:
             return render(request, "error/error_generico.html", {'error': {
                 'title': 'Esta pagina no existe',
@@ -106,10 +112,15 @@ def valorar_incidencia(request, id_incidencia):
         states.append(State(estado[0], estado[1]))
     if request.method == 'GET':
         incidencia = Incidencia.objects.filter(id=id_incidencia)
+        if len(incidencia) > 0 and incidencia[0].estadoIn == 'SC':
+            comentario = Comentario.objects.get(incidencia_id=id_incidencia)
+            return render(request, "incidencia/valorar_incidencia.html",
+                          {"incidencias": incidencia, 'cliente': incidencia[0].cliente, 'comentario': incidencia[0].id,
+                           'states': states, "incidencia": incidencia[0], 'comentarios': comentario})
         try:
             return render(request, "incidencia/valorar_incidencia.html",
                           {"incidencias": incidencia, 'cliente': incidencia[0].cliente, 'comentario': incidencia[0].id,
-                           'states': states})
+                           'states': states, "incidencia": incidencia[0]})
         except:
             return render(request, "error/error_generico.html", {'error': {
                 'title': 'Esta pagina no existe',
@@ -128,11 +139,20 @@ def valorar_incidencia(request, id_incidencia):
                           {"incidencias": incidencia, 'cliente': incidencia[0].cliente, 'comentario': incidencia[0].id,
                            'states': states})
 
-        elif request.POST['Valor'] == 'solucionada' and len(request.POST['comentario']) >= 10:
+        elif request.POST['Valor'] == 'solucionada' and len(request.POST['asunto']) >= 5:
             incidencia = Incidencia.objects.get(id=id_incidencia)
             incidencia.estadoIn = 'SC'
             incidencia.descripcion = str(request.POST['comentario'])
             incidencia.save()
+            # incidencia.descripcion = str(request.POST['comentario'])
+            try:
+                Comentario.objects.create(asunto=request.POST['asunto'], cuerpo=request.POST['comentario'],
+                                          incidencia_id=id_incidencia)
+            except:
+                comentario = Comentario.objects.get(incidencia_id=id_incidencia)
+                comentario.asunto = str(request.POST['asunto'])
+                comentario.cuerpo = str(request.POST['comentario'])
+                comentario.save()
             recipientes = []
             recipientes.append(incidencia.cliente.user.email)
             recipientes.append(request.user.email)
@@ -155,3 +175,5 @@ def valorar_incidencia(request, id_incidencia):
             return render(request, "incidencia/valorar_incidencia.html",
                           {"incidencias": incidencia, 'cliente': incidencia[0].cliente, 'comentario': incidencia[0].id,
                            'states': states})
+
+

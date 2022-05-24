@@ -1,12 +1,16 @@
 '''2,621 65 47 10,55270866A,eventsandmore,calle españa,barcelona,barcelona,españa,930 20 27 90,events@hotmail.com,0,1,2
 '''
+import datetime
+
 from django.shortcuts import render
 from django.contrib.auth.decorators import login_required
-from ..models import Assignacion, Cliente, Evento
+from ..models import Assignacion, Cliente, Evento, Gestor_solicitudes
 from .evento import State
 from django.core.mail import send_mail
-from main.decorators import gestor_solicitudes_and_cliente
+from main.decorators import gestor_solicitudes_and_cliente,rols_required
 
+error_title = 'Esta pagina no existe o no tiene los permisos necessarios'
+error_description = 'Esta intentando acceder a una pagina inexistente o usted no tiene permisos para acceder'
 
 @gestor_solicitudes_and_cliente
 def mostrar_assignaciones(request):
@@ -95,8 +99,19 @@ def detalles_assignacion(request,id_assignacion):
                 'message': 'O usted no tiene los permisos necesarios'
             }})
 
+@rols_required(['gestor_solicitudes'])
 def solicitudes_eventos(request):
-    eventos = Evento.objects.filter(aceptado_gestor=False)
+    if request.method == 'POST':
+        try:
+            id = int(request.POST['id'])
+            gestor = Gestor_solicitudes.objects.get(user=request.user)
+            evento = Evento.objects.get(pk=id)
+            evento.Validado_gestor = True
+            evento.gestor_validador = gestor
+            evento.save()
+        except:
+            return render(request, "error/error_generico.html",
+                          {'error': {'title': error_title, 'message': error_description}})
+    eventos = Evento.objects.filter(Validado_gestor=False, fecha_fin__gt=datetime.datetime.now())
     json = {'eventos': eventos}
-    #if request.method == 'POST':
     return render(request,'evento/solicitud_evento.html',json)

@@ -93,10 +93,24 @@
                 {% endfor %}
             </tbody>
         </table>
-        <div class="form-group">
-            <input type="text" id="comentario" name="comentario" class="form-control" placeholder="Escriba aquí el comentario de la incidencia" minlength="5" maxlength="500"/>
+            {% if incidencia.estadoIn == 'EP' %}
+            <div class="form-group">
+            <input type="text" id="comentario" name="asunto" class="form-control-lg form-control" placeholder="Escriba aquí el asunto de la incidencia" minlength="5" maxlength="500"/>
         </div>
-            <th><button class="btn hidden "></button></th>
+
+        <th><button class="btn hidden "></button></th>
+        <div class="form-group">
+            <input type="text" id="comentario" name="comentario" class="form-control" placeholder="Escriba aquí el cuerpo de la incidencia" minlength="5" maxlength="500"/>
+        </div>
+            {% elif incidencia.estadoIn == 'SC' %}
+                <div class="container row">
+
+            <h1><b>Asunto:</b> {{ comentarios.asunto }} </h1>
+            <h4><b>Cuerpo:</b> {{ comentarios.cuerpo}}</h4>
+                </div>
+
+            {% endif %}
+
 
         </div>
     </form>
