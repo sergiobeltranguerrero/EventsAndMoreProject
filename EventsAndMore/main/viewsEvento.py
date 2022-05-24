@@ -5,5 +5,5 @@ from .models import *
 def setPlanningStand(request):
     stand = Stand.objects.all()
     sector = Sector.objects.all()
-    json = {'stands':stand,'sectores':sector}
-    return render(request,'evento\setStandSector.html',json)
+    json = {'stands': stand, 'sectores': sector}
+    return render(request, 'evento\setStandSector.html', json)
