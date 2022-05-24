@@ -1,10 +1,13 @@
 import main.urls
 from django.shortcuts import render, redirect
-from main.models import *
-from datetime import datetime, date, timedelta
+
+from main.models import Evento, Evento_Stand_Sector, Assignacion
+from main.models.accounts import *
+
+from datetime import datetime, timedelta
 from dateutil.relativedelta import relativedelta
 from django.contrib.auth.decorators import login_required
-from main.decorators import cliente_only, rols_required
+from main.decorators import rols_required
 
 error_title = 'Esta pagina no existe o no tiene los permisos necessarios'
 error_description = 'Esta intentando acceder a una pagina inexistente o usted no tiene permisos para acceder'
@@ -45,7 +48,7 @@ def detail_event(request, id):
 
 # Shows events that user have solicitated
 @login_required
-@cliente_only
+@rols_required('cliente')
 def my_events(request):
     states = []
     for estado in Assignacion.ESTADO:
@@ -85,7 +88,7 @@ def new_event(request):
             evento = create_Event(request)
             return redirect('stand_planning', id_event=evento.id, permanent=True)
         else:
-            json['error'] = 'Las fechas no se deven solapar con otras'
+            json['error'] = 'Las fechas no se deben solapar con otras'
             return render(request, 'evento/new_event.html', json)
 
 

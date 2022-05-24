@@ -1,8 +1,8 @@
 from django.db.models import Model
 from django.db import models
 
-from main.models.accounts import Cliente, Servicios_adicionales
-from main.models.eventos import Evento
+from main.models.accounts import *
+from main.models.eventos import *
 
 
 class Incidencia(Model):

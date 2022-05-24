@@ -1,13 +1,10 @@
 # this lets the user create an incidence
 from django.core.mail import send_mail
-from django.http import HttpResponseRedirect
 from django.shortcuts import render
-from django.contrib.auth.decorators import login_required
 from ..models import Incidencia, Cliente, User, Servicios_adicionales
 from ..models import Incidencia, Cliente, Evento, Assignacion
 from .evento import State
-from ..decorators import servicios_adiciones_and_cliente,cliente_only, servicios_adicionales
-from django.urls import reverse
+from ..decorators import servicios_adiciones_and_cliente, servicios_adicionales, rols_required
 
 
 @servicios_adiciones_and_cliente
@@ -39,8 +36,8 @@ def Incidencias(request):
         if request.user.is_servicios_adicionales:
             adicionales = Servicios_adicionales.objects.get(user_id=request.user.id)
             incidencia = [incidencia for incidencia in Incidencia.objects.filter(estadoIn='PD')]
-            incidencia += [incidencia for incidencia in Incidencia.objects.filter(estadoIn='EP',gestion=adicionales)]
-            incidencia += [incidencia for incidencia in Incidencia.objects.filter(estadoIn='SC',gestion=adicionales)]
+            incidencia += [incidencia for incidencia in Incidencia.objects.filter(estadoIn='EP', gestion=adicionales)]
+            incidencia += [incidencia for incidencia in Incidencia.objects.filter(estadoIn='SC', gestion=adicionales)]
 
 
         elif request.user.is_cliente:
@@ -49,7 +46,7 @@ def Incidencias(request):
         return render(request, "incidencia/incidencia.html", {"incidencia": incidencia, 'states': states, 'user': user})
 
 
-@cliente_only
+@rols_required('cliente')
 def detalles_incidencia(request, id_incidencia):
     states = []
     for estado in Incidencia.ESTADO:
@@ -81,8 +78,7 @@ def detalles_incidencia(request, id_incidencia):
             }})
 
 
-
-@cliente_only
+@rols_required('cliente')
 def NuevaIncidencia(request):
     eventos_list = list()
     for assignaciones in Assignacion.objects.filter(cliente_id=request.user.id):
@@ -96,8 +92,9 @@ def NuevaIncidencia(request):
         else:
             return render(request, 'incidencia/nueva_incidencia.html', {'success': False, 'eventos': eventos_list})
         cliente = Cliente.objects.get(user=request.user)
-        Incidencia.objects.create(nombre=nombre, descripcion=descripcion, estadoIn='PD', cliente=cliente, gestion_id=1,evento=event)
-        return render(request, 'incidencia/nueva_incidencia.html', {'success': True,'eventos': eventos_list})
+        Incidencia.objects.create(nombre=nombre, descripcion=descripcion, estadoIn='PD', cliente=cliente, gestion_id=1,
+                                  evento=event)
+        return render(request, 'incidencia/nueva_incidencia.html', {'success': True, 'eventos': eventos_list})
     else:
         return render(request, 'incidencia/nueva_incidencia.html', {"eventos": eventos_list})
 
@@ -158,5 +155,3 @@ def valorar_incidencia(request, id_incidencia):
             return render(request, "incidencia/valorar_incidencia.html",
                           {"incidencias": incidencia, 'cliente': incidencia[0].cliente, 'comentario': incidencia[0].id,
                            'states': states})
-
-
