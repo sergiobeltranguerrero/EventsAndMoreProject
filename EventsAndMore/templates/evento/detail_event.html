@@ -35,6 +35,30 @@
                 </div>
             </div>
             <hr/>
+            <h2>Empresas participantes</h2>
+            <div class="row row-cols-12 g-4">
+            {% for assig in assigs %}
+                <div class="col">
+                {% if assig.estado == 'AP' %}
+                    <div class="card border-success">
+                {% else %}
+                    <div class="card border-warning">
+                {% endif %}
+                      <div class="card-body">
+                        <h5 class="card-title">{{ assig.cliente.nombre_empresa }}</h5>
+                        <p class="card-text">N stand: {{ assig.stand.numero_stand }}</p>
+                      </div>
+                    </div>
+                </div>
+            {% endfor %}
+            </div>
+            <hr/>
+            <h6 align="left">
+                Se muestran las empresas que han hecho una solicitud tanto si esta aceptada como pendiente. De manera que dependiendo del estado de esta el borde tendra un color:
+            </h6>
+            <p align="left"><span class="badge bg-success"> </span> Aceptado </p>
+            <p align="left"><span class="badge bg-warning"> </span> Pendiente de aprovacion </p>
+            <hr/>
             {% if user.is_cliente %}
             <a href="{% url "get_stand" evento.id %}" class="btn btn-success">Unirme</a>
             {% endif %}

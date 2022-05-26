@@ -39,7 +39,8 @@ def list_events(request):
 def detail_event(request, id):
     if request.method == 'GET':
         evento = Evento.objects.get(id=id)
-        json = {'evento': evento}
+        assignaciones = Assignacion.objects.filter(evento_id=id,).exclude(estado=Assignacion.ESTADO[0]).order_by('stand__numero_stand')
+        json = {'evento': evento,'assigs':assignaciones}
         return render(request, 'evento/detail_event.html', json)
     if request.method == 'POST':
         return render(request, "error/error_generico.html",
