@@ -27,7 +27,7 @@ def get_stands_by_sector_event(request, id_event):
             if assignados.filter(stand_id=ea.stand_id).exists():
                 eas = eas.exclude(stand_id=ea.stand_id)
         json = {'eas': eas, 'assignados': assignados, 'evento': evento}
-        return render(request, 'stand\get_stand.html', json)
+        return render(request, 'stand/get_stand.html', json)
     elif request.method == 'POST':
         lst_obj = get_elements_by_request_post(stands_id, ['id', 'size', 'sector'], 'selected', request)
         assignaciones = []
