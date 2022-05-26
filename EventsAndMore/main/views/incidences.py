@@ -116,7 +116,7 @@ def valorar_incidencia(request, id_incidencia):
             comentario = Comentario.objects.get(incidencia_id=id_incidencia)
             return render(request, "incidencia/valorar_incidencia.html",
                           {"incidencias": incidencia, 'cliente': incidencia[0].cliente, 'comentario': incidencia[0].id,
-                           'states': states, "incidencia": incidencia[0], 'comentarios': comentario})
+                           'states': states, "incidencia": incidencia[0], 'comentarios': comentario,"coment" : comentario})
         try:
             return render(request, "incidencia/valorar_incidencia.html",
                           {"incidencias": incidencia, 'cliente': incidencia[0].cliente, 'comentario': incidencia[0].id,
@@ -137,7 +137,7 @@ def valorar_incidencia(request, id_incidencia):
             incidencia = Incidencia.objects.filter(id=id_incidencia)
             return render(request, "incidencia/valorar_incidencia.html",
                           {"incidencias": incidencia, 'cliente': incidencia[0].cliente, 'comentario': incidencia[0].id,
-                           'states': states})
+                           'states': states, "incidencia": incidencia[0]})
 
         elif request.POST['Valor'] == 'solucionada' and len(request.POST['asunto']) >= 5:
             incidencia = Incidencia.objects.get(id=id_incidencia)
@@ -153,6 +153,7 @@ def valorar_incidencia(request, id_incidencia):
                 comentario.asunto = str(request.POST['asunto'])
                 comentario.cuerpo = str(request.POST['comentario'])
                 comentario.save()
+            comentario = Comentario.objects.get(incidencia_id=id_incidencia)
             recipientes = []
             recipientes.append(incidencia.cliente.user.email)
             recipientes.append(request.user.email)
@@ -166,7 +167,7 @@ def valorar_incidencia(request, id_incidencia):
             incidencia = Incidencia.objects.filter(id=id_incidencia)
             return render(request, "incidencia/valorar_incidencia.html",
                           {"incidencias": incidencia, 'cliente': incidencia[0].cliente, 'comentario': incidencia[0].id,
-                           'states': states})
+                           'states': states, "incidencia": incidencia[0] ,"coment" : comentario})
         elif request.POST['Valor'] == 'desasignar':
             incidencia = Incidencia.objects.get(id=id_incidencia)
             incidencia.estadoIn = 'PD'
