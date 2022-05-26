@@ -1,0 +1,69 @@
+{% extends "home_base.html" %}
+{% block title %}Todas las asignaciones{% endblock %}
+{% block body %}
+<div class="container">
+<h1>Asignaciones de empresas</h1>
+<!-- arreglar los tipos de busqueda -->
+    <form action="{% url 'mostrar_assignaciones' %}" method="POST">
+    {% csrf_token %}
+        <table class="table table-striped table-hover col-12">
+            <thead>
+                <tr>
+                    <th hidden>IdEvent</th>
+                     <th scope="col">Evento</th>
+                    <th scope="col">Nombre de la empresa</th>
+                    <th scope="col">Stand</th>
+                    <th scope="col">Estado</th>
+
+                    <th scope="col">Acciones</th>
+
+                </tr>
+            </thead>
+            <tbody>
+                {% for assignacion in assignaciones %}
+                    <tr class="
+                    {% if assignacion.estado == 'PD' %}
+                        table-warning
+                    {% elif assignacion.estado == 'RC' %}
+                        table-danger
+                    {% elif assignacion.estado == 'AP' %}
+                        table-success
+                    {% else %}
+                        table-danger
+                    {% endif%}
+                    ">
+
+                        <th scope="row" hidden><input type="number" id="id_evento{{assignacion.id}}" name="id_evento{{assignacion.id}}" value="{{assignacion.id}}" readonly required/></th>
+                         <td>{{assignacion.evento.nombre}}</td>
+                        <td>{{assignacion.cliente.nombre_empresa}}</td>
+                        <td>{{assignacion.stand.numero_stand}}</td>
+
+                        <td>
+                            <h4>
+                                <span class="badge badge-pill
+                        {% if assignacion.estado == 'PD' %}
+                            bg-warning">{{'Pendiente'}}
+                        {% elif assignacion.estado == 'RC' %}
+                            bg-danger">{{'Rechazado'}}
+                        {% elif assignacion.estado == 'AP' %}
+                            bg-success">{{'Aprobado'}}
+                        {% else %}
+                            bg-danger">Error on state
+                        {% endif%}
+                                </span>
+                            </h4>
+                        </td>
+                        <td>
+
+                            <div class="form-group">
+                                <a class="btn btn-primary btn-block" href="{% url 'detalles_assignacion' assignacion.id %}">Detalles Empresa</a>
+                            </div>
+
+                        </td>
+                    </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+    </form>
+</div>
+{% endblock %}

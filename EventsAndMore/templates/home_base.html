@@ -9,31 +9,51 @@
                         aria-expanded="false" aria-label="Toggle navigation"><span class="navbar-toggler-icon"></span>
                 </button>
                 <div class="collapse navbar-collapse" id="navbarSupportedContent">
-                    <ul class="navbar-nav ms-auto mb-2 mb-lg-0">
+                        <ul class="navbar-nav ms-auto mb-2 mb-lg-0">
                         <li class="nav-item"><a
-                                {% url 'home' as home %}
-                                {% if request.path == home %}
-                                    class="nav-link active" href=""
-                                {% else %}
-                                    class="nav-link" href="{% url 'home' %}"
-                                {% endif %}
+                        {% url 'home' as home %}
+                        {% if request.path == home %}
+                            class="nav-link active" href=""
+                        {% else %}
+                            class="nav-link" href="{% url 'home' %}"
+                        {% endif %}
                         >Home</a></li>
                         <li class="nav-item"><a
-                                {% url 'list_events' as list_events_url %}
-                                {% if request.path == list_events_url %}
-                                    class="nav-link active" href=""
-                                {% else %}
-                                    class="nav-link" href="{% url 'list_events' %}"
-                                {% endif %}
+                        {% url 'list_events' as list_events_url %}
+                        {% if request.path == list_events_url %}
+                        class="nav-link active" href=""
+                        {% else %}
+                        class="nav-link" href="{% url 'list_events' %}"
+                        {% endif %}
                         >Eventos</a></li>
+                        <li class="nav-item"><a class="nav-link" href="about.html">About</a></li>
+                        <li class="nav-item"><a class="nav-link" href="contact.html">Contact</a></li>
+                        <li class="nav-item"><a class="nav-link" href="pricing.html">Pricing</a></li>
+                        <li class="nav-item"><a class="nav-link" href="faq.html">FAQ</a></li>
+                        <li class="nav-item dropdown">
+                            <a class="nav-link dropdown-toggle" id="navbarDropdownBlog" href="#" role="button"
+                               data-bs-toggle="dropdown" aria-expanded="false">Blog</a>
+                            <ul class="dropdown-menu dropdown-menu-end" aria-labelledby="navbarDropdownBlog">
+                                <li><a class="dropdown-item" href="blog-home.html">Blog Home</a></li>
+                                <li><a class="dropdown-item" href="blog-post.html">Blog Post</a></li>
+                            </ul>
+                        </li>
+                        <li class="nav-item dropdown">
+                            <a class="nav-link dropdown-toggle" id="navbarDropdownPortfolio" href="#" role="button"
+                               data-bs-toggle="dropdown" aria-expanded="false">Portfolio</a>
+                            <ul class="dropdown-menu dropdown-menu-end" aria-labelledby="navbarDropdownPortfolio">
+                                <li><a class="dropdown-item" href="portfolio-overview.html">Portfolio Overview</a></li>
+                                <li><a class="dropdown-item" href="portfolio-item.html">Portfolio Item</a></li>
+                            </ul>
+                        </li>
                         {% if user.is_organizador_eventos %}
                             <li class="nav-item">
-                                {% url 'new_event' as new_event %}
-                                {% if request.path == new_event %}
-                                    <p class="nav-link x-nav-item active">Nuevo evento</p>
-                                {% else %}
-                                    <a class="nav-link" href="{% url 'new_event' %}">Nuevo evento</a>
-                                {% endif %}
+                            {% url 'new_event' as new_event %}
+                            {% if request.path == new_event %}
+                            <p class="nav-link x-nav-item active">Nuevo evento</p>
+                            {% else %}
+                            <a class="nav-link" href="{% url 'new_event' %}" >Nuevo evento</a>
+                            {% endif %}
                             </li>
                             <li>
                                 <a class="nav-link" href="{% url 'solicitudes_organizador' %}">Solicitudes realizadas</a>
@@ -41,33 +61,32 @@
                         {% endif %}
                         {% if user.is_gestor_solicitudes %}
                             <li class="nav-item">
-                                {% url 'solicitudes_eventos' as solicitudes_eventos %}
-                                {% if request.path == solicitudes_eventos %}
-                                    <p class="nav-link x-nav-item active">Solicitudes evento</p>
-                                {% else %}
-                                    <a class="nav-link" href="{% url 'solicitudes_eventos' %}">Solicitudes evento</a>
-                                {% endif %}
+                            {% url 'solicitudes_eventos' as solicitudes_eventos %}
+                            {% if request.path == solicitudes_eventos %}
+                                <p class="nav-link x-nav-item active">Solicitudes evento</p>
+                            {% else %}
+                                <a class="nav-link" href="{% url 'solicitudes_eventos' %}" >Solicitudes evento</a>
+                            {% endif %}
                             </li>
                         {% endif %}
                         {% if user.is_cliente %}
                             <li class="nav-item">
-                                {% url 'my_events' as my_events_url %}
-                                {% if request.path == my_events_url %}
-                                    <p class="nav-link x-nav-item active">Mis eventos</p>
-                                {% else %}
-                                    <a class="nav-link" href="{% url 'my_events' %}">Mis eventos</a>
-                                {% endif %}
+                            {% url 'my_events' as my_events_url %}
+                            {% if request.path == my_events_url %}
+                                <p class="nav-link x-nav-item active">Mis eventos</p>
+                            {% else %}
+                                <a class="nav-link" href="{% url 'my_events' %}" >Mis eventos</a>
+                            {% endif %}
                             </li>
                         {% endif %}
                         {% if user.is_servicios_adicionales %}
-                            <li class="nav-item"><a class="nav-link" href={% url 'incidencias' %}>My Incidences</a></li>
+                        <li class="nav-item"><a class="nav-link" href={% url 'incidencias' %}>My Incidences</a></li>
                         {% endif %}
                         {% if user.is_cliente %}
                             <li class="nav-item"><a class="nav-link" href={% url 'incidencias' %}>My Incidences</a></li>
                         {% endif %}
                         {% if user.is_gestor_solicitudes or user.is_cliente %}
-                            <li class="nav-item"><a class="nav-link"
-                                                    href={% url 'mostrar_assignaciones' %}>Assignations</a></li>
+                        <li class="nav-item"><a class="nav-link" href={% url 'mostrar_assignaciones' %}>Assignations</a></li>
                         {% endif %}
                         {% if user.is_authenticated %}
                             <li class="nav-item"><a class="btn btn-outline-secondary" href={% url 'logout' %}>Logout</a>

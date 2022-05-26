@@ -1,0 +1,96 @@
+{% extends "home_base.html" %}
+{% block title %}Detalles de la assignación{% endblock %}
+{% block body %}
+<div class="container">
+    <div class="row">
+
+    </div>
+    <br/>
+    <form action="{% url 'detalles_assignacion' comentario %}" method="POST">
+    {% csrf_token %}
+        <table class="table table-striped table-hover col-12">
+            <thead>
+                <tr>
+                    <th hidden>idAssignacio</th>
+                    <th scope="col">Evento</th>
+                    <th scope="col">Nombre de la empresa</th>
+                    <th scope="col">correo</th>
+                    <th scope="col">Estado</th>
+                    <th scope="col" colspan="2">Acciones</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for assignacion in assignaciones %}
+                    <tr class="
+                    {% if assignacion.estado == 'PD' %}
+                        table-warning
+                    {% elif assignacion.estado == 'RC' %}
+                        table-danger
+                    {% elif assignacion.estado == 'AP' %}
+                        table-success
+                    {% else %}
+                        table-danger
+                    {% endif%}
+                    ">
+                        <th scope="row" hidden><input type="number" id="id{{assignacion.id}}" name="id{{assignacion.id}}" value="{{assignacion.id}}" readonly required/></th>
+                        <td>{{assignacion.evento.nombre}}</td>
+                        <td>{{assignacion.cliente.nombre_empresa}}</td>
+                        <td>{{assignacion.cliente.email_empresa}}</td>
+                        <td>
+                            <h4>
+                                <span class="badge badge-pill
+                        {% if assignacion.estado == 'PD' %}
+                            bg-warning">
+                        {% elif assignacion.estado == 'RC' %}
+                            bg-danger">
+                        {% elif assignacion.estado == 'AP' %}
+                            bg-success">
+                        {% else %}
+                            bg-danger">Error on state
+                        {% endif%}
+                                {% for state in states %}
+                                    {% if state.id == assignacion.estado %}
+                                        {{ state.name }}
+                                    {% endif %}
+                                {% endfor %}
+                                </span>
+                            </h4>
+                        </td>
+                        <td>
+                            <div class="form-group">
+                                <button class="btn btn-success btn-block" type="submit" href="{% url 'detalles_assignacion' comentario %}" id="Valor" value="AP" name="Valor" >Aprobar</button>
+                            </div>
+
+                        </td>
+                        <td>
+                            <div class="form-group">
+                                <button class="btn btn-danger btn-block" type="submit" href="{% url 'detalles_assignacion' comentario %}" id="Valor" value="RC" name="Valor" >Rechazar</button>
+                            </div>
+                        </td>
+                    </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+        <div class="form-group">
+            <input type="text" id="comentario" name="comentario" class="form-control" placeholder="Escriba aquí el comentario sobre la solicitud" minlength="10" maxlength="500"/>
+        </div>
+            <th><button class="btn hidden "></button></th>
+            <div class="form-group">
+                <thead>
+                <tr>
+                    <a class="btn btn-danger " href="{% url 'mostrar_assignaciones' %}">Atras</a>
+
+
+                </tr>
+                </thead>
+            </div>
+        </div>
+    </form>
+    <div>
+            <a class="btn " href="{% url 'mostrar_assignaciones' %}"></a>
+        </div>
+    <div>
+
+        </div>
+</div>
+{% endblock %}
