@@ -88,6 +88,16 @@
                         {% if user.is_gestor_solicitudes or user.is_cliente %}
                         <li class="nav-item"><a class="nav-link" href={% url 'mostrar_assignaciones' %}>Assignations</a></li>
                         {% endif %}
+                        {% if user.is_personal_direccion %}
+                            <li class="nav-item">
+                            {% url 'facturacion_eventos' as facturacion_eventos %}
+                            {% if request.path == facturacion_eventos %}
+                                <p class="nav-link x-nav-item active">Facturacion eventos</p>
+                            {% else %}
+                                <a class="nav-link" href="{% url 'facturacion_eventos' %}" >Facturacion eventos</a>
+                            {% endif %}
+                            </li>
+                        {% endif %}
                         {% if user.is_authenticated %}
                             <li class="nav-item"><a class="btn btn-outline-secondary" href={% url 'logout' %}>Logout</a>
                             </li>
