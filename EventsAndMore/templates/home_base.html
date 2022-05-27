@@ -26,6 +26,21 @@
                                     class="nav-link" href="{% url 'list_events' %}"
                                 {% endif %}
                         >Eventos</a></li>
+
+                        {% if user.is_personal_direccion or user.is_servicios_adicionales %}
+                            <li class="nav-item dropdown">
+                                <a class="nav-link dropdown-toggle" id="navbarDropdownPortfolio" href="" role="button"
+                                   data-bs-toggle="dropdown" aria-expanded="false">Encuestas</a>
+                                <ul class="dropdown-menu dropdown-menu-end" aria-labelledby="navbarDropdownPortfolio">
+                                    <li><a class="dropdown-item" href="{% url 'encuestas_creadas' %}">Encuestas
+                                        creadas</a>
+                                    </li>
+                                    <li><a class="dropdown-item" href="">Historial Encuesta</a>
+                                    </li>
+                                </ul>
+                            </li>
+                        {% endif %}
+
                         {% if user.is_organizador_eventos %}
                             <li class="nav-item">
                                 {% url 'new_event' as new_event %}
@@ -36,7 +51,8 @@
                                 {% endif %}
                             </li>
                             <li>
-                                <a class="nav-link" href="{% url 'solicitudes_organizador' %}">Solicitudes realizadas</a>
+                                <a class="nav-link" href="{% url 'solicitudes_organizador' %}">Solicitudes
+                                    realizadas</a>
                             </li>
                         {% endif %}
                         {% if user.is_gestor_solicitudes %}
@@ -69,6 +85,7 @@
                             <li class="nav-item"><a class="nav-link"
                                                     href={% url 'mostrar_assignaciones' %}>Assignations</a></li>
                         {% endif %}
+
                         {% if user.is_authenticated %}
                             <li class="nav-item"><a class="btn btn-outline-secondary" href={% url 'logout' %}>Logout</a>
                             </li>
