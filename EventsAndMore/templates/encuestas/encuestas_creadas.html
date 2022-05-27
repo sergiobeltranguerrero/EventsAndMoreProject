@@ -1,0 +1,106 @@
+{% extends "home_base.html" %}
+{% block title %}Encuestas Creadas{% endblock %}
+
+{% block body %}
+    <section style="background-color: #fff">
+        <div class="container">
+            <div class="row">
+                <div class="col-md-12">
+                    <div class="d-flex justify-content-between align-items-center mb-4 pt-5 pb-3">
+                        <h2 class="fw-normal mb-0 text-black" style="color: green">Encuestas Creadas</h2>
+                    </div>
+                    <div class="mb-2">
+                        <a class="open-new-service btn btn-primary" data-toggle="modal"
+                           data-target="#modal_encuesta">Generar Encuesta</a>
+                    </div>
+
+                    <table class="table table-striped" id="service-table">
+                        <thead>
+                        <tr>
+                            <th scope="col">Nombre encuesta</th>
+                            <th scope="col">Evento</th>
+                            <th scope="col">Fecha inicio</th>
+                            <th scope="col">Fecha fin</th>
+                            <th scope="col"></th>
+                        </tr>
+                        </thead>
+                        <tbody>
+                        {% for encuesta in encuestas %}
+                            <tr>
+                                <td>{{ encuesta.nombre }}</td>
+                                <td>{{ encuesta.evento.nombre }}</td>
+                                <td>{{ encuesta.fecha_inicio }}</td>
+                                <td>{{ encuesta.fecha_fin }}</td>
+                                {% if encuesta.id_survey %}
+                                    <td>
+                                        <div class="dropdown">
+                                            <button class="btn btn-primary dropdown-toggle" type="button"
+                                                    id="dropdownMenuButton" data-toggle="dropdown" aria-haspopup="true"
+                                                    aria-expanded="false">
+                                                Opciones
+                                            </button>
+                                            <div class="dropdown-menu" aria-labelledby="dropdownMenuButton">
+                                                <a class="dropdown-item" href="{{ encuesta.url_preview }}"
+                                                   target="_blank">Pre-vista</a>
+                                                <a class="dropdown-item" href="{{ encuesta.url_edit }}"
+                                                   target="_blank">Editar</a>
+                                                <a class="dropdown-item" href="{{ encuesta.url_results }}"
+                                                   target="_blank">Resultados</a>
+                                                <a class="dropdown-item" href="#">Enviar encuesta</a>
+                                            </div>
+                                        </div>
+                                    </td>
+                                {% endif %}
+                            </tr>
+                        {% endfor %}
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    {# MODAL PARA CREAR ENCUESTAS #}
+    <div class="modal fade" id="modal_encuesta" tabindex="-1" role="dialog"
+         aria-labelledby="exampleModalCenterTitle" aria-hidden="true">
+        <div class="modal-dialog modal-dialog-centered" role="document">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h4 class="modal-title">Generar Encuesta</h4>
+                </div>
+                <div class="modal-body">
+                    <form method="POST">
+                        {% csrf_token %}
+                        <div class="form-group">
+                            <label for="nombre_encuesta">Nombre de la encuesta</label>
+                            <input type="text" class="form-control" id="nombre_encuesta" name="nombre_encuesta"
+                                   required>
+                        </div>
+                        <div class="form-group">
+                            <label for="evento">Evento</label>
+                            <select class="form-control" id="evento" name="evento_id" required>
+                                {% for evento in eventos %}
+                                    <option value="{{ evento.id }}">{{ evento.nombre }}</option>
+                                {% endfor %}
+                            </select>
+                        </div>
+                        <div class="form-group">
+                            <label for="fecha_inicio">Fecha de inicio</label>
+                            <input type="date" class="form-control" id="fecha_inicio" name="fecha_inicio" required>
+                        </div>
+                        <div class="form-group">
+                            <label for="fecha_fin">Fecha de fin</label>
+                            <input type="date" class="form-control" id="fecha_fin" name="fecha_fin" required>
+                        </div>
+                        <div class="modal-footer">
+                            <button type="button" id="close_modal" class="btn btn-secondary" data-dismiss="modal">
+                                Cerrar
+                            </button>
+                            <button type="submit" id="save_modal" class="btn btn-primary">Generar</button>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+{% endblock %}

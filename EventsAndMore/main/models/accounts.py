@@ -96,3 +96,7 @@ class Servicios_adicionales(Model):
 
     def __str__(self):
         return self.NIF
+
+
+class Personal_Direccion(Model):
+    user = models.OneToOneField(User, on_delete=models.DO_NOTHING)
