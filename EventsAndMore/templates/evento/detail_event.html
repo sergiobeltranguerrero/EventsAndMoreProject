@@ -35,6 +35,11 @@
                 </div>
             </div>
             <hr/>
+            {% for ass in assignaciones %}
+                <div>
+                    <p><b>Empresa: {{ ass.cliente.nombre_empresa }}</b>Nº stand: {{ ass.stand.numero_stand }} Sector: {{ ass.cliente.sector.nombre }} </p>
+                </div>
+            {% endfor %}
             {% if user.is_cliente %}
             <a href="{% url "get_stand" evento.id %}" class="btn btn-success">Unirme</a>
             {% endif %}
