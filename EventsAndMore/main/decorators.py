@@ -10,7 +10,6 @@ def rols_required(*rols):
     @rols_required('servicios_adicionales', ['personal_direccion', 'cliente']) -> servicios_adicionales AND (personal_direccion OR cliente)
     @param rols: lista de roles requeridos ('visitante', 'cliente', 'gestor_solicitudes', 'servicios_adicionales', 'organizador_eventos', 'personal_direccion')
     """
-
     def decorator(func):
         def inner(request, *args, **kwargs):
             if request.user.is_authenticated:
@@ -47,20 +46,6 @@ def rols_required(*rols):
         return inner
 
     return decorator
-
-
-def cliente_only(func):
-    def wrap(request, *args, **kwargs):
-        user = request.user
-        if user.is_authenticated and user.is_cliente:
-            return func(request, *args, **kwargs)
-        else:
-            return render(request, 'error/error_generico.html', {'error': {
-                'title': 'Esta pagina no existe',
-                'message': 'O usted no tiene los permisos necesarios'
-            }})
-
-    return wrap
 
 
 def event_is_validated(func):
@@ -174,4 +159,17 @@ def servicios_adicionales(func):
                 'title' : 'Esta pagina no existe',
                 'message': 'O usted no tiene los permisos necesarios'
             }})
+    return wrap
+
+def gestor_solicitudes_and_cliente_and_organizador(func):
+    def wrap(request, *args, **kwargs):
+        user = request.user
+        if user.is_authenticated and user.is_gestor_solicitudes or user.is_cliente or user.is_organizador_eventos:
+            return func(request, *args, **kwargs)
+        else:
+            return render(request, 'error/error_generico.html', {'error': {
+                'title': 'Esta pagina no existe',
+                'message': 'O usted no tiene los permisos necesarios'
+            }})
+
     return wrap

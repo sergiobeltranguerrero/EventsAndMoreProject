@@ -1,0 +1,49 @@
+{% extends "home_base.html" %}
+{% block title %}Solicitudes Organizador{% endblock %}
+
+{% block body %}
+    <section style="background-color: #fff">
+        <div class="container">
+            <div class="modal fade" tabindex="-1" role="dialog" id="modal">
+                <div class="modal-dialog" role="document">
+                    <div class="modal-content"></div>
+                </div>
+            </div>
+            <div class="row">
+                <div class="col-md-12">
+                    <div class="text-center pt-5 pb-3">
+                        <h2 class="mt-4"><strong>Solicitudes Realizadas</strong></h2>
+                    </div>
+                    <table class="table table-striped" id="service-table">
+                        <thead>
+                        <tr>
+                            <th scope="col">Nombre evento</th>
+                            <th scope="col">Descripción</th>
+                            <th scope="col">Fecha inicio</th>
+                            <th scope="col">Fecha fin</th>
+                            <th scope="col">Capacidad</th>
+                            <th scope="col"></th>
+                        </tr>
+                        </thead>
+                        <tbody
+                        {% for solicitud in solicitudes_realizadas %}
+                            <tr>
+                            <td>{{ solicitud.nombre }}</td>
+                            <td>{{ solicitud.descripcion }}</td>
+                            <td>{{ solicitud.fecha_inicio }}</td>
+                            <td>{{ solicitud.fecha_fin }}</td>
+                            <td>{{ solicitud.capacidad }}</td>
+                            {% if solicitud.Validado_gestor %}
+                                <td><div class="btn btn-success">Validado</div></td>
+                            {% else %}
+                                <td><div class="btn btn-warning">Pendiente</div></td>
+                            {% endif %}
+                            </tr>
+                        {% endfor %}
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+    </section>
+{% endblock %}

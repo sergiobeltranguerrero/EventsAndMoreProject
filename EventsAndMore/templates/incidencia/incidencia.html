@@ -41,6 +41,9 @@
                     <th>Descripcion</th>
                     <th>Evento</th>
                     <th>Estado de la solicitud</th>
+                    {% if  user.is_servicios_adicionales %}
+                    <th colspan="2">Persona asignada</th>
+                    {% endif %}
                     <th>Acciones</th>
                 </tr>
                 </thead>
@@ -83,6 +86,11 @@
                                 </span>
                             </h4>
                         </td>
+                        {% if  user.is_servicios_adicionales %}
+                            <td>{{inciden.gestion.user.first_name}}</td>
+                            <td>{{inciden.gestion.user.last_name}}</td>
+
+                        {% endif %}
                         <td>
                             <div class="form-group">
                                 {% if  user.is_cliente %}
@@ -101,8 +109,11 @@
                 {% endif %}
                 </tbody>
             </table>
+        {% if user.is_cliente %}
             <a class="btn btn-success" href="{% url 'nueva_incidencia' %}">Crear nueva incidencias</a>
+        {% endif %}
         </div>
+
     </div>
 </div>
 

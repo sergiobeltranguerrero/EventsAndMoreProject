@@ -73,6 +73,12 @@
             </tbody>
         </table>
     </form>
+    {% if inci.estadoIn == 'SC' %}
+        <div class="container row">
+            <h1><b>Asunto:</b> {{ comentario.asunto }} </h1>
+            <h4><b>Cuerpo:</b> {{ comentario.cuerpo}}</h4>
+        </div>
+    {% endif %}
     <div>
             <a class="btn btn-danger " href="{% url 'incidencias' %}">Atras</a>
         </div>

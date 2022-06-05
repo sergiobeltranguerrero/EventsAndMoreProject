@@ -2,9 +2,13 @@
 {% block title %}Planificacion del pavellon{% endblock %}
 {% block body %}
 <div class="container">
+    <div class="row d-flex justify-content-center">
     {% for evento in eventos %}
-    <div class="card" style="width: 315px; margin-top: 10px">
-        <img class="card-img-top" src="..." alt="Card image cap">
+    <form class=" col-12 col-xs-12 col-md-5 col-lg-4 col-xl-3" method="post">
+    {% csrf_token%}
+        <input type="text" id="id" name="id" class="form-control" value="{{ evento.id }}" hidden>
+    <div class="card" style=" margin-top: 10px; margin-right: 5px">
+        <!--<img class="card-img-top" src="..." alt="Card image cap">-->
         <div class="card-body">
             <h5 class="card-title">{{ evento.nombre }}</h5>
             <p class="card-text">{{ evento.descripcion }}</p>
@@ -37,18 +41,17 @@
         </ul>
         <div class="card-body">
             <div class="row">
-                    <div class="col-8">
-                        <div class="form-check form-switch">
-                            <input class="form-check-input" type="checkbox" id="flexSwitchCheckDefault">
-                            <label class="form-check-label" for="flexSwitchCheckDefault">Aceptar evento</label>
-                        </div>
+                    <div class="col-6">
+                        <button type="submit" name="action" value="deny" class="btn btn-danger">Denegar</button>
                     </div>
-                    <div class="col-4">
-                        <a class="btn btn-success" for="flexSwitchCheckDefault">Guardar</a>
+                    <div class="col-6">
+                        <button type="submit" name="action" value="accept" class="btn btn-success float-right">Aceptar</button>
                     </div>
                 </div>
         </div>
     </div>
+    </form>
     {% endfor %}
+    </div>
 </div>
 {% endblock %}

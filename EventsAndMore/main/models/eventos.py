@@ -3,7 +3,7 @@ import datetime
 from django.db.models import Model
 from django.db import models
 
-from main.models import Sector,Organizador_Eventos, Gestor_solicitudes
+from main.models.accounts import Sector, Organizador_Eventos, Gestor_solicitudes
 
 
 class Evento(Model):
@@ -16,7 +16,8 @@ class Evento(Model):
     organizador = models.ForeignKey(Organizador_Eventos, on_delete=models.DO_NOTHING)
     fecha_solicitud = models.DateTimeField(default=datetime.datetime.now())
     Validado_gestor = models.BooleanField(default=False)
-    gestor_validador = models.ForeignKey(Gestor_solicitudes,on_delete=models.DO_NOTHING,null=True, blank=True) #gestor que acepta la solicitud
+    gestor_validador = models.ForeignKey(Gestor_solicitudes, on_delete=models.DO_NOTHING, null=True,
+                                         blank=True)  # gestor que acepta la solicitud
 
     def __str__(self):
         return self.nombre + ' (' + str(self.id) + ')'

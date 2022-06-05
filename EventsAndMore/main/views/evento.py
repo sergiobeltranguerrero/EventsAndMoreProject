@@ -1,10 +1,13 @@
 import main.urls
 from django.shortcuts import render, redirect
-from main.models import *
-from datetime import datetime, date, timedelta
+
+from main.models import Evento, Evento_Stand_Sector, Assignacion, Servicios_Orden
+from main.models.accounts import *
+
+from datetime import datetime, timedelta
 from dateutil.relativedelta import relativedelta
 from django.contrib.auth.decorators import login_required
-from main.decorators import cliente_only, rols_required
+from main.decorators import rols_required
 
 error_title = 'Esta pagina no existe o no tiene los permisos necessarios'
 error_description = 'Esta intentando acceder a una pagina inexistente o usted no tiene permisos para acceder'
@@ -36,7 +39,8 @@ def list_events(request):
 def detail_event(request, id):
     if request.method == 'GET':
         evento = Evento.objects.get(id=id)
-        json = {'evento': evento}
+        assignaciones = Assignacion.objects.filter(evento_id=id,).exclude(estado=Assignacion.ESTADO[0]).order_by('stand__numero_stand')
+        json = {'evento': evento,'assigs':assignaciones}
         return render(request, 'evento/detail_event.html', json)
     if request.method == 'POST':
         return render(request, "error/error_generico.html",
@@ -45,7 +49,7 @@ def detail_event(request, id):
 
 # Shows events that user have solicitated
 @login_required
-@cliente_only
+@rols_required('cliente')
 def my_events(request):
     states = []
     for estado in Assignacion.ESTADO:
@@ -85,10 +89,46 @@ def new_event(request):
             evento = create_Event(request)
             return redirect('stand_planning', id_event=evento.id, permanent=True)
         else:
-            json['error'] = 'Las fechas no se deven solapar con otras'
+            json['error'] = 'Las fechas no se deben solapar con otras'
             return render(request, 'evento/new_event.html', json)
 
 
+@rols_required(['personal_direccion'])
+def facturacion_eventos(request):
+    servicios_Orden = Servicios_Orden.objects.filter(orden__evento__Validado_gestor=True).order_by('orden__evento__id')
+    datos = get_Eventos(servicios_Orden)
+    json = {'datos': datos}
+    return render(request, 'evento/facturacion_evento.html', json)
+
+
+@rols_required(['personal_direccion'])
+def facturacion_evento_detalle(request,id):
+    servicios_Orden = Servicios_Orden.objects.filter(evento_id=id).order_by('cliente__user_id')
+    datos = get_clientes(servicios_Orden)
+    json = {'datos': datos}
+    return render(request, 'evento/facturacion_evento.html', json)
+
+def get_Eventos(servicios_Orden):
+    eventos = {}
+    for ser_orden in servicios_Orden:
+        if eventos.get(ser_orden.orden.evento.id) == None:
+            eventos[ser_orden.orden.evento.id] = [ser_orden.orden.evento]
+    return eventos
+
+
+
+def get_clientes(servicios_Orden):
+    clientes = {}
+    for ser_orden in servicios_Orden:
+        cliente = clientes.get(ser_orden.cliente.id)
+        if cliente == None:
+            clientes[ser_orden.orden.cliente.id] = [[ser_orden.orden.cliente,ser_orden.orden.stand,ser_orden.orden.fecha_pago == null]]
+        else:
+            cliente.append([ser_orden.orden.cliente,ser_orden.orden.stand,ser_orden.orden.fecha_pago == null])
+    return clientes
+
+
+#UTILS
 def create_Event(request):
     nombre = request.POST['nombre']
     descripcion = request.POST['descripcion']
