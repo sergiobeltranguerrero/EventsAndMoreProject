@@ -20,7 +20,7 @@ class Evento(Model):
                                          blank=True)  # gestor que acepta la solicitud
 
     def __str__(self):
-        return self.nombre + ' (' + str(self.id) + ')'
+        return self.nombre
 
 
 class Stand(Model):

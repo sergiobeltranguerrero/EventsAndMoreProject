@@ -41,6 +41,21 @@
                             </li>
                         {% endif %}
 
+                        {% if user.is_personal_direccion %}
+                            <li class="nav-item dropdown">
+                                <a class="nav-link dropdown-toggle" id="navbarDropdownPortfolio" href="" role="button"
+                                   data-bs-toggle="dropdown" aria-expanded="false">Informes</a>
+                                <ul class="dropdown-menu dropdown-menu-end" aria-labelledby="navbarDropdownPortfolio">
+                                    <li><a class="dropdown-item" href="{% url 'informe_mensual_eventos' %}">Informe
+                                        mensual eventos</a>
+                                    </li>
+                                    <li><a class="dropdown-item" href="{% url 'informe_mensual_beneficios' %}">Informe
+                                        mensual beneficios</a>
+                                    </li>
+                                </ul>
+                            </li>
+                        {% endif %}
+
                         {% if user.is_organizador_eventos %}
                             <li class="nav-item">
                                 {% url 'new_event' as new_event %}
