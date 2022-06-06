@@ -1,0 +1,45 @@
+{% extends "home_base.html" %}
+
+{% block body %}
+    <div class="container">
+        <div class="row">
+            <div class="col-md-12">
+                <div class="text-end mt-3">
+                    <select class="mes">
+                        <option>Seleccionar un mes...</option>
+                        {% for mes in meses %}
+                            <option>{{ mes }}</option>
+                        {% endfor %}
+                    </select>
+                </div>
+
+            </div>
+        </div>
+
+        <div class="content">
+        </div>
+    </div>
+{% endblock %}
+
+{% block javascript %}
+    <script>
+        $(document).ready(function () {
+            $('.mes').change(function () {
+                let mes = $(this).val();
+                if (mes !== 'Seleccionar un mes...') {
+                    $.ajax({
+                        url: '{% url 'informe_mensual_beneficios' %}',
+                        type: 'POST',
+                        data: {
+                            mes: mes,
+                            csrfmiddlewaretoken: '{{ csrf_token }}'
+                        },
+                        success: function (data) {
+                            $('.content').html(data);
+                        }
+                    });
+                }
+            });
+        });
+    </script>
+{% endblock %}

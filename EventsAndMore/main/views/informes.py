@@ -69,3 +69,37 @@ def get_all_services_in_events(events):
                 else:
                     services[servicio.servicio.nombre] += servicio.cantidad
     return services
+
+
+def informe_mensual_beneficios(request):
+    locale.setlocale(locale.LC_TIME, 'es_ES.UTF-8')
+    eventos = Evento.objects.all().order_by('fecha_inicio')
+
+    if request.method == 'GET':
+        meses = set()
+        for evento in eventos:
+            meses.add(str(evento.fecha_inicio.strftime('%B')) + '-' + str(evento.fecha_inicio.year))
+        return render(request, 'informes/informe_mensual_beneficios.html', {'meses': meses})
+
+    if request.method == 'POST':
+        mes = request.POST['mes']
+        mes = mes.split('-')
+        datetime_object = datetime.datetime.strptime(mes[0], "%B")
+        month_number = datetime_object.month
+        eventos_mes = Evento.objects.filter(fecha_inicio__month=month_number, fecha_inicio__year=mes[1])
+        return render(request, 'informes/info_beneficios.html',
+                      {'eventos': eventos_mes, 'mes': mes[0], 'ingresos': get_ingresos_servicios(eventos_mes)})
+
+
+def get_ingresos_servicios(events):
+    ingresos = dict()
+    for event in events:
+        orden = Orden_Servicios.objects.filter(evento=event)
+        if orden:
+            servicios = Servicios_Orden.objects.filter(orden=orden)
+            for servicio in servicios:
+                if servicio.servicio.nombre not in ingresos:
+                    ingresos[servicio.servicio.nombre] = servicio.cantidad * servicio.servicio.precio
+                else:
+                    ingresos[servicio.servicio.nombre] += servicio.cantidad * servicio.servicio.precio
+    return ingresos
