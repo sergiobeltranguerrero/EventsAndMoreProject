@@ -3,7 +3,7 @@ import datetime
 from django.db.models import Model
 from django.db import models
 
-from main.models.accounts import Sector, Organizador_Eventos, Gestor_solicitudes
+from main.models.accounts import Sector, Organizador_Eventos, Gestor_solicitudes, Cliente
 
 
 class Evento(Model):
