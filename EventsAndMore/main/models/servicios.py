@@ -1,4 +1,6 @@
-from django.db.models import Model
+import uuid
+
+from django.db.models import Model, DO_NOTHING
 from django.db import models
 
 from main.models import Cliente, Evento, Stand, Organizador_Eventos
@@ -11,6 +13,7 @@ class Servicio(Model):
     imagen = models.ImageField(upload_to='servicios', null=True, blank=True)
     is_generic = models.BooleanField(default=False)
     is_new = models.BooleanField(default=False)
+    is_available = models.BooleanField(default=True)
 
     def __str__(self):
         return self.nombre + ' (' + str(self.id) + ')'
@@ -94,9 +97,21 @@ class Solicitud_Servicios_Evento(Model):
     organizador = models.ForeignKey(Organizador_Eventos, on_delete=models.DO_NOTHING)
     evento = models.ForeignKey(Evento, on_delete=models.DO_NOTHING)
     solicitado = models.BooleanField(default=False)
+    ESTADO = [
+        ('PD', 'Pendiente'),
+        ('RC', 'Rechazada'),
+        ('AP', 'Aprobada'),
+    ]
+    estado = models.CharField(max_length=2, choices=ESTADO, default=ESTADO[0][0])
 
 
 class Servicio_Necesario(Model):
     solicitud = models.ForeignKey(Solicitud_Servicios_Evento, on_delete=DO_NOTHING)
     servicio = models.ForeignKey(Servicio, on_delete=models.DO_NOTHING)
     is_added = models.BooleanField(default=False)
+    ESTADO = [
+        ('PD', 'Pendiente'),
+        ('RC', 'Rechazada'),
+        ('AP', 'Aprobada'),
+    ]
+    estado = models.CharField(max_length=2, choices=ESTADO, default=ESTADO[0][0])

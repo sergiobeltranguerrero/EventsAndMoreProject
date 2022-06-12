@@ -1,0 +1,54 @@
+{% extends 'home_base.html' %}
+{% block body %}
+    <section style="background-color: #fff">
+        <div class="text-center container py-5">
+            <div class="row mb-5"></div>
+            <h2 class="mt-4 mb-5"><strong>Solicitudes de servicios</strong></h2>
+            <div class="row">
+                {% for solicitud in solicitudes %}
+                    <div class="col col-lg-4 mb-4">
+                        <div class="card">
+                            <form method="post">
+                                {% csrf_token %}
+                                <input type="hidden" name="id_evento" value="{{ solicitud.id }}">
+                                <div class="card-body">
+                                    <p class="text-reset">
+                                    <h5 class="card-title mb-3"><strong>{{ solicitud.evento.nombre }}</strong></h5>
+                                    </p>
+                                    <div class="text-reset">
+                                        <p class="card-text">Organizador: {{ solicitud.organizador.user.first_name}} {{solicitud.organizador.user.last_name}}</p>
+                                    </div>
+                                    <div class="text-reset">
+                                        {% if solicitud.estado == "PD" %}
+                                            <p class="card-text text-warning"><strong>Pendiente</strong></p>
+                                        {% elif solicitud.estado == "RC" %}
+                                            <p class="card-text text-danger"><strong>Rechazada</strong></p>
+                                        {% elif solicitud.estado == "AP" %}
+                                            <p class="card-text text-success"><strong>Aprobada</strong></p>
+                                        {% endif %}
+                                    </div>
+                                    </a>
+                                </div>
+                            </form>
+                        </div>
+                        <div class="m-lg-auto">
+                            {% if solicitud.estado == "PD" %}
+                                <a class="btn btn-success" href={% url 'check_services_detail' solicitud.id  %}>Ver detalles</a>
+                            {% endif %}
+                        </div>
+                    </div>
+                {% endfor %}
+            </div>
+        </div>
+    </section>
+{% endblock %}
+
+{% block stylesheet %}
+    <style>
+        .card-img-top {
+            width: 100%;
+            height: 20vw;
+            object-fit: cover;
+        }
+    </style>
+{% endblock %}

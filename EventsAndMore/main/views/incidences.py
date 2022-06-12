@@ -6,7 +6,7 @@ from django.contrib.auth.decorators import login_required
 from ..models import Incidencia, Cliente, User, Servicios_adicionales
 from ..models import Incidencia, Cliente, Evento, Assignacion
 from .evento import State
-from ..decorators import servicios_adiciones_and_cliente,cliente_only, servicios_adicionales
+from ..decorators import servicios_adiciones_and_cliente, servicios_adicionales, rols_required
 from django.urls import reverse
 
 
@@ -49,7 +49,7 @@ def Incidencias(request):
         return render(request, "incidencia/incidencia.html", {"incidencia": incidencia, 'states': states, 'user': user})
 
 
-@cliente_only
+@rols_required('client')
 def detalles_incidencia(request, id_incidencia):
     states = []
     for estado in Incidencia.ESTADO:
@@ -82,7 +82,7 @@ def detalles_incidencia(request, id_incidencia):
 
 
 
-@cliente_only
+@rols_required('client')
 def NuevaIncidencia(request):
     eventos_list = list()
     for assignaciones in Assignacion.objects.filter(cliente_id=request.user.id):

@@ -3,14 +3,14 @@ from django.http import HttpResponseRedirect
 from django.shortcuts import render
 from django.urls import reverse
 
-from main.models import Evento, Servicios_Especiales, Servicio, Cliente, Assignacion, Stand, \
+from ..models import Evento, Servicios_Especiales, Servicio, Cliente, Assignacion, Stand, \
     Organizador_Eventos, Servicio_Necesario, Solicitud_Servicios_Evento
 from main.utils import Cart
 
 from main.decorators import event_is_validated, reserva_realizada, rols_required
 
 
-@cliente_only
+@rols_required('cliente')
 @event_is_validated
 @reserva_realizada
 def services_view(request, **kwargs):
@@ -147,7 +147,7 @@ def solicitud_realizada(request, **kwargs):
     return render(request, 'services/success_reservation_new_services.html',
                   {'solicitud': solicitud, 'servicios_necesarios': servicios_necesarios})
 
-@servicios_adicionales
+@rols_required('servicios_adicionales')
 def servicesAdd(request):
     if request.method == 'POST':
         name = request.POST['nombre']
@@ -166,7 +166,7 @@ def servicesAdd(request):
     else:
         return render(request,'services/add_service.html')
 
-@servicios_adicionales
+@rols_required('servicios_adicionales')
 def services_set_aviable(request,**kwargs):
     id_service = kwargs.get('servicio')
     try:
@@ -177,7 +177,7 @@ def services_set_aviable(request,**kwargs):
     except:
         return HttpResponseRedirect(reverse('all_servicios'))
 
-@servicios_adicionales
+@rols_required('servicios_adicionales')
 def servicesDelete(request,**kwargs):
     id_service = kwargs.get('servicio')
     try:
@@ -188,14 +188,14 @@ def servicesDelete(request,**kwargs):
     except:
         return HttpResponseRedirect(reverse('all_servicios'))
 
-@servicios_adicionales
+@rols_required('servicios_adicionales')
 def servicesListAll(request):
     servicios_genericos = Servicio.objects.filter(is_generic=True,is_available=True)
     servicios = Servicio.objects.filter(is_generic=False,is_available=True)
     servicios_no_aviable = Servicio.objects.filter(is_available=False)
     return render(request,'services/list_services.html',{'genericos':servicios_genericos, 'servicios': servicios,'not_aviable':servicios_no_aviable})
 
-@servicios_adicionales
+@rols_required('servicios_adicionales')
 def service_event_assign(request,**kwargs):
     eventos = Evento.objects.all()
     ass_event = list()
@@ -209,3 +209,18 @@ def service_event_assign(request,**kwargs):
         event = kwargs.get('event')
     else:
         return render(request, 'services/assign_service_client.html', {'eventos':ass_event})
+
+@rols_required('servicios_adicionales')
+def check_services(request):
+    solicitudes = Solicitud_Servicios_Evento.objects.filter(estado="PD")
+    return render(request,'services/service_assign_event.html',{'solicitudes': solicitudes})
+
+def check_services_detail(request,solicitud):
+    servicios = Servicio_Necesario.objects.filter(solicitud_id=solicitud)
+    evento = Solicitud_Servicios_Evento.objects.get(pk=solicitud).evento
+    if request.method == 'POST':
+        pass
+    else:
+        return render(request,'services/detail_solitud_org.html',{'servicios_necesario': servicios,'evento': evento})
+
+
