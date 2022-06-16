@@ -3,7 +3,7 @@ import datetime
 from django.db.models import Model
 from django.db import models
 
-from main.models.accounts import Sector, Organizador_Eventos, Gestor_solicitudes
+from main.models.accounts import Sector, Organizador_Eventos, Gestor_solicitudes, Cliente
 
 
 class Evento(Model):
@@ -20,7 +20,7 @@ class Evento(Model):
                                          blank=True)  # gestor que acepta la solicitud
 
     def __str__(self):
-        return self.nombre + ' (' + str(self.id) + ')'
+        return self.nombre
 
 
 class Stand(Model):

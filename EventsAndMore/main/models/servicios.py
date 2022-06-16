@@ -32,6 +32,7 @@ class Assignacion(Model):
         ('PD', 'Pendiente'),
         ('RC', 'Rechazada'),
         ('AP', 'Aprovada'),
+        ('FD', 'Facturado'),
     ]
     estado = models.CharField(max_length=2, choices=ESTADO, default=ESTADO[0])
     comentario = models.CharField(max_length=500, null=True)

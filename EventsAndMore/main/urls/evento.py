@@ -1,9 +1,10 @@
 from django.urls import path
-from main.views import evento, solicitudes
+from main.views import evento, solicitudes,client
 from main.views.solicitudes import solicitudes_realizadas
 
 urlpatterns_event = [
     path('evento/list_events', evento.list_events, name='list_events'),
+    path('evento/facturation_clients/<int:id>', client.client_facturation, name='facturation_event'),
     path('evento/detail_event/<int:id>', evento.detail_event, name='detail_event'),
     path('evento/my_events', evento.my_events, name='my_events'),
     path('evento/event_apply',solicitudes.solicitudes_eventos, name='solicitudes_eventos'),

@@ -122,3 +122,6 @@ EMAIL_BACKEND = "django.core.mail.backends.console.EmailBackend"
 
 EMAIL_FILE_PATH = BASE_DIR / "tmp" / "sent_emails"
 
+SURVEY_MONKEY_API_KEY = 'cMFftolwVdUKH2zJtk2zDGYPvfTNCnVWnIcxRc458DjRG4XcosSX.DKj7iy.g' \
+                        '-lhQ9iG6XAOf0zvffPELYOp7a3WBmmcwnkh8ydvSZJ39swST3gT1Q0hb-hAwuQJjbpT '
+SURVEY_MONKEY_API_URL = 'https://api.surveymonkey.net/v3'

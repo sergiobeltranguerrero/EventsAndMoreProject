@@ -1,0 +1,92 @@
+{% extends "home_base.html" %}
+{% block title %}Facturación{% endblock %}
+{% block body %}
+<div class="container">
+<h1>Facturación de los clientes</h1>
+    <form action="" method="POST">
+        {% csrf_token %}
+        <select class="form-select" id="state" name="state" aria-label="Default select example">
+            <option value="%"
+            {% if selection == '%' %}
+                selected
+            {% endif %}
+            >Seleccionar...</option>
+            {% for state in states %}
+            <option value="{{ state.id }}"
+            {% if selection == state.id %}
+                selected
+            {% endif %}
+            >{{ state.name }}</option>
+            {% endfor %}
+        </select>
+        <div class="input-group">
+            <button class="btn  btn-secondary" type="submit" id="filter">Filtrar</button>
+        </div>
+    </form>
+    <form action="{% url 'facturation_event' id %}" method="POST">
+    {% csrf_token %}
+        <table class="table table-striped table-hover col-12">
+            <thead>
+                <tr>
+                    <th hidden>IdEvent</th>
+                    <th scope="col">Cliente</th>
+                    <th scope="col">Evento</th>
+                    <th scope="col">Numero del Stand</th>
+                    <th scope="col">Estado</th>
+                    <th scope="col">Acciones</th>
+
+                </tr>
+            </thead>
+            <tbody>
+                {% for assign in assignacion %}
+                    <tr class="
+                    {% if assign.estado == 'FD' %}
+                        table-success
+                    {% endif%}
+                    ">
+                        <th scope="row" hidden><input type="number" id="id_evento{{assign.id}}" name="id_evento{{assign.id}}" value="{{assign.id}}" readonly required/></th>
+                        <td>{{assign.cliente.user.first_name}} {{assign.cliente.user.last_name}}</td>
+                        <td>{{assign.evento.nombre}}</td>
+                        <td>{{assign.stand.numero_stand}}</td>
+                        <td>
+                            <h4>
+                                <span class="badge badge-pill
+                        {% if assign.estado == 'AP' %}
+                            bg-body text-black">{{'Aprobado'}}
+                        {% else %}
+                            bg-success">Facturado
+                        {% endif%}
+                                </span>
+                            </h4>
+                        </td>
+
+                        <td>
+
+                            <div class="form-group ">
+                                {% if assign.estado == 'AP' %}
+                                <form action="{% url 'facturation_event' id %}" method="POST">
+                                    {% csrf_token %}
+
+                                    <button class="btn btn-primary btn-block" type="submit"  id="Valor" value="{{ assign.cliente.id }}{{ assign.stand.id }}" name="Valor">Cliente Facturado</button>
+                                </form>
+                                 {% elif assign.estado == 'FD' %}
+                                <div class="form-group ">
+                                        <button disabled class="btn btn-primary btn-block" type="submit"  id="Valor" value="{{ assign.cliente.id }}" name="Valor">Cliente Facturado</button>
+                                </div>
+                                {% endif %}
+                            </div>
+
+
+                        </td>
+                    </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+    </form>
+    <thead>
+    <tr>
+        <a class="btn btn-danger " href="{% url 'list_events' %}">Atras</a>
+    </tr>
+    </thead>
+</div>
+{% endblock %}
