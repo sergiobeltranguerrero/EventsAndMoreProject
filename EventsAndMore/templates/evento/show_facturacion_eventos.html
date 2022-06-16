@@ -1,0 +1,17 @@
+{% extends "home_base.html" %}
+{% block title %}Planificacion del pavellon{% endblock %}
+{% block body %}
+<div class="container">
+    {% for evento in eventos %}
+        <div class="card">
+            <div class="card-header">
+                {{ evento.evento.nombre }}
+            </div>
+            <div class="card-body">
+                <p class="card-text">{{ evento.estado }}</p>
+                <a href="{% url 'show_event_facturation' evento.evento.id %}" class="btn btn-primary">Detalle</a>
+            </div>
+        </div>
+    {% endfor %}
+</div>
+{% endblock %}

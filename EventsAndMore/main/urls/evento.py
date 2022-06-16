@@ -11,5 +11,7 @@ urlpatterns_event = [
     path('evento/new_event',evento.new_event,name='new_event'),
     path('solicitudes/organizador', solicitudes_realizadas, name='solicitudes_organizador'),
     path('evento/facturacion_eventos', evento.facturacion_eventos, name='facturacion_eventos'),
-    path('evento/facturacion_evento/<int:id>', evento.facturacion_evento_detalle, name='facturacion_evento')
+    path('evento/facturacion_evento/<int:id>', evento.facturacion_evento_detalle, name='facturacion_evento'),
+    path('evento/show_event_facturation/<int:id>', evento.show_event_facturation, name='show_event_facturation'),
+    path('evento/show_events_facturation/<int:id>', evento.show_events_facturation, name='show_events_facturation')
     ]
